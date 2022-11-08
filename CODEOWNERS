@@ -1,0 +1,12 @@
+* @coopnorge/engineering
+
+Dockerfile @coopnorge/github-review-bots @coopnorge/engineering
+go.mod @coopnorge/github-review-bots @coopnorge/engineering
+go.sum @coopnorge/github-review-bots @coopnorge/engineering
+vendor @coopnorge/github-review-bots @coopnorge/engineering
+pyproject.toml @coopnorge/github-review-bots @coopnorge/engineering
+poetry.lock @coopnorge/github-review-bots @coopnorge/engineering
+
+/CODEOWNERS @coopnorge/cloud-security
+.github/workflows/security-* @coopnorge/cloud-security
+

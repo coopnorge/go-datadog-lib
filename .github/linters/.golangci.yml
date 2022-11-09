@@ -1,6 +1,6 @@
 run:
   timeout: 5m
-  go: '1.17'
+  go: '1.19'
   tests: false
   allow-parallel-runners: true
   modules-download-mode: vendor

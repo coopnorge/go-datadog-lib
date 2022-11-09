@@ -1,0 +1,26 @@
+run:
+  timeout: 5m
+  go: '1.17'
+  tests: false
+  allow-parallel-runners: true
+  modules-download-mode: vendor
+  skip-dirs-use-default: true
+  skip-dirs:
+    - generated
+    - vendor
+
+output:
+  sort-results: true
+
+linters-settings:
+  errcheck:
+    check-blank: true
+  govet:
+    check-shadowing: true
+  gocyclo:
+    min-complexity: 10
+  maligned:
+    suggest-new: true
+
+linters:
+  fast: true

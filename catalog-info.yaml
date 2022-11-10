@@ -5,6 +5,6 @@ metadata:
   annotations:
     github.com/project-slug: coopnorge/go-datadog-lib
 spec:
-  type: other
-  lifecycle: unknown
+  type: library
+  lifecycle: experimental
   owner: engineering

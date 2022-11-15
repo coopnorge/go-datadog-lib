@@ -2,12 +2,13 @@ package grpc
 
 import (
 	"context"
-	"github.com/coopnorge/go-datadog-lib/internal"
-	"github.com/coopnorge/go-datadog-lib/tracing"
-	"github.com/stretchr/testify/assert"
 	"net/http"
 	"testing"
 
+	"github.com/coopnorge/go-datadog-lib/internal"
+	"github.com/coopnorge/go-datadog-lib/tracing"
+
+	"github.com/stretchr/testify/assert"
 	"google.golang.org/grpc"
 )
 

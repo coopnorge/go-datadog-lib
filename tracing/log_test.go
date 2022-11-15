@@ -2,11 +2,12 @@ package tracing
 
 import (
 	"context"
-	"github.com/coopnorge/go-datadog-lib/internal"
-	"gopkg.in/DataDog/dd-trace-go.v1/ddtrace/tracer"
 	"testing"
 
+	"github.com/coopnorge/go-datadog-lib/internal"
+
 	"github.com/coopnorge/go-logger"
+	"gopkg.in/DataDog/dd-trace-go.v1/ddtrace/tracer"
 )
 
 func TestLogWithTrace(t *testing.T) {

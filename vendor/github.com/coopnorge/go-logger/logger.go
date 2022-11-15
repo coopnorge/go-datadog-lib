@@ -23,12 +23,12 @@ type Logger struct {
 	reportCaller bool
 }
 
-func (l *Logger) applyOptions(opts ...LoggerOption) {
+func (logger *Logger) applyOptions(opts ...LoggerOption) {
 	for _, opt := range opts {
-		opt.Apply(l)
+		opt.Apply(logger)
 	}
-	l.logrusLogger.SetOutput(l.output)
-	l.logrusLogger.SetLevel(mapLevelToLogrusLevel(l.level))
+	logger.logrusLogger.SetOutput(logger.output)
+	logger.logrusLogger.SetLevel(mapLevelToLogrusLevel(logger.level))
 }
 
 func New(opts ...LoggerOption) *Logger {
@@ -45,14 +45,14 @@ func New(opts ...LoggerOption) *Logger {
 	return logger
 }
 
-func (l *Logger) entry() Entry {
+func (logger *Logger) entry() Entry {
 	fields := logrus.Fields{}
-	if l.reportCaller {
+	if logger.reportCaller {
 		frame := getCaller()
 		fields["file"] = fmt.Sprintf("%s:%v", frame.File, frame.Line)
 		fields["function"] = frame.Function
 	}
-	return l.logrusLogger.WithTime(l.now()).WithFields(fields)
+	return logger.logrusLogger.WithTime(logger.now()).WithFields(fields)
 }
 
 // WithFields forwards a logging call with fields

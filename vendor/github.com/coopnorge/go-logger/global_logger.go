@@ -1,5 +1,7 @@
 package logger
 
+import "io"
+
 var globalLogger = New()
 
 func ConfigureGlobalLogger(opts ...LoggerOption) {
@@ -63,4 +65,24 @@ func Fatal(args ...interface{}) {
 // Fatalf uses global logger to log payload on "fatal" level
 func Fatalf(format string, args ...interface{}) {
 	globalLogger.Fatalf(format, args...)
+}
+
+// SetNowFunc sets `now` func user by global logger
+func SetNowFunc(nowFunc NowFunc) {
+	ConfigureGlobalLogger(WithNowFunc(nowFunc))
+}
+
+// SetOutput changes global logger's output
+func SetOutput(output io.Writer) {
+	ConfigureGlobalLogger(WithOutput(output))
+}
+
+// SetLevel sets minimum log level for global logger
+func SetLevel(level Level) {
+	ConfigureGlobalLogger(WithLevel(level))
+}
+
+// SetReportCaller allows controling if caller info should be attached to logs by global logger
+func SetReportCaller(enable bool) {
+	ConfigureGlobalLogger(WithReportCaller(enable))
 }

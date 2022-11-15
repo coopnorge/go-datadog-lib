@@ -3,11 +3,9 @@ run:
   go: '1.19'
   tests: false
   allow-parallel-runners: true
-  modules-download-mode: vendor
   skip-dirs-use-default: true
   skip-dirs:
     - generated
-    - vendor
 
 output:
   sort-results: true

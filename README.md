@@ -1,9 +1,11 @@
 # Coop Datadog Go package
 
-## About
+Plug and play package that wraps base functionally and initialization of Datadog Service.
 
-## How to setup
+- APM, StatsD Initialization
+- StatsD metrics unification
 
-## How to use
+## Mocks
 
-^
+To generate or update mocks use tools [Eitri](https://github.com/Clink-n-Clank/Eitri)
+or use directly [Mockhandler](github.com/sanposhiho/gomockhandle)

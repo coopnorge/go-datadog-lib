@@ -12,9 +12,9 @@ import (
 )
 
 type (
-	DatadogMetricsService interface {
+	DatadogMetricsClient interface {
 		// GetClient statsd client
-		GetClient() *statsd.Client
+		GetClient() statsd.ClientInterface
 		// GetDefaultTags that will be used in Datadog metrics
 		GetDefaultTags() []string
 		// GetServiceNamePrefix for metric name
@@ -54,7 +54,7 @@ func NewDatadogMetrics(cfg *config.DatadogConfig) *DatadogMetrics {
 }
 
 // GetClient statsd client
-func (d DatadogMetrics) GetClient() *statsd.Client {
+func (d DatadogMetrics) GetClient() statsd.ClientInterface {
 	return d.client
 }
 

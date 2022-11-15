@@ -42,6 +42,9 @@ github.com/dustin/go-humanize
 # github.com/golang/glog v1.0.0
 ## explicit; go 1.11
 github.com/golang/glog
+# github.com/golang/mock v1.6.0
+## explicit; go 1.11
+github.com/golang/mock/gomock
 # github.com/golang/protobuf v1.5.2
 ## explicit; go 1.9
 github.com/golang/protobuf/jsonpb

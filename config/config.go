@@ -31,11 +31,11 @@ func IsDataDogConfigValid(cfg DatadogConfig) bool {
 	}
 
 	// Check socket paths
-	if cfg.DSD != "" && strings.Contains(cfg.DSD, "unix") {
-		return true
+	if cfg.DSD != "" && !strings.Contains(cfg.DSD, "unix") {
+		return false
 	}
-	if cfg.APM != "" && !strings.Contains(cfg.DSD, "unix") {
-		return true
+	if cfg.APM != "" && strings.Contains(cfg.APM, "unix") {
+		return false
 	}
 
 	// DSD or APM must be configured

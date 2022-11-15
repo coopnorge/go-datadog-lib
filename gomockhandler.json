@@ -1,0 +1,22 @@
+{
+	"mocks": {
+		"DatadogMetricsClient": {
+			"checksum": "NydKUvnQJ3LPAfMgNhUA9w==",
+			"source_checksum": "zu6GOBn/tWEABrE4PJxmFg==",
+			"mode": "SOURCE_MODE",
+			"source_mode_runner": {
+				"source": "metric/datadog.go",
+				"destination": "internal/generated/mocks/metric/datadog.go"
+			}
+		},
+		"DatadogStatsD": {
+			"checksum": "r0GQ7Wji6r+0x0jpDL4pDA==",
+			"source_checksum": "Nk+LbWvsfdewE/vzBZJBGw==",
+			"mode": "SOURCE_MODE",
+			"source_mode_runner": {
+				"source": "vendor/github.com/DataDog/datadog-go/statsd/statsd.go",
+				"destination": "internal/generated/mocks/DataDog/datadog-go/statsd/statsd.go"
+			}
+		}
+	}
+}

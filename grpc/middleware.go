@@ -20,8 +20,8 @@ func TraceUnaryServerInterceptor() grpc.UnaryServerInterceptor {
 		span, spanCtx := tracer.StartSpanFromContext(reqCtx, info.FullMethod, tracer.ResourceName(defaultDDResourceName))
 		defer span.Finish()
 
-		internal.ExtendedContextWithMetadata(spanCtx, internal.TraceContextKey{}, tracing.TraceDetails{DatadogSpan: span})
+		extCtx := internal.ExtendedContextWithMetadata(spanCtx, internal.TraceContextKey{}, tracing.TraceDetails{DatadogSpan: span})
 
-		return grpcReqHandler(spanCtx, req)
+		return grpcReqHandler(extCtx, req)
 	}
 }

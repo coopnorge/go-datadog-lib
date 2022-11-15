@@ -22,4 +22,8 @@ func TestNewDatadogMetrics(t *testing.T) {
 	assert.True(t, m.defaultMetricsTags[2] == "version:VUnit")
 
 	assert.True(t, m.servicePrefix == "unit_test")
+
+	assert.Nil(t, m.GetClient())
+	assert.ElementsMatch(t, m.defaultMetricsTags, m.GetDefaultTags())
+	assert.Equal(t, m.GetServiceNamePrefix(), "unit_test")
 }

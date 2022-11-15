@@ -109,3 +109,15 @@ func TestAddMetric(t *testing.T) {
 		})
 	}
 }
+
+func TestAddMetricNoClient(t *testing.T) {
+	ctrl := gomock.NewController(t)
+	mockDatadogClient := mock_metrics.NewMockDatadogMetricsClient(ctrl)
+	ctrl.Finish()
+
+	mockDatadogClient.EXPECT().GetClient().Return(nil).MaxTimes(1)
+
+	bmc := NewBaseMetricCollector(nil)
+	bmc = &BaseMetricCollector{c: mockDatadogClient}
+	bmc.AddMetric(context.Background(), Data{})
+}

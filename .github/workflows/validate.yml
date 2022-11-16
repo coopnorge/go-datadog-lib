@@ -1,0 +1,38 @@
+---
+name: Project Validation
+on:
+  push:
+    branches-ignore: [ main ]
+jobs:
+  lint:
+    name: Lint and Test Project
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v3
+        with:
+          # Full git history is needed
+          # to get a proper list of changed files
+          # within `super-linter`
+          fetch-depth: 0
+      - name: Install Go
+        uses: actions/setup-go@v3
+        with:
+          go-version: "1.19"
+      - name: Lint Code Base
+        uses: github/super-linter@v4
+        env:
+          # Lint only changed files
+          VALIDATE_ALL_CODEBASE: true
+          VALIDATE_MARKDOWN: true
+          VALIDATE_GO: true
+          DEFAULT_BRANCH: main
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      - name: Test
+        run: go test -v -race -p=1 ./...
+  build:
+    needs:
+      - lint
+    runs-on: ubuntu-latest
+    steps:
+      - run: echo "Done"

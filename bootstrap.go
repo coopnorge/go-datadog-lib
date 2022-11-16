@@ -10,7 +10,7 @@ import (
 
 // StartDatadog parallel process to collect data, enableExtraProfiling flag enables more optional profilers not recommended for prod
 func StartDatadog(cfg config.DatadogConfig, enableExtraProfiling bool) {
-	if config.IsDataDogConfigValid(cfg) {
+	if !config.IsDataDogConfigValid(cfg) {
 		logger.Errorf("Datadog configuration not valid, cannot initialize Datadog services")
 
 		return

@@ -15,6 +15,11 @@ traceability and logs in Datadog.
 - [X] gRPC Unary Server
 - [X] HTTP - Echo
 
+## Documentation
+
+There is detailed documentation stored in
+[docs](https://github.com/coopnorge/go-datadog-lib/tree/main/docs).
+
 ## Mocks
 
 To generate or update mocks use tools

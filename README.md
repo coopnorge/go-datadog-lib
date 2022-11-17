@@ -1,13 +1,18 @@
 # Coop Datadog Go package
 
-![Coverage](https://img.shields.io/badge/Coverage-98.7%25-brightgreen)
-![Build](https://github.com/coopnorge/go-datadog-lib/actions/workflows/validate.yml/badge.svg)
+![Test](https://github.com/coopnorge/go-datadog-lib/actions/workflows/test.yml/badge.svg)
+![Build](https://github.com/coopnorge/go-datadog-lib/actions/workflows/build.yml/badge.svg)
 
 Plug and play package that wraps base functionally
 and initialization of Datadog Service.
 
 - APM, StatsD Initialization
 - StatsD metrics unification
+
+Supported middleware to correlate/extend traceability and logs in Datadog
+
+- [X] gRPC Unary Server
+- [ ] HTTP - Echo
 
 ## Mocks
 

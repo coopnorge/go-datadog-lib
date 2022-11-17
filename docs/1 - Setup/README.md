@@ -81,7 +81,8 @@ It's how the application will be shown in Datadog APM.
       fieldPath: metadata.labels['tags.datadoghq.com/service']
 ```
 
-Depending on your policy, you can have an API version or tag/commit from git.
+Depending on your policy,
+you can have an API version or tag/commit from git.
 
 ```yaml
 - name: DD_VERSION
@@ -131,7 +132,8 @@ middleware that will extend context.
 
 It's needed to relate logs with your trace data in APM.
 
-To do that simple add Go - Datadog middleware to your gRPC interceptor.
+To do that simple add Go - Datadog middleware
+to your gRPC interceptor.
 
 Take a look `"github.com/coopnorge/go-datadog-lib/grpc"`
 function `TraceUnaryServerInterceptor`
@@ -161,4 +163,3 @@ tried to connect via HTTP. That could be related
 to issue when your container starts faster
 and sockets were not ready to communicate with Agent
 or Agent was started later.
-

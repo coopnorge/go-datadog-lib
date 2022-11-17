@@ -99,33 +99,33 @@ Create pkg configuration for boostrap datadog.
 package main
 
 import (
-	"github.com/coopnorge/go-datadog-lib"
-	"github.com/coopnorge/go-datadog-lib/config"
+  "github.com/coopnorge/go-datadog-lib"
+  "github.com/coopnorge/go-datadog-lib/config"
 )
 
 func main() {
-	// Your app initialization
-	/// ... 
+  // Your app initialization
+  /// ... 
 
-	// From your core configuration add datadog related values
-	ddCfg := config.DatadogConfig{
-		Env:            "dd_env",
-		Service:        "dd_service",
-		ServiceVersion: "dd_version",
-		DSD:            "dd_dogstatsd_url",
-		APM:            "dd_trace_agent_url",
-	}
+  // From your core configuration add datadog related values
+  ddCfg := config.DatadogConfig{
+    Env:            "dd_env",
+    Service:        "dd_service",
+    ServiceVersion: "dd_version",
+    DSD:            "dd_dogstatsd_url",
+    APM:            "dd_trace_agent_url",
+  }
 
-	// When you start other processes start datadog
-	withExtraProfiler := true
-	go_datadog_lib.StartDatadog(ddCfg, withExtraProfiler)
-	
-	// Stop datadog with yours other processes
-	handleGracefulShutdown(go_datadog_lib.GracefulDatadogShutdown)
+  // When you start other processes start datadog
+  withExtraProfiler := true
+  go_datadog_lib.StartDatadog(ddCfg, withExtraProfiler)
+
+  // Stop datadog with yours other processes
+  handleGracefulShutdown(go_datadog_lib.GracefulDatadogShutdown)
 }
 ```
 
-## 3. Middleware
+## 3. Middleware gRPC
 
 To have better tracing you need add to your gRPC custom
 middleware that will extend context.
@@ -135,21 +135,57 @@ It's needed to relate logs with your trace data in APM.
 To do that simple add Go - Datadog middleware
 to your gRPC interceptor.
 
-Take a look `"github.com/coopnorge/go-datadog-lib/grpc"`
+Take a look `"github.com/coopnorge/go-datadog-lib/middleware"`
 function `TraceUnaryServerInterceptor`
 
 ```go
-    // This is gRPC server configuration builder
-	cfgBuilder.AddGrpcUnaryInterceptors(
-		grpctrace.UnaryServerInterceptor(
-			grpctrace.WithServiceName(cfg.DatadogService),
-			grpctrace.WithStreamCalls(false),
-		),
-		grpc.TraceUnaryServerInterceptor(),
-	)
+package myServer
 
-    // This middleware will extend context for tracing and logs
-    // grpc.TraceUnaryServerInterceptor()
+import (
+  "github.com/coopnorge/go-datadog-lib/middleware"
+  "github.com/labstack/echo/v4"
+)
+
+func MyServer() {
+  // ...
+  // This is gRPC server configuration builder
+  cfgBuilder.AddGrpcUnaryInterceptors(
+    grpctrace.UnaryServerInterceptor(
+      grpctrace.WithServiceName(cfg.DatadogService),
+      grpctrace.WithStreamCalls(false),
+    ),
+    middleware.TraceUnaryServerInterceptor(),
+  )
+
+  // This middleware will extend context for tracing and logs
+  // grpc.TraceUnaryServerInterceptor()
+}
+```
+
+## 3. Middleware echo
+
+Same as gRPC middleware but for Echo framework.
+It will extend request context and will allow
+to create nested spans for it, also correlate with logs.
+
+Example:
+
+```go
+package myServer
+
+import (
+  "github.com/coopnorge/go-datadog-lib/middleware"
+  "github.com/labstack/echo/v4"
+)
+
+func MyServer() {
+  // ...
+  echoServer := echo.New()
+  // Some other configuration
+  // ...
+  // Add middleware to extend context for better traceability
+  echoServer.Use(middleware.TraceServerMiddleware())
+}
 ```
 
 ## Common issue

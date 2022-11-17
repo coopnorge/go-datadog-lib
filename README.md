@@ -13,7 +13,7 @@ Supported middleware to correlate/extend
 traceability and logs in Datadog.
 
 - [X] gRPC Unary Server
-- [ ] HTTP - Echo
+- [X] HTTP - Echo
 
 ## Mocks
 

@@ -7,7 +7,7 @@ require (
 	github.com/coopnorge/go-logger v0.1.0
 	github.com/golang/mock v1.6.0
 	github.com/iancoleman/strcase v0.2.0
-	github.com/stretchr/testify v1.8.0
+	github.com/stretchr/testify v1.8.1
 	google.golang.org/grpc v1.50.1
 	gopkg.in/DataDog/dd-trace-go.v1 v1.43.1
 )

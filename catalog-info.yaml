@@ -2,9 +2,23 @@ apiVersion: backstage.io/v1alpha1
 kind: Component
 metadata:
   name: go-datadog-lib
+  title: Datadog Golang
+  tags:
+    - "go"
+    - "pkg"
   annotations:
     github.com/project-slug: coopnorge/go-datadog-lib
+    backstage.io/techdocs-ref: dir:.
+  links:
+    - url: https://docs.datadoghq.com/tracing/trace_collection/dd_libraries/go/?tab=containers
+      title: Official Datadog golang docs
+      icon: web
+    - url: https://docs.datadoghq.com/integrations/statsd/?tab=host
+      title: Official Datadog StatsD docs
+      icon: web
 spec:
+  profile:
+    displayName: Datadog Golang
   type: library
   lifecycle: experimental
   owner: engineering

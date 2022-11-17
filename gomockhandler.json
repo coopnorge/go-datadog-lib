@@ -17,6 +17,15 @@
 				"source": "vendor/github.com/DataDog/datadog-go/statsd/statsd.go",
 				"destination": "internal/generated/mocks/DataDog/datadog-go/statsd/statsd.go"
 			}
+		},
+		"EchoContext": {
+			"checksum": "PSG18wg++awZ1qw/7oljqQ==",
+			"source_checksum": "pWnvl6vrYLS6YojmsOscmQ==",
+			"mode": "SOURCE_MODE",
+			"source_mode_runner": {
+				"source": "vendor/github.com/labstack/echo/context.go",
+				"destination": "internal/generated/mocks/labstack/echo/context.go"
+			}
 		}
 	}
 }

@@ -1,0 +1,64 @@
+package middleware
+
+import (
+    "net/http"
+    "testing"
+
+    "github.com/coopnorge/go-datadog-lib/internal"
+    mock_echo "github.com/coopnorge/go-datadog-lib/internal/generated/mocks/labstack/echo"
+    "github.com/coopnorge/go-datadog-lib/tracing"
+
+    "github.com/golang/mock/gomock"
+    "github.com/labstack/echo"
+    "github.com/stretchr/testify/assert"
+)
+
+func TestTraceServerMiddleware(t *testing.T) {
+    echoMiddlewareHandler := TraceServerMiddleware()
+    echoRequestHandler := func(reqCtx echo.Context) (err error) {
+        assert.NotNil(t, reqCtx.Request())
+
+        meta, exist := internal.GetContextMetadata[tracing.TraceDetails](reqCtx.Request().Context(), internal.TraceContextKey{})
+        assert.True(t, exist)
+        assert.NotNil(t, meta.DatadogSpan)
+
+        return nil
+    }
+
+    tReq, _ := http.NewRequest(http.MethodGet, "unit.test", nil)
+
+    ctrl := gomock.NewController(t)
+    mockEchoContext := mock_echo.NewMockContext(ctrl)
+    ctrl.Finish()
+
+    mockEchoContext.EXPECT().Request().Return(tReq).MaxTimes(4)
+
+    echoMiddlewareFun := echoMiddlewareHandler(echoRequestHandler)
+    echoHandlerFunc := echoMiddlewareFun(mockEchoContext)
+
+    assert.Nil(t, echoHandlerFunc)
+}
+
+func TestTraceServerMiddlewareEchoMissingRequest(t *testing.T) {
+    echoMiddlewareHandler := TraceServerMiddleware()
+    echoRequestHandler := func(reqCtx echo.Context) (err error) {
+        assert.NotNil(t, reqCtx.Request())
+
+        meta, exist := internal.GetContextMetadata[tracing.TraceDetails](reqCtx.Request().Context(), internal.TraceContextKey{})
+        assert.True(t, exist)
+        assert.NotNil(t, meta.DatadogSpan)
+
+        return nil
+    }
+
+    ctrl := gomock.NewController(t)
+    mockEchoContext := mock_echo.NewMockContext(ctrl)
+    ctrl.Finish()
+
+    mockEchoContext.EXPECT().Request().Return(nil).MaxTimes(1)
+
+    echoMiddlewareFun := echoMiddlewareHandler(echoRequestHandler)
+    echoHandlerFunc := echoMiddlewareFun(mockEchoContext)
+
+    assert.NotNil(t, echoHandlerFunc)
+}

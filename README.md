@@ -9,10 +9,11 @@ and initialization of Datadog Service.
 - APM, StatsD Initialization
 - StatsD metrics unification
 
-Supported middleware to correlate/extend traceability and logs in Datadog
+Supported middleware to correlate/extend
+traceability and logs in Datadog.
 
 - [X] gRPC Unary Server
-- [ ] HTTP - Echo
+- [X] HTTP - Echo
 
 ## Mocks
 

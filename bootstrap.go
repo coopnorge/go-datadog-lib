@@ -1,57 +1,85 @@
 package go_datadog_lib
 
 import (
-	"github.com/coopnorge/go-datadog-lib/config"
-	"github.com/coopnorge/go-logger"
+    "github.com/coopnorge/go-datadog-lib/config"
+    "github.com/coopnorge/go-logger"
 
-	"gopkg.in/DataDog/dd-trace-go.v1/ddtrace/tracer"
-	"gopkg.in/DataDog/dd-trace-go.v1/profiler"
+    "gopkg.in/DataDog/dd-trace-go.v1/ddtrace/tracer"
+    "gopkg.in/DataDog/dd-trace-go.v1/profiler"
 )
 
 // StartDatadog parallel process to collect data, enableExtraProfiling flag enables more optional profilers not recommended for prod
-func StartDatadog(cfg config.DatadogConfig, enableExtraProfiling bool) {
-	if !config.IsDataDogConfigValid(cfg) {
-		logger.Errorf("Datadog configuration not valid, cannot initialize Datadog services")
+func StartDatadog(cfg config.DatadogParameters, enableExtraProfiling, isConnectionSocket bool) {
+    if !cfg.IsDataDogConfigValid() {
+        logger.Errorf("Datadog configuration not valid, cannot initialize Datadog services")
 
-		return
-	}
+        return
+    }
 
-	logger.Infof("Initializing Datadog services for %s in environment %s", cfg.Service, cfg.Env)
+    logger.Infof("Initializing Datadog services for %s in environment %s", cfg.GetService(), cfg.GetEnv())
 
-	tracer.Start(
-		tracer.WithEnv(cfg.Env),
-		tracer.WithUDS(cfg.APM),
-		tracer.WithService(cfg.Service),
-		tracer.WithServiceVersion(cfg.ServiceVersion),
-	)
-
-	var profileTypes []profiler.ProfileType
-	if enableExtraProfiling {
-		profileTypes = []profiler.ProfileType{
-			profiler.CPUProfile,
-			profiler.HeapProfile,
-			profiler.GoroutineProfile,
-			profiler.MutexProfile,
-			profiler.BlockProfile,
-		}
-	} else {
-		profileTypes = []profiler.ProfileType{profiler.CPUProfile}
-	}
-
-	err := profiler.Start(
-		profiler.WithEnv(cfg.Env),
-		profiler.WithUDS(cfg.APM),
-		profiler.WithService(cfg.Service),
-		profiler.WithVersion(cfg.ServiceVersion),
-		profiler.WithProfileTypes(profileTypes...),
-	)
-	if err != nil {
-		logger.Errorf("Failed to start Datadog profiler: %v", err)
-	}
+    initTracer(cfg, isConnectionSocket)
+    if initProfilerErr := initProfiler(cfg, enableExtraProfiling, isConnectionSocket); initProfilerErr != nil {
+        logger.Errorf("Failed to start Datadog profiler: %v", initProfilerErr)
+    }
 }
 
 // GracefulDatadogShutdown of executed parallel processes
 func GracefulDatadogShutdown() {
-	defer tracer.Stop()
-	defer profiler.Stop()
+    defer tracer.Stop()
+    defer profiler.Stop()
+}
+
+func initTracer(cfg config.DatadogParameters, isConnectionSocket bool) {
+    var tracerOptions []tracer.StartOption
+    if isConnectionSocket {
+        tracerOptions = append(tracerOptions, tracer.WithUDS(cfg.GetApmEndpoint()))
+    } else {
+        tracerOptions = append(tracerOptions, tracer.WithAgentAddr(cfg.GetApmEndpoint()))
+    }
+
+    tracerOptions = append(
+        tracerOptions,
+        []tracer.StartOption{
+            tracer.WithEnv(cfg.GetEnv()),
+            tracer.WithService(cfg.GetService()),
+            tracer.WithServiceVersion(cfg.GetServiceVersion()),
+        }...,
+    )
+
+    tracer.Start(tracerOptions...)
+}
+
+func initProfiler(cfg config.DatadogParameters, enableExtraProfiling bool, isConnectionSocket bool) error {
+    var profilerTypes []profiler.ProfileType
+    if enableExtraProfiling {
+        profilerTypes = []profiler.ProfileType{
+            profiler.CPUProfile,
+            profiler.HeapProfile,
+            profiler.GoroutineProfile,
+            profiler.MutexProfile,
+            profiler.BlockProfile,
+        }
+    } else {
+        profilerTypes = []profiler.ProfileType{profiler.CPUProfile}
+    }
+
+    var profilerOptions []profiler.Option
+    if isConnectionSocket {
+        profilerOptions = append(profilerOptions, profiler.WithUDS(cfg.GetApmEndpoint()))
+    } else {
+        profilerOptions = append(profilerOptions, profiler.WithAgentAddr(cfg.GetApmEndpoint()))
+    }
+
+    profilerOptions = append(
+        profilerOptions,
+        []profiler.Option{
+            profiler.WithEnv(cfg.GetEnv()),
+            profiler.WithService(cfg.GetService()),
+            profiler.WithVersion(cfg.GetServiceVersion()),
+            profiler.WithProfileTypes(profilerTypes...),
+        }...,
+    )
+
+    return profiler.Start(profilerOptions...)
 }

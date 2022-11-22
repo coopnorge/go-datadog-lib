@@ -18,7 +18,7 @@ traceability and logs in Datadog.
 ## Documentation
 
 There is detailed documentation stored in
-[docs](https://github.com/coopnorge/go-datadog-lib/tree/main/docs).
+[docs](docs/).
 
 ## Mocks
 

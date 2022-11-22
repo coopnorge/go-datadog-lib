@@ -26,3 +26,39 @@ To generate or update mocks use tools
 [Eitri](https://github.com/Clink-n-Clank/Eitri)
 or use directly
 [Mockhandler](github.com/sanposhiho/gomockhandle)
+
+## User documentation
+
+User documentation is build using TechDocs and published to
+[Inventory](https://inventory.internal.coop/docs/default/component/go-datadog-lib).
+
+To list the commands available for the TechDocs image:
+
+```sh
+docker compose run --rm help
+```
+
+For more information see the [TechDocs Engineering
+Image](https://github.com/coopnorge/engineering-docker-images/tree/main/images/techdocs).
+
+### Documentation validation
+
+To Validate changed documentation:
+
+```sh
+docker compose run --rm techdocs validate
+```
+
+To validate all documentation:
+
+```sh
+docker compose run --rm techdocs validate MARKDOWN_FILES=docs/
+```
+
+### Documentation preview
+
+To preview the documentation:
+
+```sh
+docker compose up techdocs
+```

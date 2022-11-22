@@ -1,5 +1,13 @@
 ---
 version: 2
+
+registries:
+  coop-ghcr:
+    type: docker-registry
+    url: ghcr.io
+    username: CoopGithubServiceaccount
+    password: ${{ secrets.DEPENDABOT_GHCR_PULL }}
+
 updates:
   - package-ecosystem: "github-actions"
     directory: "/"
@@ -7,5 +15,11 @@ updates:
       interval: "daily"
   - package-ecosystem: "gomod"
     directory: "/"
+    schedule:
+      interval: "daily"
+  - package-ecosystem: "docker"
+    directory: "/docker-compose"
+    registries:
+      - coop-ghcr
     schedule:
       interval: "daily"

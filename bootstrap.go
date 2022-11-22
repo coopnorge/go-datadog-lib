@@ -8,7 +8,9 @@ import (
     "gopkg.in/DataDog/dd-trace-go.v1/profiler"
 )
 
-// StartDatadog parallel process to collect data, enableExtraProfiling flag enables more optional profilers not recommended for prod
+// StartDatadog parallel process to collect data for Datadog.
+// enableExtraProfiling flag enables more optional profilers not recommended for production.
+// isConnectionSocket flag related to Datadog connection type, it supports HTTP or socket - values will be used from config.DatadogParameters
 func StartDatadog(cfg config.DatadogParameters, enableExtraProfiling, isConnectionSocket bool) {
     if !cfg.IsDataDogConfigValid() {
         logger.Errorf("Datadog configuration not valid, cannot initialize Datadog services")

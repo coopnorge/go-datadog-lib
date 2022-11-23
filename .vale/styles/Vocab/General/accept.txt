@@ -1,5 +1,6 @@
 Datadog
-Unary
 Eitri
+Kustomize
 Mockhandler
-middleware
+Unary
+[mM]iddleware

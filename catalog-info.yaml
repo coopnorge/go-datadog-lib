@@ -2,7 +2,7 @@ apiVersion: backstage.io/v1alpha1
 kind: Component
 metadata:
   name: go-datadog-lib
-  title: Datadog Golang
+  title: Go Datadog Library
   tags:
     - "go"
     - "pkg"
@@ -17,8 +17,6 @@ metadata:
       title: Official Datadog StatsD docs
       icon: web
 spec:
-  profile:
-    displayName: Datadog Golang
   type: library
   lifecycle: experimental
   owner: engineering

@@ -9,6 +9,12 @@ end_of_line = lf
 insert_final_newline = true
 charset = utf-8
 indent_style = space
+max_line_length = 79
+
+[*.go]
+indent_style = tabs
+indent_size = 4
+max_line_length = ignore
 
 [*.html]
 indent_style = space

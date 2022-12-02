@@ -206,6 +206,27 @@ func MyServer() {
 }
 ```
 
+#### Echo Middleware logs
+
+```go
+package myServer
+
+import (
+  "github.com/labstack/echo/v4"
+
+  ddEcho "github.com/coopnorge/go-datadog-lib/observability/echo"
+)
+
+func MyServer()  {
+	// ...
+  echoServer := echo.New()
+  
+  // Redeclare what logger must be used in echo
+  // In this case it will be used Coop logger that implements Echo interface
+  echoServer.EchoRouter.Logger = ddEcho.NewWrappedEchoLogger()
+}
+```
+
 ### Common issue
 
 After that Datadog will try to connect to the socket and will start to send all

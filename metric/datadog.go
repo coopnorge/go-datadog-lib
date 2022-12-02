@@ -30,13 +30,13 @@ type (
 )
 
 // NewDatadogMetrics instance
-func NewDatadogMetrics(cfg *config.DatadogConfig) *DatadogMetrics {
+func NewDatadogMetrics(cfg config.DatadogParameters) *DatadogMetrics {
 	var ddClient *statsd.Client
 	var ddClientErr error
 
-	ddClient, ddClientErr = statsd.New(cfg.DSD)
+	ddClient, ddClientErr = statsd.New(cfg.GetDsdEndpoint())
 	if ddClientErr != nil {
-		logger.Errorf("datadog statsd client initialize with socket(%s) - error %w", cfg.DSD, ddClientErr)
+		logger.Errorf("datadog statsd client initialize with socket(%s) - error %w", cfg.GetDsdEndpoint(), ddClientErr)
 		if ddClient, ddClientErr = statsd.New(""); ddClientErr != nil {
 			logger.Errorf("datadog statsd self-resolving client initialize - error %w", ddClientErr)
 		}
@@ -44,11 +44,11 @@ func NewDatadogMetrics(cfg *config.DatadogConfig) *DatadogMetrics {
 
 	return &DatadogMetrics{
 		client:        ddClient,
-		servicePrefix: strings.ToLower(strcase.ToSnake(cfg.Service)),
+		servicePrefix: strings.ToLower(strcase.ToSnake(cfg.GetService())),
 		defaultMetricsTags: []string{
-			fmt.Sprintf("environment:%s", cfg.Env),
-			fmt.Sprintf("service:%s", cfg.Service),
-			fmt.Sprintf("version:%s", cfg.ServiceVersion),
+			fmt.Sprintf("environment:%s", cfg.GetEnv()),
+			fmt.Sprintf("service:%s", cfg.GetService()),
+			fmt.Sprintf("version:%s", cfg.GetServiceVersion()),
 		},
 	}
 }

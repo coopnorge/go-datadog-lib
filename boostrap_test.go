@@ -9,7 +9,7 @@ import (
 func TestDatadog(t *testing.T) {
 	ddCfg := config.DatadogConfig{}
 
-	StartDatadog(ddCfg, false)
+	StartDatadog(ddCfg, false, false)
 
 	ddCfg = config.DatadogConfig{
 		Env:            "local",
@@ -19,6 +19,6 @@ func TestDatadog(t *testing.T) {
 		APM:            "/tmp",
 	}
 
-	StartDatadog(ddCfg, true)
+	StartDatadog(ddCfg, true, true)
 	GracefulDatadogShutdown()
 }

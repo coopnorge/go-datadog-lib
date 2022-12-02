@@ -3,6 +3,23 @@ package config
 import "strings"
 
 type (
+	// DatadogParameters for connection and configuring background process to send information to Datadog Agent
+	DatadogParameters interface {
+		// GetEnv where application is executed, dev, production, staging etc
+		GetEnv() string
+		// GetService how must be service called and displayed in Datadog system
+		GetService() string
+		// GetServiceVersion depends on system, can be Git Tag or API version
+		GetServiceVersion() string
+		// GetDsdEndpoint Socket path or URL for DD StatsD
+		// for socket important to have unix prefix for that value, example: unix:///var/run/dd/dsd.socket
+		GetDsdEndpoint() string
+		// GetApmEndpoint Socket path or URL for APM and profiler
+		// unix prefix not needed, example: /var/run/dd/apm.socket
+		GetApmEndpoint() string
+		// IsDataDogConfigValid method to verify if configuration values are correct
+		IsDataDogConfigValid() bool
+	}
 	// DatadogConfig that required to connect to Datadog Agent
 	DatadogConfig struct {
 		// Env where application is executed, dev, production, staging etc
@@ -18,30 +35,57 @@ type (
 	}
 )
 
-// IsDataDogConfigValid with given values
-func IsDataDogConfigValid(cfg DatadogConfig) bool {
-	if cfg.Env == "" {
+// IsDataDogConfigValid method to verify if configuration values are correct
+func (d DatadogConfig) IsDataDogConfigValid() bool {
+	if d.Env == "" {
 		return false
 	}
-	if cfg.Service == "" {
+	if d.Service == "" {
 		return false
 	}
-	if cfg.ServiceVersion == "" {
+	if d.ServiceVersion == "" {
 		return false
 	}
 
 	// Check socket paths
-	if cfg.DSD != "" && !strings.Contains(cfg.DSD, "unix") {
+	if d.DSD != "" && !strings.Contains(d.DSD, "unix") {
 		return false
 	}
-	if cfg.APM != "" && strings.Contains(cfg.APM, "unix") {
+	if d.APM != "" && strings.Contains(d.APM, "unix") {
 		return false
 	}
 
-	// DSD or APM must be configured
-	if cfg.DSD == "" && cfg.APM == "" {
+	// DSD or APM must be configured`
+	if d.DSD == "" && d.APM == "" {
 		return false
 	}
 
 	return true
+}
+
+// GetEnv where application is executed, dev, production, staging etc
+func (d DatadogConfig) GetEnv() string {
+	return d.Env
+}
+
+// GetService how must be service called and displayed in Datadog system
+func (d DatadogConfig) GetService() string {
+	return d.Service
+}
+
+// GetServiceVersion depends on system, can be Git Tag or API version
+func (d DatadogConfig) GetServiceVersion() string {
+	return d.ServiceVersion
+}
+
+// GetDsdEndpoint Socket path or URL for DD StatsD
+// for socket important to have unix prefix for that value, example: unix:///var/run/dd/dsd.socket
+func (d DatadogConfig) GetDsdEndpoint() string {
+	return d.DSD
+}
+
+// GetApmEndpoint Socket path or URL for APM and profiler
+// unix prefix not needed, example: /var/run/dd/apm.socket
+func (d DatadogConfig) GetApmEndpoint() string {
+	return d.APM
 }

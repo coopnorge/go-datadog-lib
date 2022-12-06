@@ -1,4 +1,4 @@
-package middleware
+package grpc
 
 import (
     "context"
@@ -13,7 +13,7 @@ import (
 // TraceUnaryServerInterceptor for Datadog Log Integration, middleware will create span that can be used from context
 func TraceUnaryServerInterceptor() grpc.UnaryServerInterceptor {
     return func(reqCtx context.Context, req interface{}, info *grpc.UnaryServerInfo, grpcReqHandler grpc.UnaryHandler) (interface{}, error) {
-        span, spanCtx := tracer.StartSpanFromContext(reqCtx, info.FullMethod, tracer.ResourceName(ddGRPCResourceName))
+        span, spanCtx := tracer.StartSpanFromContext(reqCtx, info.FullMethod, tracer.ResourceName("grpc.request"))
         defer span.Finish()
 
         extCtx := internal.ExtendedContextWithMetadata(spanCtx, internal.TraceContextKey{}, tracing.TraceDetails{DatadogSpan: span})

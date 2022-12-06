@@ -1,12 +1,13 @@
-package middleware
+package echo
 
 import (
     "fmt"
+
     "github.com/coopnorge/go-datadog-lib/internal"
     "github.com/coopnorge/go-datadog-lib/tracing"
-    "gopkg.in/DataDog/dd-trace-go.v1/ddtrace/tracer"
 
-    "github.com/labstack/echo"
+    "github.com/labstack/echo/v4"
+    "gopkg.in/DataDog/dd-trace-go.v1/ddtrace/tracer"
 )
 
 // TraceServerMiddleware for Datadog Log Integration, middleware will create span that can be used from context
@@ -17,7 +18,7 @@ func TraceServerMiddleware() echo.MiddlewareFunc {
                 return fmt.Errorf("unable to extract request from Request Context from Echo it's nil")
             }
 
-            span, spanCtx := tracer.StartSpanFromContext(c.Request().Context(), c.Request().RequestURI, tracer.ResourceName(ddHTTPResourceName))
+            span, spanCtx := tracer.StartSpanFromContext(c.Request().Context(), c.Request().RequestURI, tracer.ResourceName("http.request"))
             defer span.Finish()
 
             extCtx := internal.ExtendedContextWithMetadata(spanCtx, internal.TraceContextKey{}, tracing.TraceDetails{DatadogSpan: span})

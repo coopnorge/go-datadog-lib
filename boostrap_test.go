@@ -1,24 +1,24 @@
-package go_datadog_lib
+package coopdatadog
 
 import (
-	"testing"
+    "testing"
 
-	"github.com/coopnorge/go-datadog-lib/config"
+    "github.com/coopnorge/go-datadog-lib/config"
 )
 
 func TestDatadog(t *testing.T) {
-	ddCfg := config.DatadogConfig{}
+    ddCfg := config.DatadogConfig{}
 
-	StartDatadog(ddCfg, false, false)
+    StartDatadog(ddCfg, false, false)
 
-	ddCfg = config.DatadogConfig{
-		Env:            "local",
-		Service:        "Test-Go-Datadog-lib",
-		ServiceVersion: "na",
-		DSD:            "unix:///tmp/",
-		APM:            "/tmp",
-	}
+    ddCfg = config.DatadogConfig{
+        Env:            "local",
+        Service:        "Test-Go-Datadog-lib",
+        ServiceVersion: "na",
+        DSD:            "unix:///tmp/",
+        APM:            "/tmp",
+    }
 
-	StartDatadog(ddCfg, true, true)
-	GracefulDatadogShutdown()
+    StartDatadog(ddCfg, true, true)
+    GracefulDatadogShutdown()
 }

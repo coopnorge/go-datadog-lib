@@ -1,4 +1,4 @@
-package go_datadog_lib
+package coopdatadog
 
 import (
     "github.com/coopnorge/go-datadog-lib/config"

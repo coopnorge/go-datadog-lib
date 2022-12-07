@@ -4,7 +4,7 @@ go 1.19
 
 require (
 	github.com/DataDog/datadog-go v4.8.3+incompatible
-	github.com/coopnorge/go-logger v0.1.0
+	github.com/coopnorge/go-logger v0.2.0
 	github.com/golang/mock v1.6.0
 	github.com/iancoleman/strcase v0.2.0
 	github.com/labstack/echo/v4 v4.9.1

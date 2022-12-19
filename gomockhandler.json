@@ -1,8 +1,8 @@
 {
 	"mocks": {
 		"DatadogMetricsClient": {
-			"checksum": "NydKUvnQJ3LPAfMgNhUA9w==",
-			"source_checksum": "NmI2tghjdQQKsK5XAvdcSg==",
+			"checksum": "hUSmzPFyMJaUxKVKcI64Vw==",
+			"source_checksum": "MVO/6N1Jb+XRESS9E4He2Q==",
 			"mode": "SOURCE_MODE",
 			"source_mode_runner": {
 				"source": "metric/datadog.go",

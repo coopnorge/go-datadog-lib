@@ -1,8 +1,9 @@
 package coopdatadog
 
 import (
+    "fmt"
+    
     "github.com/coopnorge/go-datadog-lib/config"
-    "github.com/coopnorge/go-logger"
 
     "gopkg.in/DataDog/dd-trace-go.v1/ddtrace/tracer"
     "gopkg.in/DataDog/dd-trace-go.v1/profiler"
@@ -11,19 +12,17 @@ import (
 // StartDatadog parallel process to collect data for Datadog.
 // enableExtraProfiling flag enables more optional profilers not recommended for production.
 // isConnectionSocket flag related to Datadog connection type, it supports HTTP or socket - values will be used from config.DatadogParameters
-func StartDatadog(cfg config.DatadogParameters, enableExtraProfiling, isConnectionSocket bool) {
+func StartDatadog(cfg config.DatadogParameters, enableExtraProfiling, isConnectionSocket bool) error {
     if !cfg.IsDataDogConfigValid() {
-        logger.Errorf("Datadog configuration not valid, cannot initialize Datadog services")
-
-        return
+        return fmt.Errorf("datadog configuration not valid, cannot initialize Datadog services")
     }
-
-    logger.Infof("Initializing Datadog services for %s in environment %s", cfg.GetService(), cfg.GetEnv())
 
     initTracer(cfg, isConnectionSocket)
     if initProfilerErr := initProfiler(cfg, enableExtraProfiling, isConnectionSocket); initProfilerErr != nil {
-        logger.Errorf("Failed to start Datadog profiler: %v", initProfilerErr)
+        return fmt.Errorf("failed to start Datadog profiler: %v", initProfilerErr)
     }
+
+    return nil
 }
 
 // GracefulDatadogShutdown of executed parallel processes

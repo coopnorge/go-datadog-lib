@@ -137,10 +137,15 @@ func main() {
 
 	// When you start other processes start datadog
 	withExtraProfiler := true
-	go_datadog_lib.StartDatadog(ddCfg, withExtraProfiler)
+	startDatadogServiceError := go_datadog_lib.StartDatadog(ddCfg, withExtraProfiler)
+	if startDatadogServiceError != nil {
+    // Handle error / log error
+  }
 
 	// Stop datadog with yours other processes
 	handleGracefulShutdown(go_datadog_lib.GracefulDatadogShutdown)
+	// or simply call with defer
+	defer go_datadog_lib.GracefulDatadogShutdown()
 }
 ```
 
@@ -253,7 +258,10 @@ func MyServiceContainer(ddCfg *config.DatadogConfig) error {
 	ddClient := metrics.NewDatadogMetrics(ddCfg)
 
 	// If you need simple metric collector then create
-	ddMetricCollector := metrics.NewBaseMetricCollector(ddClient)
+	ddMetricCollector, ddMetricCollectorErr := metrics.NewBaseMetricCollector(ddClient)
+	if ddMetricCollectorErr != nil {
+		// Handle error / log error
+  }
 	// ddMetricCollector -> *BaseMetricCollector allows you to send metrics to Datadog
 }
 ```
@@ -274,7 +282,10 @@ import (
 )
 
 func Example()  {
-	ddClient := metrics.NewDatadogMetrics(new(config.DatadogConfig))
+	ddClient, ddClientErr := metrics.NewDatadogMetrics(new(config.DatadogConfig))
+	if ddClient != nil {
+    // Handle error / log error
+  }
 	ddMetricCollector := metrics.NewBaseMetricCollector(ddClient)
 
 	tMetricData := metrics.Data{

@@ -10,12 +10,12 @@ require (
 	github.com/labstack/echo/v4 v4.9.1
 	github.com/stretchr/testify v1.8.1
 	google.golang.org/grpc v1.51.0
-	gopkg.in/DataDog/dd-trace-go.v1 v1.44.1
+	gopkg.in/DataDog/dd-trace-go.v1 v1.45.1
 )
 
 require (
 	github.com/DataDog/datadog-agent/pkg/obfuscate v0.0.0-20211129110424-6491aa3bf583 // indirect
-	github.com/DataDog/datadog-agent/pkg/remoteconfig/state v0.41.0-rc.3.0.20221208094921-9e0b0bfca62a // indirect
+	github.com/DataDog/datadog-agent/pkg/remoteconfig/state v0.42.0-rc.1 // indirect
 	github.com/DataDog/datadog-go/v5 v5.0.2 // indirect
 	github.com/DataDog/go-tuf v0.3.0--fix-localmeta-fork // indirect
 	github.com/DataDog/gostackparse v0.5.0 // indirect

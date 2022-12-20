@@ -161,7 +161,7 @@ function `TraceUnaryServerInterceptor`
 package myServer
 
 import (
-	  "github.com/coopnorge/go-datadog-lib/middleware"
+	  "github.com/coopnorge/go-datadog-lib/middleware/grpc"
 	  "github.com/labstack/echo/v4"
 )
 
@@ -173,7 +173,7 @@ func MyServer() {
 			grpctrace.WithServiceName(cfg.DatadogService),
 			grpctrace.WithStreamCalls(false),
 		),
-		middleware.TraceUnaryServerInterceptor(),
+		grpc.TraceUnaryServerInterceptor(),
 	)
 
 	// This middleware will extend context for tracing and logs
@@ -192,7 +192,7 @@ Example:
 package myServer
 
 import (
-	"github.com/coopnorge/go-datadog-lib/middleware"
+  coopEchoDatadog "github.com/coopnorge/go-datadog-lib/middleware/echo"
 	"github.com/labstack/echo/v4"
 )
 
@@ -202,7 +202,7 @@ func MyServer() {
 	// Some other configuration
 	// ...
 	// Add middleware to extend context for better traceability
-	echoServer.Use(middleware.TraceServerMiddleware())
+	echoServer.Use(coopEchoDatadog.TraceServerMiddleware())
 }
 ```
 

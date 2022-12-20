@@ -7,24 +7,36 @@ import (
     "github.com/coopnorge/go-datadog-lib/tracing"
 
     "github.com/labstack/echo/v4"
+    "gopkg.in/DataDog/dd-trace-go.v1/ddtrace"
     "gopkg.in/DataDog/dd-trace-go.v1/ddtrace/tracer"
 )
 
 // TraceServerMiddleware for Datadog Log Integration, middleware will create span that can be used from context
 func TraceServerMiddleware() echo.MiddlewareFunc {
-    return func(next echo.HandlerFunc) echo.HandlerFunc {
-        return func(c echo.Context) error {
-            if c.Request() == nil {
-                return fmt.Errorf("unable to extract request from Request Context from Echo it's nil")
-            }
+	return func(next echo.HandlerFunc) echo.HandlerFunc {
+		return func(c echo.Context) error {
+            req := c.Request()
+			if req == nil {
+				return fmt.Errorf("unable to extract request from Echo Request Context, returned nil")
+			}
 
-            span, spanCtx := tracer.StartSpanFromContext(c.Request().Context(), c.Request().RequestURI, tracer.ResourceName("http.request"))
-            defer span.Finish()
+			opts := []ddtrace.StartSpanOption{tracer.Measured()}
+			if spanCtx, err := tracer.Extract(tracer.HTTPHeadersCarrier(req.Header)); err == nil {
+				opts = append(opts, tracer.ChildOf(spanCtx))
+			}
 
-            extCtx := internal.ExtendedContextWithMetadata(spanCtx, internal.TraceContextKey{}, tracing.TraceDetails{DatadogSpan: span})
-            c.Request().WithContext(extCtx)
+			span, spanCtx := tracer.StartSpanFromContext(req.Context(), req.RequestURI, opts...)
+			defer span.Finish()
 
-            return nil
-        }
-    }
+			extCtx := internal.ExtendedContextWithMetadata(
+                spanCtx,
+                internal.TraceContextKey{},
+                tracing.TraceDetails{DatadogSpan: span},
+            )
+
+            c.SetRequest(req.WithContext(extCtx))
+
+			return next(c)
+		}
+	}
 }

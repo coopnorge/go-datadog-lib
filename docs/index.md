@@ -60,7 +60,7 @@ spec:
             - name: DD_DOGSTATSD_URL
               value: "unix:///var/run/datadog/dsd.socket"
             - name: DD_TRACE_AGENT_URL
-              value: "/var/run/datadog/apm.socket"
+              value: "unix:///var/run/datadog/apm.socket"
             - name: DD_SERVICE
               valueFrom:
                 fieldRef:
@@ -78,17 +78,6 @@ spec:
         - hostPath:
             path: /var/run/datadog/
           name: ddsocket
-```
-
-Most important is that your paths for sockets are the same as this. The reason
-for that is Datadog implementation in go would not connect to APM if you will
-pass Unix socket prefix.
-
-```yaml
-- name: DD_DOGSTATSD_URL
-  value: "unix:///var/run/datadog/dsd.socket"
-- name: DD_TRACE_AGENT_URL
-  value: "/var/run/datadog/apm.socket"
 ```
 
 It's how the application will be shown in Datadog APM.
@@ -136,8 +125,9 @@ func main() {
 	}
 
 	// When you start other processes start datadog
-	withExtraProfiler := true
-	startDatadogServiceError := go_datadog_lib.StartDatadog(ddCfg, withExtraProfiler)
+	isSocket := true // Will try connect via socket or if false send via HTTP
+	withExtraProfiler := true // Enables additional profiling
+	startDatadogServiceError := go_datadog_lib.StartDatadog(ddCfg, withExtraProfiler, isSocket)
 	if startDatadogServiceError != nil {
     // Handle error / log error
   }

@@ -24,6 +24,14 @@ func TestIsDataDogConfigValid(t *testing.T) {
     cfg.DSD = ""
     assert.False(t, cfg.IsDataDogConfigValid())
 
+    cfg.APM = ""
+    cfg.DSD = "unix///tmp"
+    assert. True(t, cfg.IsDataDogConfigValid())
+
+    cfg.APM = "unix///tmp"
+    cfg.DSD = ""
+    assert. True(t, cfg.IsDataDogConfigValid())
+
     cfg.DSD = "unix///tmp"
     cfg.APM = "unix///tmp"
     assert.True(t, cfg.IsDataDogConfigValid())

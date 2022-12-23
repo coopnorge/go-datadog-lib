@@ -44,7 +44,7 @@ func (d DatadogConfig) IsDataDogConfigValid() bool {
     }
 
     // DSD or APM must be configured`
-    if d.DSD == "" || d.APM == "" {
+    if d.DSD == "" && d.APM == "" {
         return false
     }
 

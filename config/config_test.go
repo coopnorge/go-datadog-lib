@@ -20,7 +20,8 @@ func TestIsDataDogConfigValid(t *testing.T) {
     cfg.ServiceVersion = "v1"
     assert.False(t, cfg.IsDataDogConfigValid())
 
-    cfg.DSD = "/tmp"
+    cfg.APM = ""
+    cfg.DSD = ""
     assert.False(t, cfg.IsDataDogConfigValid())
 
     cfg.DSD = "unix///tmp"

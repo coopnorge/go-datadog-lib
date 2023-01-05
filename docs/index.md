@@ -25,7 +25,8 @@ Prepare configuration for your container.
 
 Following configuration example related to Kubernetes and Kustomize.
 
-NOTE: Don't forget to set `DD_ENV` for each env, otherwise it will be not visible in APM list.
+NOTE: Don't forget to set `DD_ENV` for each env,
+otherwise it will be not visible in APM list.
 
 ```yaml
 apiVersion: apps/v1

@@ -25,6 +25,8 @@ Prepare configuration for your container.
 
 Following configuration example related to Kubernetes and Kustomize.
 
+NOTE: Don't forget to set `DD_ENV` for each env, otherwise it will be not visible in APM list.
+
 ```yaml
 apiVersion: apps/v1
 kind: Deployment
@@ -60,7 +62,7 @@ spec:
             - name: DD_DOGSTATSD_URL
               value: "unix:///var/run/datadog/dsd.socket"
             - name: DD_TRACE_AGENT_URL
-              value: "unix:///var/run/datadog/apm.socket"
+              value: "/var/run/datadog/apm.socket"
             - name: DD_SERVICE
               valueFrom:
                 fieldRef:
@@ -69,6 +71,10 @@ spec:
               valueFrom:
                 fieldRef:
                   fieldPath: metadata.labels['tags.datadoghq.com/version']
+            - name: DD_ENV
+              valueFrom:
+                fieldRef:
+                  fieldPath: metadata.labels['tags.datadoghq.com/env']
           volumeMounts:
             - name: ddsocket
               mountPath: /var/run/datadog

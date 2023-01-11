@@ -10,7 +10,7 @@ require (
 	github.com/labstack/echo/v4 v4.9.1
 	github.com/stretchr/testify v1.8.1
 	google.golang.org/grpc v1.51.0
-	gopkg.in/DataDog/dd-trace-go.v1 v1.45.1
+	gopkg.in/DataDog/dd-trace-go.v1 v1.46.0
 )
 
 require (

@@ -2,10 +2,12 @@ package metric
 
 import (
     "fmt"
-    "github.com/DataDog/datadog-go/statsd"
-    "github.com/coopnorge/go-datadog-lib/config"
-    "github.com/iancoleman/strcase"
     "strings"
+
+    "github.com/coopnorge/go-datadog-lib/config"
+
+    "github.com/DataDog/datadog-go/statsd"
+    "github.com/iancoleman/strcase"
 )
 
 type (

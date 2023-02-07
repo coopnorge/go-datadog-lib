@@ -104,7 +104,7 @@ func TestAddMetric(t *testing.T) {
                     MaxTimes(1)
             }
 
-            bmc := &BaseMetricCollector{c: mockDatadogClient}
+            bmc := &BaseMetricCollector{Client: mockDatadogClient}
             bmc.AddMetric(context.Background(), tMetricData)
         })
     }
@@ -118,6 +118,6 @@ func TestAddMetricNoClient(t *testing.T) {
     mockDatadogClient.EXPECT().GetClient().Return(nil).MaxTimes(1)
 
     bmc := NewBaseMetricCollector(nil)
-    bmc = &BaseMetricCollector{c: mockDatadogClient}
+    bmc = &BaseMetricCollector{Client: mockDatadogClient}
     bmc.AddMetric(context.Background(), Data{})
 }

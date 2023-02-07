@@ -15,7 +15,7 @@ func TestNewDatadogMetrics(t *testing.T) {
 		ServiceVersion: "VUnit",
 	}
 
-	m, err := NewDatadogMetrics(&cfg)
+	m, err := NewDatadogMetrics(&cfg, "myUnitTest")
 	assert.NotNil(t, err)
 	assert.Nil(t, m)
 }

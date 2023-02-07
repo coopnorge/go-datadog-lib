@@ -23,7 +23,7 @@ type (
 
     // BaseMetricCollector ...
     BaseMetricCollector struct {
-        c DatadogMetricsClient
+        DatadogMetrics DatadogMetricsClient
     }
 
     // Data for metrics
@@ -47,12 +47,12 @@ const (
 
 // NewBaseMetricCollector instance
 func NewBaseMetricCollector(dm *DatadogMetrics) *BaseMetricCollector {
-    return &BaseMetricCollector{c: dm}
+    return &BaseMetricCollector{DatadogMetrics: dm}
 }
 
 // AddMetric related to name with given value
 func (m BaseMetricCollector) AddMetric(ctx context.Context, d Data) {
-    if m.c.GetClient() == nil {
+    if m.DatadogMetrics == nil || m.DatadogMetrics.GetClient() == nil {
         return
     }
 
@@ -62,16 +62,16 @@ func (m BaseMetricCollector) AddMetric(ctx context.Context, d Data) {
         metricTags = append(metricTags, fmt.Sprintf("%s:%s", tagName, t.MetricTagValue))
     }
 
-    metricName := fmt.Sprintf("%s.%s", m.c.GetServiceNamePrefix(), d.Name)
+    metricName := fmt.Sprintf("%s.%s", m.DatadogMetrics.GetServiceNamePrefix(), d.Name)
 
     var metricCollectionErr error
     switch d.Type {
     case MetricTypeEvent:
-        metricCollectionErr = m.c.GetClient().Incr(metricName, metricTags, 1)
+        metricCollectionErr = m.DatadogMetrics.GetClient().Incr(metricName, metricTags, 1)
     case MetricTypeMeasurement:
-        metricCollectionErr = m.c.GetClient().Gauge(metricName, d.Value, metricTags, 1)
+        metricCollectionErr = m.DatadogMetrics.GetClient().Gauge(metricName, d.Value, metricTags, 1)
     case MetricTypeCountEvents:
-        metricCollectionErr = m.c.GetClient().Count(metricName, int64(d.Value), metricTags, 1)
+        metricCollectionErr = m.DatadogMetrics.GetClient().Count(metricName, int64(d.Value), metricTags, 1)
     }
 
     if metricCollectionErr != nil {

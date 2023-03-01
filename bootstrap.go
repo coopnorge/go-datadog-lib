@@ -2,7 +2,7 @@ package coopdatadog
 
 import (
     "fmt"
-    
+
     "github.com/coopnorge/go-datadog-lib/config"
 
     "gopkg.in/DataDog/dd-trace-go.v1/ddtrace/tracer"
@@ -45,6 +45,7 @@ func initTracer(cfg config.DatadogParameters, isConnectionSocket bool) {
             tracer.WithEnv(cfg.GetEnv()),
             tracer.WithService(cfg.GetService()),
             tracer.WithServiceVersion(cfg.GetServiceVersion()),
+            tracer.WithRuntimeMetrics(),
         }...,
     )
 

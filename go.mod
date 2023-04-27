@@ -10,14 +10,15 @@ require (
 	github.com/labstack/echo/v4 v4.10.2
 	github.com/stretchr/testify v1.8.2
 	google.golang.org/grpc v1.54.0
-	gopkg.in/DataDog/dd-trace-go.v1 v1.49.1
+	gopkg.in/DataDog/dd-trace-go.v1 v1.50.0
 )
 
 require (
-	github.com/DataDog/datadog-agent/pkg/obfuscate v0.43.0 // indirect
-	github.com/DataDog/datadog-agent/pkg/remoteconfig/state v0.43.1 // indirect
+	github.com/DataDog/appsec-internal-go v1.0.0 // indirect
+	github.com/DataDog/datadog-agent/pkg/obfuscate v0.43.1 // indirect
+	github.com/DataDog/datadog-agent/pkg/remoteconfig/state v0.45.0-rc.1 // indirect
 	github.com/DataDog/datadog-go/v5 v5.1.1 // indirect
-	github.com/DataDog/go-libddwaf v1.0.0 // indirect
+	github.com/DataDog/go-libddwaf v1.1.0 // indirect
 	github.com/DataDog/go-tuf v0.3.0--fix-localmeta-fork // indirect
 	github.com/DataDog/gostackparse v0.5.0 // indirect
 	github.com/DataDog/sketches-go v1.2.1 // indirect
@@ -45,7 +46,7 @@ require (
 	go.uber.org/atomic v1.10.0 // indirect
 	go4.org/intern v0.0.0-20211027215823-ae77deb06f29 // indirect
 	go4.org/unsafe/assume-no-moving-gc v0.0.0-20220617031537-928513b29760 // indirect
-	golang.org/x/crypto v0.6.0 // indirect
+	golang.org/x/crypto v0.7.0 // indirect
 	golang.org/x/net v0.8.0 // indirect
 	golang.org/x/sys v0.6.0 // indirect
 	golang.org/x/text v0.8.0 // indirect
@@ -54,5 +55,5 @@ require (
 	google.golang.org/genproto v0.0.0-20230110181048-76db0878b65f // indirect
 	google.golang.org/protobuf v1.28.1 // indirect
 	gopkg.in/yaml.v3 v3.0.1 // indirect
-	inet.af/netaddr v0.0.0-20220617031823-097006376321 // indirect
+	inet.af/netaddr v0.0.0-20220811202034-502d2d690317 // indirect
 )

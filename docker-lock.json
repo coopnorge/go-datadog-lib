@@ -1,0 +1,11 @@
+{
+    "dockerfiles": {
+        "docker-compose/Dockerfile": [
+            {
+                "name": "ghcr.io/coopnorge/engineering-docker-images/e0/techdocs",
+                "tag": "latest",
+                "digest": "532692a7a2c78dc83ac379c50572d10820bd1b64cff033bdd4612063741161c7"
+            }
+        ]
+    }
+}

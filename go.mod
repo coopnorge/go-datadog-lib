@@ -8,7 +8,7 @@ require (
 	github.com/golang/mock v1.6.0
 	github.com/iancoleman/strcase v0.2.0
 	github.com/labstack/echo/v4 v4.10.2
-	github.com/stretchr/testify v1.8.2
+	github.com/stretchr/testify v1.8.3
 	google.golang.org/grpc v1.55.0
 	gopkg.in/DataDog/dd-trace-go.v1 v1.50.1
 )

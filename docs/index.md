@@ -148,27 +148,44 @@ func main() {
 
 ### 3. Middleware gRPC
 
-To have better tracing you need add to your gRPC custom
-middleware that will extend context.
+To have better tracing you need add to your gRPC custom middleware that will
+extend context.
 
 It's needed to relate logs with your trace data in APM.
 
-To do that simple add Go - Datadog middleware
-to your gRPC interceptor.
+To do that, simply add Go - Datadog middleware to your gRPC interceptor.
 
-Take a look `"github.com/coopnorge/go-datadog-lib/middleware"`
-function `TraceUnaryServerInterceptor`
+Take a look at the function `TraceUnaryServerInterceptor` in
+[`github.com/coopnorge/go-datadog-lib/blob/main/middleware/grpc/grpc.go`](https://github.com/coopnorge/go-datadog-lib/blob/main/middleware/grpc/grpc.go).
+
+```go
+import (
+	datadogMiddleware "github.com/coopnorge/go-datadog-lib/middleware/grpc"
+	"google.golang.org/grpc"
+)
+
+func main() {
+	serverOpts := []grpc.ServerOption{
+		grpc.UnaryInterceptor(datadogMiddleware.TraceUnaryServerInterceptor()),
+	}
+
+	grpcServer := grpc.NewServer(serverOpts...)
+}
+```
+
+#### Using `cfgBuilder`
 
 ```go
 package myServer
 
 import (
-	  "github.com/coopnorge/go-datadog-lib/middleware/grpc"
-	  "github.com/labstack/echo/v4"
+	"github.com/coopnorge/go-datadog-lib/middleware/grpc"
+	"github.com/labstack/echo/v4"
 )
 
 func MyServer() {
 	// ...
+  
 	// This is gRPC server configuration builder
 	cfgBuilder.AddGrpcUnaryInterceptors(
 		grpctrace.UnaryServerInterceptor(
@@ -194,7 +211,7 @@ Example:
 package myServer
 
 import (
-  coopEchoDatadog "github.com/coopnorge/go-datadog-lib/middleware/echo"
+	coopEchoDatadog "github.com/coopnorge/go-datadog-lib/middleware/echo"
 	"github.com/labstack/echo/v4"
 )
 

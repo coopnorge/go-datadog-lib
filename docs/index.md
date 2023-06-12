@@ -114,35 +114,33 @@ Create pkg configuration for bootstrap Datadog.
 package main
 
 import (
-	"github.com/coopnorge/go-datadog-lib"
+	coopdatadog "github.com/coopnorge/go-datadog-lib"
 	"github.com/coopnorge/go-datadog-lib/config"
 )
 
 func main() {
 	// Your app initialization
 	/// ... 
-
-// From your core configuration add datadog related values
+	// From your core configuration add datadog related values
 	ddCfg := config.DatadogConfig{
 		Env:            "dd_env",
 		Service:        "dd_service",
 		ServiceVersion: "dd_version",
 		DSD:            "dd_dogstatsd_url",
 		APM:            "dd_trace_agent_url",
+		EnableExtraProfiling: "dd_enable_extra_profiling"
 	}
 
 	// When you start other processes start datadog
-	isSocket := true // Will try connect via socket or if false send via HTTP
-	withExtraProfiler := true // Enables additional profiling
-	startDatadogServiceError := go_datadog_lib.StartDatadog(ddCfg, withExtraProfiler, isSocket)
+	startDatadogServiceError := coopdatadog.StartDatadog(ddCfg, coopdatadog.ConnectionTypeSocket)
 	if startDatadogServiceError != nil {
-    // Handle error / log error
-  }
+	// Handle error / log error
+	}
 
 	// Stop datadog with yours other processes
-	handleGracefulShutdown(go_datadog_lib.GracefulDatadogShutdown)
+	handleGracefulShutdown(coopdatadog.GracefulDatadogShutdown)
 	// or simply call with defer
-	defer go_datadog_lib.GracefulDatadogShutdown()
+	defer coopdatadog.GracefulDatadogShutdown()
 }
 ```
 

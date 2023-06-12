@@ -9,16 +9,25 @@ import (
 	"gopkg.in/DataDog/dd-trace-go.v1/profiler"
 )
 
+// ConnectionType enum type
+type ConnectionType byte
+
+const (
+	// ConnectionTypeSocket sets the connection to Datadog to go throug a UNIX socket
+	ConnectionTypeSocket ConnectionType = iota
+	// ConnectionTypeHTTP sets the connection to Datadog to go over HTTP
+	ConnectionTypeHTTP
+)
+
 // StartDatadog parallel process to collect data for Datadog.
-// enableExtraProfiling flag enables more optional profilers not recommended for production.
-// isConnectionSocket flag related to Datadog connection type, it supports HTTP or socket - values will be used from config.DatadogParameters
-func StartDatadog(cfg config.DatadogParameters, enableExtraProfiling, isConnectionSocket bool) error {
+// connectionType flag related to Datadog connection type, it supports HTTP or socket - values will be used from config.DatadogParameters
+func StartDatadog(cfg config.DatadogParameters, connectionType ConnectionType) error {
 	if !cfg.IsDataDogConfigValid() {
 		return fmt.Errorf("datadog configuration not valid, cannot initialize Datadog services")
 	}
 
-	initTracer(cfg, isConnectionSocket)
-	if initProfilerErr := initProfiler(cfg, enableExtraProfiling, isConnectionSocket); initProfilerErr != nil {
+	initTracer(cfg, connectionType)
+	if initProfilerErr := initProfiler(cfg, connectionType); initProfilerErr != nil {
 		return fmt.Errorf("failed to start Datadog profiler: %v", initProfilerErr)
 	}
 
@@ -31,11 +40,12 @@ func GracefulDatadogShutdown() {
 	defer profiler.Stop()
 }
 
-func initTracer(cfg config.DatadogParameters, isConnectionSocket bool) {
+func initTracer(cfg config.DatadogParameters, connectionType ConnectionType) {
 	var tracerOptions []tracer.StartOption
-	if isConnectionSocket {
+	switch connectionType {
+	case ConnectionTypeSocket:
 		tracerOptions = append(tracerOptions, tracer.WithUDS(cfg.GetApmEndpoint()))
-	} else {
+	case ConnectionTypeHTTP:
 		tracerOptions = append(tracerOptions, tracer.WithAgentAddr(cfg.GetApmEndpoint()))
 	}
 
@@ -52,9 +62,9 @@ func initTracer(cfg config.DatadogParameters, isConnectionSocket bool) {
 	tracer.Start(tracerOptions...)
 }
 
-func initProfiler(cfg config.DatadogParameters, enableExtraProfiling bool, isConnectionSocket bool) error {
+func initProfiler(cfg config.DatadogParameters, connectionType ConnectionType) error {
 	var profilerTypes []profiler.ProfileType
-	if enableExtraProfiling {
+	if cfg.IsExtraProfilingEnabled() {
 		profilerTypes = []profiler.ProfileType{
 			profiler.CPUProfile,
 			profiler.HeapProfile,
@@ -67,9 +77,10 @@ func initProfiler(cfg config.DatadogParameters, enableExtraProfiling bool, isCon
 	}
 
 	var profilerOptions []profiler.Option
-	if isConnectionSocket {
+	switch connectionType {
+	case ConnectionTypeSocket:
 		profilerOptions = append(profilerOptions, profiler.WithUDS(cfg.GetApmEndpoint()))
-	} else {
+	case ConnectionTypeHTTP:
 		profilerOptions = append(profilerOptions, profiler.WithAgentAddr(cfg.GetApmEndpoint()))
 	}
 

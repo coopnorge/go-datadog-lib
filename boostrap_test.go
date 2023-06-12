@@ -10,18 +10,19 @@ import (
 func TestDatadog(t *testing.T) {
 	ddCfg := config.DatadogConfig{}
 
-	err := StartDatadog(ddCfg, false, false)
+	err := StartDatadog(ddCfg, ConnectionTypeHTTP)
 	assert.NotNil(t, err)
 
 	ddCfg = config.DatadogConfig{
-		Env:            "local",
-		Service:        "Test-Go-Datadog-lib",
-		ServiceVersion: "na",
-		DSD:            "unix:///tmp/",
-		APM:            "/tmp",
+		Env:                  "local",
+		Service:              "Test-Go-Datadog-lib",
+		ServiceVersion:       "na",
+		DSD:                  "unix:///tmp/",
+		APM:                  "/tmp",
+		EnableExtraProfiling: true,
 	}
 
-	err = StartDatadog(ddCfg, true, true)
+	err = StartDatadog(ddCfg, ConnectionTypeSocket)
 	assert.Nil(t, err)
 
 	GracefulDatadogShutdown()

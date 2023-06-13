@@ -11,8 +11,8 @@ import (
 	url "net/url"
 	reflect "reflect"
 
-	echo "github.com/labstack/echo/v4"
 	gomock "github.com/golang/mock/gomock"
+	echo "github.com/labstack/echo/v4"
 )
 
 // MockContext is a mock of Context interface.

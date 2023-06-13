@@ -22,7 +22,7 @@ func TestDatadog(t *testing.T) {
 	}
 
 	err = StartDatadog(ddCfg, true, true)
-    assert.Nil(t, err)
+	assert.Nil(t, err)
 
 	GracefulDatadogShutdown()
 }

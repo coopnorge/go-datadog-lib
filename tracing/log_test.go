@@ -10,19 +10,19 @@ import (
 	"gopkg.in/DataDog/dd-trace-go.v1/ddtrace/tracer"
 )
 
-func TestLogWithTrace(t *testing.T) {
+func TestLogWithTrace(_ *testing.T) {
 	ctx := context.Background()
 
 	LogWithTrace(ctx, logger.LevelDebug, "unit test")
 }
 
-func TestLogFieldsWithTrace(t *testing.T) {
+func TestLogFieldsWithTrace(_ *testing.T) {
 	ctx := context.Background()
 
 	LogFieldsWithTrace(ctx, logger.LevelDebug, "unit test", logger.Fields{})
 }
 
-func TestLogWithExtendedDatadogContext(t *testing.T) {
+func TestLogWithExtendedDatadogContext(_ *testing.T) {
 	ctx := context.Background()
 	span, spanCtx := tracer.StartSpanFromContext(ctx, "test", tracer.ResourceName("UnitTest"))
 	defer span.Finish()
@@ -30,7 +30,7 @@ func TestLogWithExtendedDatadogContext(t *testing.T) {
 	LogWithTrace(extCtx, logger.LevelDebug, "unit test")
 }
 
-func TestLogWithAllSeverity(t *testing.T) {
+func TestLogWithAllSeverity(_ *testing.T) {
 	ctx := context.Background()
 
 	LogWithTrace(ctx, logger.LevelDebug, "unit test")

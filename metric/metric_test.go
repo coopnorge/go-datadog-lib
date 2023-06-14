@@ -19,7 +19,7 @@ func TestAddMetric(t *testing.T) {
 
 	testCases := []struct {
 		name        string
-		metricType  MetricType
+		metricType  Type
 		isWithError bool
 	}{
 		{
@@ -47,8 +47,8 @@ func TestAddMetric(t *testing.T) {
 				Name:  "RuntimeTest",
 				Type:  tc.metricType,
 				Value: float64(42),
-				MetricTags: []MetricTag{
-					{MetricTagName: "Unit", MetricTagValue: "Test"},
+				MetricTags: []Tag{
+					{Name: "Unit", Value: "Test"},
 				},
 			}
 
@@ -117,7 +117,6 @@ func TestAddMetricNoClient(t *testing.T) {
 
 	mockDatadogClient.EXPECT().GetClient().Return(nil).MaxTimes(1)
 
-	bmc := NewBaseMetricCollector(nil)
-	bmc = &BaseMetricCollector{DatadogMetrics: mockDatadogClient}
+	bmc := &BaseMetricCollector{DatadogMetrics: mockDatadogClient}
 	bmc.AddMetric(context.Background(), Data{})
 }

@@ -306,8 +306,8 @@ func Example()  {
 		Name:  "RuntimeTest",
 		Type:  metrics.MetricTypeEvent,
 		Value: float64(42),
-		MetricTags: []metrics.MetricTag{
-			{MetricTagName: "Show", MetricTagValue: "Case"},
+		MetricTags: []metrics.Tag{
+			{Name: "Show", Value: "Case"},
 		},
 	}
 

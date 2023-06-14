@@ -24,6 +24,20 @@ To generate or update mocks use tools
 [Eitri](https://github.com/Clink-n-Clank/Eitri) or use directly
 [Mockhandler](github.com/sanposhiho/gomockhandle)
 
+## Development workflow
+
+### Validate
+
+```bash
+docker compose run --rm golang-devtools validate
+```
+
+### Other targets
+
+```bash
+docker compose run --rm golang-devtools help
+```
+
 ## User documentation
 
 User documentation is build using TechDocs and published to

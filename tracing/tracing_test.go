@@ -15,7 +15,7 @@ func TestCreateNestedTrace(t *testing.T) {
 	res := "unit"
 	ctx := context.Background()
 
-	nestedTrace, nestedTraceErr := CreateNestedTrace(op, res, ctx)
+	nestedTrace, nestedTraceErr := CreateNestedTrace(ctx, op, res)
 
 	assert.Error(t, nestedTraceErr, "expected error since context not extended")
 	assert.Nil(t, nestedTrace)
@@ -23,7 +23,7 @@ func TestCreateNestedTrace(t *testing.T) {
 	span, spanCtx := tracer.StartSpanFromContext(ctx, "test", tracer.ResourceName("UnitTest"))
 	defer span.Finish()
 	extCtx := internal.ExtendedContextWithMetadata(spanCtx, internal.TraceContextKey{}, TraceDetails{DatadogSpan: span})
-	nestedTrace, nestedTraceErr = CreateNestedTrace(op, res, extCtx)
+	nestedTrace, nestedTraceErr = CreateNestedTrace(extCtx, op, res)
 
 	assert.Nil(t, nestedTraceErr)
 	assert.NotNil(t, nestedTrace)

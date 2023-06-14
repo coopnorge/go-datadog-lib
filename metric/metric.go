@@ -12,13 +12,14 @@ import (
 )
 
 type (
-	// MetricName must be in specific format like cart.amount, request.my_request.x etc
-	MetricName string
-	MetricType byte
-	// MetricTag categories metric value with MetricTagName for MetricTagValue to display category like PaymentID.
-	MetricTag struct {
-		MetricTagName  string
-		MetricTagValue string
+	// Name must be in specific format like cart.amount, request.my_request.x etc
+	Name string
+	// Type is an Enum type for metric types
+	Type byte
+	// Tag categories metric value with Name for Value to display category like PaymentID.
+	Tag struct {
+		Name  string
+		Value string
 	}
 
 	// BaseMetricCollector ...
@@ -28,17 +29,17 @@ type (
 
 	// Data for metrics
 	Data struct {
-		Name  MetricName
-		Type  MetricType
+		Name  Name
+		Type  Type
 		Value float64
 		// MetricTags level empty if no categories required to relate metric
-		MetricTags []MetricTag
+		MetricTags []Tag
 	}
 )
 
 const (
 	// MetricTypeCountEvents Datadog will aggregate events to show how many events happened in second
-	MetricTypeCountEvents MetricType = iota
+	MetricTypeCountEvents Type = iota
 	// MetricTypeEvent send single event to Datadog
 	MetricTypeEvent
 	// MetricTypeMeasurement aggregates value of metrics in Datadog for measuring it, like memory or cart value
@@ -58,8 +59,8 @@ func (m BaseMetricCollector) AddMetric(ctx context.Context, d Data) {
 
 	var metricTags []string
 	for _, t := range d.MetricTags {
-		tagName := strings.ToLower(strcase.ToKebab(t.MetricTagName))
-		metricTags = append(metricTags, fmt.Sprintf("%s:%s", tagName, t.MetricTagValue))
+		tagName := strings.ToLower(strcase.ToKebab(t.Name))
+		metricTags = append(metricTags, fmt.Sprintf("%s:%s", tagName, t.Value))
 	}
 
 	metricName := fmt.Sprintf("%s.%s", m.DatadogMetrics.GetServiceNamePrefix(), d.Name)
@@ -78,7 +79,7 @@ func (m BaseMetricCollector) AddMetric(ctx context.Context, d Data) {
 		tracing.LogWithTrace(
 			ctx,
 			logger.LevelError,
-			fmt.Sprintf("Failed to collect metrics metricData for MetricName=%s - error: %v", metricName, metricCollectionErr),
+			fmt.Sprintf("Failed to collect metrics metricData for Name=%s - error: %v", metricName, metricCollectionErr),
 		)
 	}
 }

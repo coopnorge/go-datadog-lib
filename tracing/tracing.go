@@ -20,7 +20,7 @@ type (
 )
 
 // CreateNestedTrace will fork parent tracer to attach to parent one with new operation and resource from sourceCtx
-func CreateNestedTrace(operation, resource string, sourceCtx context.Context) (ddtrace.Span, error) {
+func CreateNestedTrace(sourceCtx context.Context, operation, resource string) (ddtrace.Span, error) {
 	ddCtx, ddExist := internal.GetContextMetadata[TraceDetails](sourceCtx, internal.TraceContextKey{})
 	if !ddExist || ddCtx.DatadogSpan == nil {
 		return nil, fmt.Errorf("inheritance failed, parent span tracer not found in context")

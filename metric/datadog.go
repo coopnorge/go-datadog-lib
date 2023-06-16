@@ -11,6 +11,7 @@ import (
 )
 
 type (
+	// DatadogMetricsClient ...
 	DatadogMetricsClient interface {
 		// GetClient statsd client
 		GetClient() statsd.ClientInterface

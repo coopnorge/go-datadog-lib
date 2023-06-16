@@ -5,8 +5,9 @@ import (
 	"testing"
 
 	"github.com/coopnorge/go-datadog-lib/internal"
-	"github.com/coopnorge/go-datadog-lib/internal/generated/mocks/labstack/echo/v4"
 	"github.com/coopnorge/go-datadog-lib/tracing"
+
+	mock_echo "github.com/coopnorge/go-datadog-lib/internal/generated/mocks/labstack/echo/v4"
 
 	"github.com/golang/mock/gomock"
 	"github.com/labstack/echo/v4"

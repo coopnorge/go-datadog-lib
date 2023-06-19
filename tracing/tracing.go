@@ -4,7 +4,7 @@ import (
 	"context"
 	"fmt"
 
-	"github.com/coopnorge/go-datadog-lib/internal"
+	"github.com/coopnorge/go-datadog-lib/v2/internal"
 
 	"gopkg.in/DataDog/dd-trace-go.v1/ddtrace"
 	"gopkg.in/DataDog/dd-trace-go.v1/ddtrace/ext"

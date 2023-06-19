@@ -4,7 +4,7 @@ import (
 	"context"
 	"testing"
 
-	"github.com/coopnorge/go-datadog-lib/internal"
+	"github.com/coopnorge/go-datadog-lib/v2/internal"
 
 	"github.com/stretchr/testify/assert"
 	"gopkg.in/DataDog/dd-trace-go.v1/ddtrace/tracer"

@@ -1,4 +1,4 @@
-module github.com/coopnorge/go-datadog-lib
+module github.com/coopnorge/go-datadog-lib/v2
 
 go 1.19
 

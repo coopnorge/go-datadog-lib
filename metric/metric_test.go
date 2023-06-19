@@ -5,8 +5,8 @@ import (
 	"fmt"
 	"testing"
 
-	mock_statsd "github.com/coopnorge/go-datadog-lib/internal/generated/mocks/DataDog/datadog-go/statsd"
-	mock_metrics "github.com/coopnorge/go-datadog-lib/internal/generated/mocks/metric"
+	mock_statsd "github.com/coopnorge/go-datadog-lib/v2/internal/generated/mocks/DataDog/datadog-go/statsd"
+	mock_metrics "github.com/coopnorge/go-datadog-lib/v2/internal/generated/mocks/metric"
 
 	"github.com/golang/mock/gomock"
 )

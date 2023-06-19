@@ -13,6 +13,8 @@ type (
 		GetDsdEndpoint() string
 		// GetApmEndpoint Socket path or URL for APM and profiler
 		GetApmEndpoint() string
+		// IsExtraProfilingEnabled flag enables more optional profilers not recommended for production.
+		IsExtraProfilingEnabled() bool
 		// IsDataDogConfigValid method to verify if configuration values are correct
 		IsDataDogConfigValid() bool
 	}
@@ -28,6 +30,8 @@ type (
 		DSD string `mapstructure:"dd_dogstatsd_url"`
 		// APM Socket path for apm and profiler, unix prefix not needed, example: /var/run/dd/apm.socket
 		APM string `mapstructure:"dd_trace_agent_url"`
+		// EnableExtraProfiling flag enables more optional profilers not recommended for production.
+		EnableExtraProfiling bool `mapstructure:"dd_enable_extra_profiling"`
 	}
 )
 
@@ -76,4 +80,9 @@ func (d DatadogConfig) GetDsdEndpoint() string {
 // unix prefix not needed, example: /var/run/dd/apm.socket
 func (d DatadogConfig) GetApmEndpoint() string {
 	return d.APM
+}
+
+// IsExtraProfilingEnabled return true if profilers not recommended for production are enabled.
+func (d DatadogConfig) IsExtraProfilingEnabled() bool {
+	return d.EnableExtraProfiling
 }

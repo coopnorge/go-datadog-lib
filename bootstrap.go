@@ -3,7 +3,7 @@ package coopdatadog
 import (
 	"fmt"
 
-	"github.com/coopnorge/go-datadog-lib/config"
+	"github.com/coopnorge/go-datadog-lib/v2/config"
 
 	"gopkg.in/DataDog/dd-trace-go.v1/ddtrace/tracer"
 	"gopkg.in/DataDog/dd-trace-go.v1/profiler"

@@ -4,10 +4,10 @@ import (
 	"net/http"
 	"testing"
 
-	"github.com/coopnorge/go-datadog-lib/internal"
-	"github.com/coopnorge/go-datadog-lib/tracing"
+	"github.com/coopnorge/go-datadog-lib/v2/internal"
+	"github.com/coopnorge/go-datadog-lib/v2/tracing"
 
-	mock_echo "github.com/coopnorge/go-datadog-lib/internal/generated/mocks/labstack/echo/v4"
+	mock_echo "github.com/coopnorge/go-datadog-lib/v2/internal/generated/mocks/labstack/echo/v4"
 
 	"github.com/golang/mock/gomock"
 	"github.com/labstack/echo/v4"

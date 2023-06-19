@@ -3,7 +3,7 @@ package metric
 import (
 	"testing"
 
-	"github.com/coopnorge/go-datadog-lib/config"
+	"github.com/coopnorge/go-datadog-lib/v2/config"
 
 	"github.com/stretchr/testify/assert"
 )

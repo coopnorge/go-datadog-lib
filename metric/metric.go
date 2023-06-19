@@ -5,7 +5,7 @@ import (
 	"fmt"
 	"strings"
 
-	"github.com/coopnorge/go-datadog-lib/tracing"
+	"github.com/coopnorge/go-datadog-lib/v2/tracing"
 	"github.com/coopnorge/go-logger"
 
 	"github.com/iancoleman/strcase"

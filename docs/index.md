@@ -114,7 +114,7 @@ Create pkg configuration for bootstrap Datadog.
 package main
 
 import (
-	coopdatadog "github.com/coopnorge/go-datadog-lib"
+	coopdatadog "github.com/coopnorge/go-datadog-lib/v2"
 	"github.com/coopnorge/go-datadog-lib/config"
 )
 
@@ -158,7 +158,7 @@ Take a look at the function `TraceUnaryServerInterceptor` in
 
 ```go
 import (
-	datadogMiddleware "github.com/coopnorge/go-datadog-lib/middleware/grpc"
+	datadogMiddleware "github.com/coopnorge/go-datadog-lib/v2/middleware/grpc"
 	"google.golang.org/grpc"
 )
 
@@ -177,7 +177,7 @@ func main() {
 package myServer
 
 import (
-	"github.com/coopnorge/go-datadog-lib/middleware/grpc"
+	"github.com/coopnorge/go-datadog-lib/v2/middleware/grpc"
 	"github.com/labstack/echo/v4"
 )
 
@@ -209,7 +209,7 @@ Example:
 package myServer
 
 import (
-	coopEchoDatadog "github.com/coopnorge/go-datadog-lib/middleware/echo"
+	coopEchoDatadog "github.com/coopnorge/go-datadog-lib/v2/middleware/echo"
 	"github.com/labstack/echo/v4"
 )
 
@@ -261,8 +261,8 @@ that you can create new instance of Datadog client for DD StatsD.
 package your_pkg
 
 import (
-	"github.com/coopnorge/go-datadog-lib/config"
-	"github.com/coopnorge/go-datadog-lib/metric"
+	"github.com/coopnorge/go-datadog-lib/v2/config"
+	"github.com/coopnorge/go-datadog-lib/v2/metric"
 )
 
 func MyServiceContainer(ddCfg *config.DatadogConfig) error {
@@ -289,8 +289,8 @@ package my_metric
 import (
 	"context"
 
-	"github.com/coopnorge/go-datadog-lib/config"
-	"github.com/coopnorge/go-datadog-lib/metric"
+	"github.com/coopnorge/go-datadog-lib/v2/config"
+	"github.com/coopnorge/go-datadog-lib/v2/metric"
 )
 
 func Example()  {

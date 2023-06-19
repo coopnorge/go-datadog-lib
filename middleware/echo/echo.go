@@ -3,8 +3,8 @@ package echo
 import (
 	"fmt"
 
-	"github.com/coopnorge/go-datadog-lib/internal"
-	"github.com/coopnorge/go-datadog-lib/tracing"
+	"github.com/coopnorge/go-datadog-lib/v2/internal"
+	"github.com/coopnorge/go-datadog-lib/v2/tracing"
 
 	"github.com/labstack/echo/v4"
 	"gopkg.in/DataDog/dd-trace-go.v1/ddtrace"

@@ -3,8 +3,8 @@ package grpc
 import (
 	"context"
 
-	"github.com/coopnorge/go-datadog-lib/internal"
-	"github.com/coopnorge/go-datadog-lib/tracing"
+	"github.com/coopnorge/go-datadog-lib/v2/internal"
+	"github.com/coopnorge/go-datadog-lib/v2/tracing"
 
 	"google.golang.org/grpc"
 	"gopkg.in/DataDog/dd-trace-go.v1/ddtrace/tracer"

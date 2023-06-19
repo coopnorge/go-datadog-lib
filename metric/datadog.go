@@ -4,7 +4,7 @@ import (
 	"fmt"
 	"strings"
 
-	"github.com/coopnorge/go-datadog-lib/config"
+	"github.com/coopnorge/go-datadog-lib/v2/config"
 
 	"github.com/DataDog/datadog-go/statsd"
 	"github.com/iancoleman/strcase"

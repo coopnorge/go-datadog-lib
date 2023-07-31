@@ -25,8 +25,8 @@ Prepare configuration for your container.
 
 Following configuration example related to Kubernetes and Kustomize.
 
-NOTE: Don't forget to set `DD_ENV` for each env,
-otherwise it will be not visible in APM list.
+NOTE: Don't forget to set `DD_ENV` for each env, otherwise it will be not
+visible in APM list.
 
 ```yaml
 apiVersion: apps/v1
@@ -35,30 +35,26 @@ metadata:
   name: my-app
   labels:
     app: my-app
-    version: v1
-    tags.datadoghq.com/service: "my-app-api"
-    tags.datadoghq.com/version: "v1"
+    version: gitc-b24846c73fe50704969ea4bc1e81e3a3a7592296
+    tags.datadoghq.com/service: my-app
+    tags.datadoghq.com/env: production
+    tags.datadoghq.com/version: gitc-b24846c73fe50704969ea4bc1e81e3a3a7592296
 spec:
   selector:
     matchLabels:
       app: my-app
-      version: v1
   template:
     metadata:
       labels:
         app: my-app
-        version: v1
-        tags.datadoghq.com/service: "my-app-api"
-        tags.datadoghq.com/version: "v1"
+        version: gitc-b24846c73fe50704969ea4bc1e81e3a3a7592296
+        tags.datadoghq.com/service: my-app
+        tags.datadoghq.com/version: gitc-b24846c73fe50704969ea4bc1e81e3a3a7592296
       annotations:
         proxy.istio.io/config: '{ "holdApplicationUntilProxyStarts": true }'
     spec:
-      serviceAccountName: my-app-app
+      serviceAccountName: my-app
       containers:
-        - name: my-app-api
-          envFrom:
-            - secretRef:
-                name: external-secrets-my-app
           env:
             - name: DD_DOGSTATSD_URL
               value: "unix:///var/run/datadog/dsd.socket"

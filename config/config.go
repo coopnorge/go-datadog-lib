@@ -21,17 +21,17 @@ type (
 	// DatadogConfig that required to connect to Datadog Agent
 	DatadogConfig struct {
 		// Env where application is executed, dev, production, staging etc
-		Env string `mapstructure:"dd_env"`
+		Env string `mapstructure:"dd_env" json:"dd_env,omitempty"`
 		// Service how must be service called and displayed in Datadog system
-		Service string `mapstructure:"dd_service"`
+		Service string `mapstructure:"dd_service" json:"dd_service,omitempty"`
 		// ServiceVersion depends on system, can be Git Tag or API version
-		ServiceVersion string `mapstructure:"dd_version"`
+		ServiceVersion string `mapstructure:"dd_version" json:"dd_service_version,omitempty"`
 		// DSD Socket path for DD StatsD, important to have unix prefix for that value, example: unix:///var/run/dd/dsd.socket
-		DSD string `mapstructure:"dd_dogstatsd_url"`
+		DSD string `mapstructure:"dd_dogstatsd_url" json:"dd_dsd,omitempty"`
 		// APM Socket path for apm and profiler, unix prefix not needed, example: /var/run/dd/apm.socket
-		APM string `mapstructure:"dd_trace_agent_url"`
+		APM string `mapstructure:"dd_trace_agent_url" json:"dd_apm,omitempty"`
 		// EnableExtraProfiling flag enables more optional profilers not recommended for production.
-		EnableExtraProfiling bool `mapstructure:"dd_enable_extra_profiling"`
+		EnableExtraProfiling bool `mapstructure:"dd_enable_extra_profiling" json:"dd_enable_extra_profiling,omitempty"`
 	}
 )
 

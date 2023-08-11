@@ -89,7 +89,7 @@ func (d DatadogConfig) GetApmEndpoint() string {
 
 // IsExtraProfilingEnabled return true if profilers not recommended for production are enabled.
 func (d DatadogConfig) IsExtraProfilingEnabled() bool {
-	isEnabled, failedToConvert := strconv.ParseBool(strings.ToLower(strings.TrimSpace(d.EnableExtraProfiling)))
+	isEnabled, failedToConvert := strconv.ParseBool(strings.TrimSpace(d.EnableExtraProfiling))
 	if failedToConvert != nil {
 		return false
 	}

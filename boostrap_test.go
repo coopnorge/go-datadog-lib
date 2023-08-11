@@ -19,7 +19,7 @@ func TestDatadog(t *testing.T) {
 		ServiceVersion:       "na",
 		DSD:                  "unix:///tmp/",
 		APM:                  "/tmp",
-		EnableExtraProfiling: true,
+		EnableExtraProfiling: "true",
 	}
 
 	err = StartDatadog(ddCfg, ConnectionTypeSocket)

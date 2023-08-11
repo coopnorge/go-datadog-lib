@@ -1,5 +1,10 @@
 package config
 
+import (
+	"strconv"
+	"strings"
+)
+
 type (
 	// DatadogParameters for connection and configuring background process to send information to Datadog Agent
 	DatadogParameters interface {
@@ -25,13 +30,13 @@ type (
 		// Service how must be service called and displayed in Datadog system
 		Service string `mapstructure:"dd_service" json:"dd_service,omitempty"`
 		// ServiceVersion depends on system, can be Git Tag or API version
-		ServiceVersion string `mapstructure:"dd_version" json:"dd_service_version,omitempty"`
+		ServiceVersion string `mapstructure:"dd_version" json:"dd_version,omitempty"`
 		// DSD Socket path for DD StatsD, important to have unix prefix for that value, example: unix:///var/run/dd/dsd.socket
-		DSD string `mapstructure:"dd_dogstatsd_url" json:"dd_dsd,omitempty"`
-		// APM Socket path for apm and profiler, unix prefix not needed, example: /var/run/dd/apm.socket
-		APM string `mapstructure:"dd_trace_agent_url" json:"dd_apm,omitempty"`
-		// EnableExtraProfiling flag enables more optional profilers not recommended for production.
-		EnableExtraProfiling bool `mapstructure:"dd_enable_extra_profiling" json:"dd_enable_extra_profiling,omitempty"`
+		DSD string `mapstructure:"dd_dogstatsd_url" json:"dd_dogstatsd_url,omitempty"`
+		// APM Socket path for APM and profiler, unix prefix not needed, example: /var/run/dd/apm.socket
+		APM string `mapstructure:"dd_trace_agent_url" json:"dd_trace_agent_url,omitempty"`
+		// EnableExtraProfiling bool flag enables more optional profilers not recommended for production
+		EnableExtraProfiling string `mapstructure:"dd_enable_extra_profiling" json:"dd_enable_extra_profiling,omitempty"`
 	}
 )
 
@@ -84,5 +89,10 @@ func (d DatadogConfig) GetApmEndpoint() string {
 
 // IsExtraProfilingEnabled return true if profilers not recommended for production are enabled.
 func (d DatadogConfig) IsExtraProfilingEnabled() bool {
-	return d.EnableExtraProfiling
+	isEnabled, failedToConvert := strconv.ParseBool(strings.TrimSpace(d.EnableExtraProfiling))
+	if failedToConvert != nil {
+		return false
+	}
+
+	return isEnabled
 }

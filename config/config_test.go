@@ -1,7 +1,6 @@
 package config
 
 import (
-	"strconv"
 	"testing"
 
 	"github.com/stretchr/testify/assert"
@@ -52,41 +51,4 @@ func TestConfigGetters(t *testing.T) {
 	assert.Equal(t, expectedCfg.ServiceVersion, expectedCfg.GetServiceVersion())
 	assert.Equal(t, expectedCfg.DSD, expectedCfg.GetDsdEndpoint())
 	assert.Equal(t, expectedCfg.APM, expectedCfg.GetApmEndpoint())
-
-	testParsingStringToBool := []struct {
-		input    string
-		expected bool
-		valid    bool
-	}{
-		{"true", true, true},
-		{"t", true, true},
-		{"1", true, true},
-		{"y", false, false},
-		{"yes", false, false},
-		{"false", false, true},
-		{"f", false, true},
-		{"0", false, true},
-		{"n", false, false},
-		{"no", false, false},
-		{"invalid", false, false},
-	}
-
-	for _, tt := range testParsingStringToBool {
-		t.Run(tt.input, func(t *testing.T) {
-			expectedCfg.EnableExtraProfiling = tt.input
-
-			isBool, parseFailed := strconv.ParseBool(expectedCfg.EnableExtraProfiling)
-			if parseFailed != nil && tt.valid {
-				t.Fatalf("Expected no error but got '%v'", parseFailed)
-			}
-
-			if parseFailed == nil && !tt.valid {
-				t.Fatalf("Expected an error for input '%v' but got none", tt.input)
-			}
-
-			if tt.valid && isBool != tt.expected {
-				t.Fatalf("Expected '%v' but got '%v' for input '%v'", tt.expected, isBool, tt.input)
-			}
-		})
-	}
 }

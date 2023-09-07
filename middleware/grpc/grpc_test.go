@@ -9,7 +9,10 @@ import (
 	"github.com/coopnorge/go-datadog-lib/v2/tracing"
 
 	"github.com/stretchr/testify/assert"
+	"github.com/stretchr/testify/suite"
 	"google.golang.org/grpc"
+
+	"github.com/grpc-ecosystem/go-grpc-middleware/v2/testing/testpb"
 )
 
 func TestTraceUnaryServerInterceptor(t *testing.T) {
@@ -33,4 +36,39 @@ func TestTraceUnaryServerInterceptor(t *testing.T) {
 
 	assert.Nil(t, err)
 	assert.Nil(t, resp)
+}
+
+type streamServerInterceptorTestSuite struct {
+	*testpb.InterceptorTestSuite
+}
+
+type testPingService struct {
+	*testpb.TestPingService
+	t *testing.T
+}
+
+func (s *testPingService) PingList(_ *testpb.PingListRequest, stream testpb.TestService_PingListServer) error {
+	meta, exist := internal.GetContextMetadata[tracing.TraceDetails](stream.Context(), internal.TraceContextKey{})
+	assert.True(s.t, exist)
+	assert.NotNil(s.t, meta.DatadogSpan)
+	return nil
+}
+
+func (s *streamServerInterceptorTestSuite) TestPingStream() {
+	ctx := context.Background()
+	s.Client.PingList(ctx, &testpb.PingListRequest{})
+}
+
+func TestTraceStreamServerInterceptor(t *testing.T) {
+	s := &streamServerInterceptorTestSuite{
+		&testpb.InterceptorTestSuite{
+			TestService: &testPingService{
+				t: t,
+			},
+		},
+	}
+	s.InterceptorTestSuite.ServerOpts = []grpc.ServerOption{
+		grpc.StreamInterceptor(TraceStreamServerInterceptor()),
+	}
+	suite.Run(t, s)
 }

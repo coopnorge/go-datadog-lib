@@ -111,7 +111,7 @@ package main
 
 import (
 	coopdatadog "github.com/coopnorge/go-datadog-lib/v2"
-	"github.com/coopnorge/go-datadog-lib/config"
+	"github.com/coopnorge/go-datadog-lib/v2/config"
 )
 
 func main() {

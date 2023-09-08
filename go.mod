@@ -6,11 +6,13 @@ require (
 	github.com/DataDog/datadog-go v4.8.3+incompatible
 	github.com/coopnorge/go-logger v0.3.0
 	github.com/golang/mock v1.6.0
+	github.com/grpc-ecosystem/go-grpc-middleware v1.4.0
+	github.com/grpc-ecosystem/go-grpc-middleware/v2 v2.0.0
 	github.com/iancoleman/strcase v0.3.0
 	github.com/labstack/echo/v4 v4.11.1
 	github.com/stretchr/testify v1.8.4
 	google.golang.org/grpc v1.57.0
-	gopkg.in/DataDog/dd-trace-go.v1 v1.54.0
+	gopkg.in/DataDog/dd-trace-go.v1 v1.54.1
 )
 
 require (
@@ -30,8 +32,6 @@ require (
 	github.com/golang/protobuf v1.5.3 // indirect
 	github.com/google/pprof v0.0.0-20230509042627-b1315fad0c5a // indirect
 	github.com/google/uuid v1.3.0 // indirect
-	github.com/grpc-ecosystem/go-grpc-middleware v1.4.0 // indirect
-	github.com/grpc-ecosystem/go-grpc-middleware/v2 v2.0.0 // indirect
 	github.com/labstack/gommon v0.4.0 // indirect
 	github.com/mattn/go-colorable v0.1.13 // indirect
 	github.com/mattn/go-isatty v0.0.19 // indirect

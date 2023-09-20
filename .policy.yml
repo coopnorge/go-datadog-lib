@@ -1,0 +1,49 @@
+policy:
+  approval:
+  - or:
+    - Dependabot update
+    - Code change
+
+approval_rules:
+- name: Dependabot update
+  requires:
+    count: 1
+    teams:
+    - "coopnorge/engineering"
+  options:
+    invalidate_on_push: true
+    request_review:
+      enabled: true
+      mode: all-users
+    methods:
+      github_review: true
+  if:
+    has_successful_status:
+      - "build"
+    only_has_contributors_in:
+      users:
+      - "dependabot[bot]"
+    only_changed_files:
+      paths:
+      - "^go.mod$"
+      - "^go.sum$"
+      - "^.github/workflows/*$"
+      - "^docker-compose/Dockerfile$"
+    has_valid_signatures_by_keys:
+      key_ids: ["4AEE18F83AFDEB23"]
+
+- name: Code change
+  if:
+    has_successful_status:
+      - "build"
+  requires:
+    count: 2
+    teams:
+    - "coopnorge/engineering"
+  options:
+    invalidate_on_push: true
+    request_review:
+      enabled: true
+      mode: random-users
+    methods:
+      github_review: true

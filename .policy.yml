@@ -27,7 +27,7 @@ approval_rules:
       paths:
       - "^go.mod$"
       - "^go.sum$"
-      - "^.github/workflows/*$"
+      - "^.github/workflows/.*$"
       - "^docker-compose/Dockerfile$"
     has_valid_signatures_by_keys:
       key_ids: ["4AEE18F83AFDEB23"]

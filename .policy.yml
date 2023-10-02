@@ -1,10 +1,15 @@
 policy:
   approval:
+  - CI
   - or:
     - Dependabot update
     - Code change
 
 approval_rules:
+- name: CI
+  if:
+    has_successful_status:
+      - "build"
 - name: Dependabot update
   requires:
     count: 1
@@ -18,8 +23,6 @@ approval_rules:
     methods:
       github_review: true
   if:
-    has_successful_status:
-      - "build"
     only_has_contributors_in:
       users:
       - "dependabot[bot]"
@@ -34,8 +37,9 @@ approval_rules:
 
 - name: Code change
   if:
-    has_successful_status:
-      - "build"
+    changed_files:
+      paths:
+        - ".*"
   requires:
     count: 2
     teams:

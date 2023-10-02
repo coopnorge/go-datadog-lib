@@ -60,3 +60,15 @@ func TestOverrideTraceResourceName(t *testing.T) {
 
 	assert.Nil(t, err)
 }
+
+func TestGetTraceID(t *testing.T) {
+	ctx := context.Background()
+
+	span, spanCtx := tracer.StartSpanFromContext(ctx, "test", tracer.ResourceName("UnitTest"))
+	defer span.Finish()
+	extCtx := internal.ExtendedContextWithMetadata(spanCtx, internal.TraceContextKey{}, TraceDetails{DatadogSpan: span})
+
+	id, err := GetTraceID(extCtx)
+	assert.Nil(t, err)
+	assert.Equal(t, "0", id)
+}

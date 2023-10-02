@@ -3,6 +3,7 @@ package tracing
 import (
 	"context"
 	"fmt"
+	"strconv"
 
 	"github.com/coopnorge/go-datadog-lib/v2/internal"
 
@@ -53,4 +54,14 @@ func OverrideTraceResourceName(sourceCtx context.Context, newResourceName string
 	ddCtx.DatadogSpan.SetTag(ext.ResourceName, newResourceName)
 
 	return nil
+}
+
+// GetTraceID returns the trace ID that the source context is carrying if present.
+func GetTraceID(sourceCtx context.Context) (string, error) {
+	ddCtx, ddExist := internal.GetContextMetadata[TraceDetails](sourceCtx, internal.TraceContextKey{})
+	if !ddExist || ddCtx.DatadogSpan == nil {
+		return "", fmt.Errorf("parent span tracer not found in context")
+	}
+	traceID := strconv.FormatUint(ddCtx.DatadogSpan.Context().TraceID(), 10)
+	return traceID, nil
 }

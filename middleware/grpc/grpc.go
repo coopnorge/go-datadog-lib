@@ -2,6 +2,8 @@ package grpc
 
 import (
 	"context"
+	"google.golang.org/grpc/metadata"
+	"strconv"
 
 	"github.com/coopnorge/go-datadog-lib/v2/internal"
 	"github.com/coopnorge/go-datadog-lib/v2/tracing"
@@ -19,6 +21,9 @@ func TraceUnaryServerInterceptor() grpc.UnaryServerInterceptor {
 		defer span.Finish()
 
 		extCtx := internal.ExtendedContextWithMetadata(spanCtx, internal.TraceContextKey{}, tracing.TraceDetails{DatadogSpan: span})
+
+		md := metadata.New(map[string]string{"traceID": strconv.FormatUint(span.Context().TraceID(), 10)})
+		grpc.SetHeader(extCtx, md)
 
 		return grpcReqHandler(extCtx, req)
 	}

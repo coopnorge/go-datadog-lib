@@ -1,11 +1,11 @@
 package echo
 
 import (
-	"gopkg.in/DataDog/dd-trace-go.v1/ddtrace/tracer"
 	"net/http"
 	"testing"
 
 	mock_echo "github.com/coopnorge/go-datadog-lib/v2/internal/generated/mocks/labstack/echo/v4"
+	"gopkg.in/DataDog/dd-trace-go.v1/ddtrace/tracer"
 
 	"github.com/golang/mock/gomock"
 	"github.com/labstack/echo/v4"

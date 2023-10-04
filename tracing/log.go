@@ -3,9 +3,9 @@ package tracing
 import (
 	"context"
 	"fmt"
-	"gopkg.in/DataDog/dd-trace-go.v1/ddtrace/tracer"
 
 	"github.com/coopnorge/go-logger"
+	"gopkg.in/DataDog/dd-trace-go.v1/ddtrace/tracer"
 )
 
 // LogWithTrace will log message by logger.Level with trace if it's present in context.Context

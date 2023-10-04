@@ -1,11 +1,9 @@
 package echo
 
 import (
+	"gopkg.in/DataDog/dd-trace-go.v1/ddtrace/tracer"
 	"net/http"
 	"testing"
-
-	"github.com/coopnorge/go-datadog-lib/v2/internal"
-	"github.com/coopnorge/go-datadog-lib/v2/tracing"
 
 	mock_echo "github.com/coopnorge/go-datadog-lib/v2/internal/generated/mocks/labstack/echo/v4"
 
@@ -30,6 +28,8 @@ func TestTraceServerMiddleware(t *testing.T) {
 
 	mockEchoContext.EXPECT().Request().Return(tReq).MaxTimes(5)
 	mockEchoContext.EXPECT().SetRequest(gomock.Any()).MaxTimes(1)
+	mockEchoContext.EXPECT().Path().Return("")
+	mockEchoContext.EXPECT().Response().Return(&echo.Response{})
 
 	echoMiddlewareFun := echoMiddlewareHandler(echoRequestHandler)
 	echoHandlerFunc := echoMiddlewareFun(mockEchoContext)
@@ -42,9 +42,9 @@ func TestTraceServerMiddlewareEchoMissingRequest(t *testing.T) {
 	echoRequestHandler := func(reqCtx echo.Context) (err error) {
 		assert.NotNil(t, reqCtx.Request())
 
-		meta, exist := internal.GetContextMetadata[tracing.TraceDetails](reqCtx.Request().Context(), internal.TraceContextKey{})
-		assert.True(t, exist)
-		assert.NotNil(t, meta.DatadogSpan)
+		span, exists := tracer.SpanFromContext(reqCtx.Request().Context())
+		assert.True(t, exists)
+		assert.NotNil(t, span)
 
 		return nil
 	}

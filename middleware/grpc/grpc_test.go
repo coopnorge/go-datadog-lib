@@ -2,11 +2,9 @@ package grpc
 
 import (
 	"context"
+	"gopkg.in/DataDog/dd-trace-go.v1/ddtrace/tracer"
 	"net/http"
 	"testing"
-
-	"github.com/coopnorge/go-datadog-lib/v2/internal"
-	"github.com/coopnorge/go-datadog-lib/v2/tracing"
 
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/suite"
@@ -18,9 +16,9 @@ import (
 func TestTraceUnaryServerInterceptor(t *testing.T) {
 	grpcUnaryMW := TraceUnaryServerInterceptor()
 	grpcUnaryHandler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		meta, exist := internal.GetContextMetadata[tracing.TraceDetails](ctx, internal.TraceContextKey{})
-		assert.True(t, exist)
-		assert.NotNil(t, meta.DatadogSpan)
+		span, exists := tracer.SpanFromContext(ctx)
+		assert.True(t, exists)
+		assert.NotNil(t, span)
 
 		return nil, nil
 	}
@@ -48,9 +46,9 @@ type testPingService struct {
 }
 
 func (s *testPingService) PingList(_ *testpb.PingListRequest, stream testpb.TestService_PingListServer) error {
-	meta, exist := internal.GetContextMetadata[tracing.TraceDetails](stream.Context(), internal.TraceContextKey{})
-	assert.True(s.t, exist)
-	assert.NotNil(s.t, meta.DatadogSpan)
+	span, exists := tracer.SpanFromContext(stream.Context())
+	assert.True(s.t, exists)
+	assert.NotNil(s.t, span)
 	return nil
 }
 

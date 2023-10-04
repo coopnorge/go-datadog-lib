@@ -3,8 +3,7 @@ package tracing
 import (
 	"context"
 	"fmt"
-
-	"github.com/coopnorge/go-datadog-lib/v2/internal"
+	"gopkg.in/DataDog/dd-trace-go.v1/ddtrace/tracer"
 
 	"github.com/coopnorge/go-logger"
 )
@@ -28,9 +27,9 @@ func LogFieldsWithTrace(sourceCtx context.Context, severity logger.Level, messag
 func getMessageToLog(ctx context.Context, message string) string {
 	var messageToLog string
 
-	ddCtx, ddExist := internal.GetContextMetadata[TraceDetails](ctx, internal.TraceContextKey{})
-	if ddExist {
-		messageToLog = fmt.Sprintf("%s %v dd.lang=go", message, ddCtx.DatadogSpan)
+	span, exists := tracer.SpanFromContext(ctx)
+	if exists {
+		messageToLog = fmt.Sprintf("%s %v dd.lang=go", message, span)
 	} else {
 		messageToLog = message
 	}

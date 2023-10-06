@@ -73,3 +73,20 @@ To preview the documentation:
 ```sh
 docker compose up techdocs
 ```
+
+## Experimental Tracing
+
+For advanced tracing capabilities and features, you can enable experimental
+tracing by setting the environment variable
+"DD_EXPERIMENTAL_TRACING_ENABLED" to "true", "TRUE", or "True".
+
+When this environment variable is set, the package utilizes an experimental
+tracing interceptor from
+[dd-trace-go](https://github.com/DataDog/dd-trace-go/blob/main/contrib/google.golang.org/grpc/server.go)
+for gRPC servers, enhancing distributed tracing capabilities.
+Additionally, for the Echo middleware, the package leverages
+the interceptor from
+[dd-trace-go Echo Middleware](https://github.com/DataDog/dd-trace-go/tree/main/contrib/labstack/echo.v4).
+
+In a future release, these experimental tracing features will become
+the default behavior, eliminating the need for the feature flag.

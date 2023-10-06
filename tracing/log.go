@@ -3,6 +3,7 @@ package tracing
 import (
 	"context"
 	"fmt"
+	"github.com/coopnorge/go-datadog-lib/v2/internal"
 
 	"github.com/coopnorge/go-logger"
 	"gopkg.in/DataDog/dd-trace-go.v1/ddtrace/tracer"
@@ -16,6 +17,14 @@ func LogWithTrace(sourceCtx context.Context, severity logger.Level, message stri
 	logWithSeverity(emptyEntry, severity, messageToLog)
 }
 
+// LogWithTraceExperimental is experimental, and will be removed in the next non-pre-release version.
+func LogWithTraceExperimental(sourceCtx context.Context, severity logger.Level, message string) {
+	messageToLog := getMessageToLogExperimental(sourceCtx, message)
+	emptyEntry := logger.WithFields(map[string]interface{}{})
+
+	logWithSeverity(emptyEntry, severity, messageToLog)
+}
+
 // LogFieldsWithTrace will log message by logger.Level with trace if it's present in context.Context
 func LogFieldsWithTrace(sourceCtx context.Context, severity logger.Level, message string, fields logger.Fields) {
 	messageToLog := getMessageToLog(sourceCtx, message)
@@ -24,7 +33,28 @@ func LogFieldsWithTrace(sourceCtx context.Context, severity logger.Level, messag
 	logWithSeverity(entry, severity, messageToLog)
 }
 
+// LogFieldsWithTraceExperimental is experimental, and will be removed in the next non-pre-release version.
+func LogFieldsWithTraceExperimental(sourceCtx context.Context, severity logger.Level, message string, fields logger.Fields) {
+	messageToLog := getMessageToLogExperimental(sourceCtx, message)
+	entry := logger.WithFields(fields)
+
+	logWithSeverity(entry, severity, messageToLog)
+}
+
 func getMessageToLog(ctx context.Context, message string) string {
+	var messageToLog string
+
+	ddCtx, ddExist := internal.GetContextMetadata[TraceDetails](ctx, internal.TraceContextKey{})
+	if ddExist {
+		messageToLog = fmt.Sprintf("%s %v dd.lang=go", message, ddCtx.DatadogSpan)
+	} else {
+		messageToLog = message
+	}
+
+	return messageToLog
+}
+
+func getMessageToLogExperimental(ctx context.Context, message string) string {
 	var messageToLog string
 
 	span, exists := tracer.SpanFromContext(ctx)

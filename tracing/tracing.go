@@ -3,6 +3,7 @@ package tracing
 import (
 	"context"
 	"fmt"
+	"github.com/coopnorge/go-datadog-lib/v2/internal"
 
 	"gopkg.in/DataDog/dd-trace-go.v1/ddtrace"
 	"gopkg.in/DataDog/dd-trace-go.v1/ddtrace/ext"
@@ -19,6 +20,18 @@ type (
 
 // CreateNestedTrace will fork parent tracer to attach to parent one with new operation and resource from sourceCtx
 func CreateNestedTrace(sourceCtx context.Context, operation, resource string) (ddtrace.Span, error) {
+	ddCtx, ddExist := internal.GetContextMetadata[TraceDetails](sourceCtx, internal.TraceContextKey{})
+	if !ddExist || ddCtx.DatadogSpan == nil {
+		return nil, fmt.Errorf("inheritance failed, parent span tracer not found in context")
+	}
+
+	nestedSpan := tracer.StartSpan(operation, tracer.ResourceName(resource), tracer.ChildOf(ddCtx.DatadogSpan.Context()))
+
+	return nestedSpan, nil
+}
+
+// CreateNestedTraceExperimental is experimental, and will be removed in the next non-pre-release version.
+func CreateNestedTraceExperimental(sourceCtx context.Context, operation, resource string) (ddtrace.Span, error) {
 	span, exists := tracer.SpanFromContext(sourceCtx)
 	if !exists || span == nil {
 		return nil, fmt.Errorf("inheritance failed, parent span tracer not found in context")
@@ -31,6 +44,18 @@ func CreateNestedTrace(sourceCtx context.Context, operation, resource string) (d
 
 // AppendUserToTrace includes identifier of user that would be attached to span in datadog
 func AppendUserToTrace(sourceCtx context.Context, user string) error {
+	ddCtx, ddExist := internal.GetContextMetadata[TraceDetails](sourceCtx, internal.TraceContextKey{})
+	if !ddExist || ddCtx.DatadogSpan == nil {
+		return fmt.Errorf("parent span tracer not found in context")
+	}
+
+	tracer.SetUser(ddCtx.DatadogSpan, user)
+
+	return nil
+}
+
+// AppendUserToTraceExperimental is experimental, and will be removed in the next non-pre-release version.
+func AppendUserToTraceExperimental(sourceCtx context.Context, user string) error {
 	span, exists := tracer.SpanFromContext(sourceCtx)
 	if !exists || span == nil {
 		return fmt.Errorf("parent span tracer not found in context")
@@ -43,6 +68,18 @@ func AppendUserToTrace(sourceCtx context.Context, user string) error {
 
 // OverrideTraceResourceName set custom resource name for traced span aka SQL Query, Request, I/O etc
 func OverrideTraceResourceName(sourceCtx context.Context, newResourceName string) error {
+	ddCtx, ddExist := internal.GetContextMetadata[TraceDetails](sourceCtx, internal.TraceContextKey{})
+	if !ddExist || ddCtx.DatadogSpan == nil {
+		return fmt.Errorf("parent span tracer not found in context")
+	}
+
+	ddCtx.DatadogSpan.SetTag(ext.ResourceName, newResourceName)
+
+	return nil
+}
+
+// OverrideTraceResourceNameExperimental is experimental, and will be removed in the next non-pre-release version.
+func OverrideTraceResourceNameExperimental(sourceCtx context.Context, newResourceName string) error {
 	span, exists := tracer.SpanFromContext(sourceCtx)
 	if !exists || span == nil {
 		return fmt.Errorf("parent span tracer not found in context")

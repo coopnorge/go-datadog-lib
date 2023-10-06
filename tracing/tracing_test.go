@@ -4,6 +4,7 @@ import (
 	"context"
 	"testing"
 
+	"github.com/coopnorge/go-datadog-lib/v2/internal"
 	"github.com/stretchr/testify/assert"
 	"gopkg.in/DataDog/dd-trace-go.v1/ddtrace/tracer"
 )
@@ -20,7 +21,26 @@ func TestCreateNestedTrace(t *testing.T) {
 
 	span, spanCtx := tracer.StartSpanFromContext(ctx, "test", tracer.ResourceName("UnitTest"))
 	defer span.Finish()
-	nestedTrace, nestedTraceErr = CreateNestedTrace(spanCtx, op, res)
+	extCtx := internal.ExtendedContextWithMetadata(spanCtx, internal.TraceContextKey{}, TraceDetails{DatadogSpan: span})
+	nestedTrace, nestedTraceErr = CreateNestedTrace(extCtx, op, res)
+
+	assert.Nil(t, nestedTraceErr)
+	assert.NotNil(t, nestedTrace)
+}
+
+func TestCreateNestedTraceExperimental(t *testing.T) {
+	op := "test"
+	res := "unit"
+	ctx := context.Background()
+
+	nestedTrace, nestedTraceErr := CreateNestedTraceExperimental(ctx, op, res)
+
+	assert.Error(t, nestedTraceErr, "expected error since context not extended")
+	assert.Nil(t, nestedTrace)
+
+	span, spanCtx := tracer.StartSpanFromContext(ctx, "test", tracer.ResourceName("UnitTest"))
+	defer span.Finish()
+	nestedTrace, nestedTraceErr = CreateNestedTraceExperimental(spanCtx, op, res)
 
 	assert.Nil(t, nestedTraceErr)
 	assert.NotNil(t, nestedTrace)
@@ -36,7 +56,23 @@ func TestAppendUserToTrace(t *testing.T) {
 
 	span, spanCtx := tracer.StartSpanFromContext(ctx, "test", tracer.ResourceName("UnitTest"))
 	defer span.Finish()
-	err = AppendUserToTrace(spanCtx, user)
+	extCtx := internal.ExtendedContextWithMetadata(spanCtx, internal.TraceContextKey{}, TraceDetails{DatadogSpan: span})
+	err = AppendUserToTrace(extCtx, user)
+
+	assert.Nil(t, err)
+}
+
+func TestAppendUserToTraceExperimental(t *testing.T) {
+	user := "unit_tester"
+	ctx := context.Background()
+
+	err := AppendUserToTraceExperimental(ctx, user)
+
+	assert.Error(t, err, "expected error since context not extended")
+
+	span, spanCtx := tracer.StartSpanFromContext(ctx, "test", tracer.ResourceName("UnitTest"))
+	defer span.Finish()
+	err = AppendUserToTraceExperimental(spanCtx, user)
 
 	assert.Nil(t, err)
 }
@@ -51,7 +87,23 @@ func TestOverrideTraceResourceName(t *testing.T) {
 
 	span, spanCtx := tracer.StartSpanFromContext(ctx, "test", tracer.ResourceName("UnitTest"))
 	defer span.Finish()
-	err = OverrideTraceResourceName(spanCtx, newRes)
+	extCtx := internal.ExtendedContextWithMetadata(spanCtx, internal.TraceContextKey{}, TraceDetails{DatadogSpan: span})
+	err = OverrideTraceResourceName(extCtx, newRes)
+
+	assert.Nil(t, err)
+}
+
+func TestOverrideTraceResourceNameExperimental(t *testing.T) {
+	newRes := "unit_test"
+	ctx := context.Background()
+
+	err := OverrideTraceResourceNameExperimental(ctx, newRes)
+
+	assert.Error(t, err, "expected error since context not extended")
+
+	span, spanCtx := tracer.StartSpanFromContext(ctx, "test", tracer.ResourceName("UnitTest"))
+	defer span.Finish()
+	err = OverrideTraceResourceNameExperimental(spanCtx, newRes)
 
 	assert.Nil(t, err)
 }

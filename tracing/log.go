@@ -4,6 +4,7 @@ import (
 	"context"
 	"fmt"
 
+	"github.com/coopnorge/go-datadog-lib/v2/internal"
 	"github.com/coopnorge/go-logger"
 	"gopkg.in/DataDog/dd-trace-go.v1/ddtrace/tracer"
 )
@@ -27,7 +28,11 @@ func LogFieldsWithTrace(sourceCtx context.Context, severity logger.Level, messag
 func getMessageToLog(ctx context.Context, message string) string {
 	var messageToLog string
 
-	span, exists := tracer.SpanFromContext(ctx)
+	ddCtx, exists := internal.GetContextMetadata[TraceDetails](ctx, internal.TraceContextKey{})
+	span := ddCtx.DatadogSpan
+	if internal.IsExperimentalTracingEnabled() {
+		span, exists = tracer.SpanFromContext(ctx)
+	}
 	if exists {
 		messageToLog = fmt.Sprintf("%s %v dd.lang=go", message, span)
 	} else {

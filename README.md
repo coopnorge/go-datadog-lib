@@ -21,7 +21,7 @@ There is detailed documentation stored in [docs](docs/).
 ## Mocks
 
 To generate or update mocks use
-[Mockhandler](github.com/sanposhiho/gomockhandler).
+[Mockhandler](https://github.com/sanposhiho/gomockhandler).
 
 ## Development workflow
 

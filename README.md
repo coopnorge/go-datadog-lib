@@ -20,9 +20,8 @@ There is detailed documentation stored in [docs](docs/).
 
 ## Mocks
 
-To generate or update mocks use tools
-[Eitri](https://github.com/Clink-n-Clank/Eitri) or use directly
-[Mockhandler](github.com/sanposhiho/gomockhandle)
+To generate or update mocks use
+[Mockhandler](github.com/sanposhiho/gomockhandler).
 
 ## Development workflow
 

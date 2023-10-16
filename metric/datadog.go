@@ -6,7 +6,7 @@ import (
 
 	"github.com/coopnorge/go-datadog-lib/v2/config"
 
-	"github.com/DataDog/datadog-go/statsd"
+	"github.com/DataDog/datadog-go/v5/statsd"
 	"github.com/iancoleman/strcase"
 )
 

@@ -5,12 +5,12 @@ go 1.20
 require (
 	github.com/DataDog/datadog-go v4.8.3+incompatible
 	github.com/coopnorge/go-logger v0.5.0
-	github.com/golang/mock v1.6.0
 	github.com/grpc-ecosystem/go-grpc-middleware v1.4.0
 	github.com/grpc-ecosystem/go-grpc-middleware/v2 v2.0.1
 	github.com/iancoleman/strcase v0.3.0
 	github.com/labstack/echo/v4 v4.11.1
 	github.com/stretchr/testify v1.8.4
+	go.uber.org/mock v0.3.0
 	google.golang.org/grpc v1.58.2
 	gopkg.in/DataDog/dd-trace-go.v1 v1.55.0
 )

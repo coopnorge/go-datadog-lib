@@ -8,7 +8,7 @@ import (
 	mock_statsd "github.com/coopnorge/go-datadog-lib/v2/internal/generated/mocks/DataDog/datadog-go/statsd"
 	mock_metrics "github.com/coopnorge/go-datadog-lib/v2/internal/generated/mocks/metric"
 
-	"github.com/golang/mock/gomock"
+	gomock "go.uber.org/mock/gomock"
 )
 
 func TestAddMetric(t *testing.T) {

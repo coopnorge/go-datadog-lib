@@ -9,9 +9,9 @@ import (
 
 	mock_echo "github.com/coopnorge/go-datadog-lib/v2/internal/generated/mocks/labstack/echo/v4"
 
-	"github.com/golang/mock/gomock"
 	"github.com/labstack/echo/v4"
 	"github.com/stretchr/testify/assert"
+	gomock "go.uber.org/mock/gomock"
 )
 
 func TestTraceServerMiddleware(t *testing.T) {

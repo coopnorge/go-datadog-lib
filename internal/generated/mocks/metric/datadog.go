@@ -11,7 +11,7 @@ package mock_metric
 import (
 	reflect "reflect"
 
-	statsd "github.com/DataDog/datadog-go/statsd"
+	statsd "github.com/DataDog/datadog-go/v5/statsd"
 	gomock "go.uber.org/mock/gomock"
 )
 

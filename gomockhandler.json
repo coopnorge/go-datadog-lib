@@ -1,30 +1,31 @@
 {
 	"mocks": {
 		"DatadogMetricsClient": {
-			"checksum": "hUSmzPFyMJaUxKVKcI64Vw==",
-			"source_checksum": "MVO/6N1Jb+XRESS9E4He2Q==",
+			"checksum": "xxI4XolsuSm6Iy6IhueIkg==",
+			"source_checksum": "COvOgMgBmWFHkoyceHK+HQ==",
 			"mode": "SOURCE_MODE",
 			"source_mode_runner": {
 				"source": "metric/datadog.go",
 				"destination": "internal/generated/mocks/metric/datadog.go"
 			}
 		},
-		"DatadogStatsD": {
-			"checksum": "r0GQ7Wji6r+0x0jpDL4pDA==",
-			"source_checksum": "Nk+LbWvsfdewE/vzBZJBGw==",
-			"mode": "SOURCE_MODE",
-			"source_mode_runner": {
-				"source": "vendor/github.com/DataDog/datadog-go/statsd/statsd.go",
+		"internal/generated/mocks/DataDog/datadog-go/statsd/statsd.go": {
+			"checksum": "QQVrMreiUls6giEPAMv17w==",
+			"mode": "REFLECT_MODE",
+			"reflect_mode_runner": {
+				"package_name": "github.com/DataDog/datadog-go/statsd",
+				"interfaces": "ClientInterface",
 				"destination": "internal/generated/mocks/DataDog/datadog-go/statsd/statsd.go"
 			}
 		},
-		"EchoContext": {
-			"checksum": "gwqpPqMa/TonFyB94kC0Eg==",
-			"source_checksum": "bgemGwQTh26qKeITOsg2/w==",
-			"mode": "SOURCE_MODE",
-			"source_mode_runner": {
-				"source": "vendor/github.com/labstack/echo/v4/context.go",
-				"destination": "internal/generated/mocks/labstack/echo/v4/context.go"
+		"internal/generated/mocks/labstack/echo/v4/context.go": {
+			"checksum": "L74NccKqt3ohccT0EQteHA==",
+			"mode": "REFLECT_MODE",
+			"reflect_mode_runner": {
+				"package_name": "github.com/labstack/echo/v4",
+				"interfaces": "Context",
+				"destination": "internal/generated/mocks/labstack/echo/v4/context.go",
+				"package": "mock_echo"
 			}
 		}
 	}

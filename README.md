@@ -21,23 +21,19 @@ There is detailed documentation stored in [docs](docs/).
 ## Mocks
 
 To generate or update mocks use
-[Mockhandler](github.com/sanposhiho/gomockhandler).
-
-```bash
-go install go.uber.org/mock/mockgen@latest
-go install github.com/sanposhiho/gomockhandler@latest
-```
+[`gomockhandler`](github.com/sanposhiho/gomockhandler). `gomockhandler` is
+provided by `golang-devtools`.
 
 ### Check mocks
 
 ```bash
-gomockhandler -config ./gomockhandler.json check
+docker compose run --rm golang-devtools gomockhandler -config ./gomockhandler.json check
 ```
 
 ### Generate / Update mocks
 
 ```bash
-gomockhandler -config ./gomockhandler.json mockgen
+docker compose run --rm golang-devtools gomockhandler -config ./gomockhandler.json mockgen
 ```
 
 ## Development workflow

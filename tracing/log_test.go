@@ -4,8 +4,6 @@ import (
 	"context"
 	"testing"
 
-	"github.com/coopnorge/go-datadog-lib/v2/internal"
-
 	"github.com/coopnorge/go-logger"
 	"gopkg.in/DataDog/dd-trace-go.v1/ddtrace/tracer"
 )
@@ -26,8 +24,7 @@ func TestLogWithExtendedDatadogContext(_ *testing.T) {
 	ctx := context.Background()
 	span, spanCtx := tracer.StartSpanFromContext(ctx, "test", tracer.ResourceName("UnitTest"))
 	defer span.Finish()
-	extCtx := internal.ExtendedContextWithMetadata(spanCtx, internal.TraceContextKey{}, TraceDetails{DatadogSpan: span})
-	LogWithTrace(extCtx, logger.LevelDebug, "unit test")
+	LogWithTrace(spanCtx, logger.LevelDebug, "unit test")
 }
 
 func TestLogWithAllSeverity(_ *testing.T) {

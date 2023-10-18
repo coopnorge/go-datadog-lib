@@ -15,7 +15,7 @@ import (
 )
 
 func TestTraceServerMiddleware(t *testing.T) {
-	echoMiddlewareHandler := TraceServerMiddleware()
+	echoMiddlewareHandler := traceServerMiddlewareLegacy()
 	echoRequestHandler := func(reqCtx echo.Context) (err error) {
 		assert.NotNil(t, reqCtx.Request())
 		// Since there is mock you cannot fetch TraceDetails to verify it
@@ -38,7 +38,7 @@ func TestTraceServerMiddleware(t *testing.T) {
 }
 
 func TestTraceServerMiddlewareEchoMissingRequest(t *testing.T) {
-	echoMiddlewareHandler := TraceServerMiddleware()
+	echoMiddlewareHandler := traceServerMiddlewareLegacy()
 	echoRequestHandler := func(reqCtx echo.Context) (err error) {
 		assert.NotNil(t, reqCtx.Request())
 
@@ -59,4 +59,29 @@ func TestTraceServerMiddlewareEchoMissingRequest(t *testing.T) {
 	echoHandlerFunc := echoMiddlewareFun(mockEchoContext)
 
 	assert.NotNil(t, echoHandlerFunc)
+}
+
+func TestTraceServerMiddlewareExperimental(t *testing.T) {
+	echoMiddlewareHandler := traceServerMiddlewareExperimental()
+	echoRequestHandler := func(reqCtx echo.Context) (err error) {
+		assert.NotNil(t, reqCtx.Request())
+		// Since there is mock you cannot fetch TraceDetails to verify it
+		return nil
+	}
+
+	tReq, _ := http.NewRequest(http.MethodGet, "unit.test", nil)
+
+	ctrl := gomock.NewController(t)
+	mockEchoContext := mock_echo.NewMockContext(ctrl)
+	ctrl.Finish()
+
+	mockEchoContext.EXPECT().Request().Return(tReq).MaxTimes(5)
+	mockEchoContext.EXPECT().SetRequest(gomock.Any()).MaxTimes(1)
+	mockEchoContext.EXPECT().Path().Return("")
+	mockEchoContext.EXPECT().Response().Return(&echo.Response{})
+
+	echoMiddlewareFun := echoMiddlewareHandler(echoRequestHandler)
+	echoHandlerFunc := echoMiddlewareFun(mockEchoContext)
+
+	assert.Nil(t, echoHandlerFunc)
 }

@@ -7,12 +7,20 @@ import (
 	"github.com/coopnorge/go-datadog-lib/v2/tracing"
 
 	"github.com/labstack/echo/v4"
+	ddEcho "gopkg.in/DataDog/dd-trace-go.v1/contrib/labstack/echo.v4"
 	"gopkg.in/DataDog/dd-trace-go.v1/ddtrace"
 	"gopkg.in/DataDog/dd-trace-go.v1/ddtrace/tracer"
 )
 
 // TraceServerMiddleware for Datadog Log Integration, middleware will create span that can be used from context
 func TraceServerMiddleware() echo.MiddlewareFunc {
+	if internal.IsExperimentalTracingEnabled() {
+		return traceServerMiddlewareExperimental()
+	}
+	return traceServerMiddlewareLegacy()
+}
+
+func traceServerMiddlewareLegacy() echo.MiddlewareFunc {
 	return func(next echo.HandlerFunc) echo.HandlerFunc {
 		return func(c echo.Context) error {
 			req := c.Request()
@@ -39,4 +47,9 @@ func TraceServerMiddleware() echo.MiddlewareFunc {
 			return next(c)
 		}
 	}
+}
+
+// TraceServerMiddlewareExperimental is experimental, and will be removed in the next non-pre-release version. Used for testing a new way of setting up the middleware.
+func traceServerMiddlewareExperimental() echo.MiddlewareFunc {
+	return ddEcho.Middleware()
 }

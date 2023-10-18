@@ -9,13 +9,13 @@
 				"destination": "internal/generated/mocks/metric/datadog.go"
 			}
 		},
-		"internal/generated/mocks/DataDog/datadog-go/statsd/statsd.go": {
-			"checksum": "QQVrMreiUls6giEPAMv17w==",
+		"internal/generated/mocks/DataDog/datadog-go/v5/statsd/statsd.go": {
+			"checksum": "6Ri6JzlCmHGMnGMB6L8x/g==",
 			"mode": "REFLECT_MODE",
 			"reflect_mode_runner": {
-				"package_name": "github.com/DataDog/datadog-go/statsd",
+				"package_name": "github.com/DataDog/datadog-go/v5/statsd",
 				"interfaces": "ClientInterface",
-				"destination": "internal/generated/mocks/DataDog/datadog-go/statsd/statsd.go"
+				"destination": "internal/generated/mocks/DataDog/datadog-go/v5/statsd/statsd.go"
 			}
 		},
 		"internal/generated/mocks/labstack/echo/v4/context.go": {

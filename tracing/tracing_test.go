@@ -120,3 +120,20 @@ func TestOverrideTraceResourceNameExperimental(t *testing.T) {
 
 	assert.Nil(t, err)
 }
+
+func TestExecuteWithTrace(t *testing.T) {
+	ctx := context.Background()
+	span, spanCtx := tracer.StartSpanFromContext(ctx, "test", tracer.ResourceName("UnitTest"))
+	defer span.Finish()
+
+	ddCtx := internal.ExtendedContextWithMetadata(spanCtx, internal.TraceContextKey{}, TraceDetails{DatadogSpan: span})
+
+	isCallableCalled := false
+	callableUnit := func() (bool, error) {
+		return !isCallableCalled, nil
+	}
+
+	execRes, execErr := ExecuteWithTrace[bool](ddCtx, callableUnit, "unit.test", "test")
+	assert.NoError(t, execErr, "expected context with Datadog tracer context")
+	assert.True(t, execRes, "expected response of ExecuteWithTrace to be true")
+}

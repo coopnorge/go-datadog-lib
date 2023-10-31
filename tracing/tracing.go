@@ -74,7 +74,7 @@ func ExecuteWithTrace[T any](ctx context.Context, callable func() (T, error), so
 
 	// NOTE: close only if context was given with Datadog metadata.
 	if traceSpanErr == nil {
-		traceSpan.Finish(ddtrace.WithError(execErr))
+		traceSpan.Finish(tracer.WithError(execErr))
 	}
 
 	return execResp, execErr

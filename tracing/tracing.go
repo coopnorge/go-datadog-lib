@@ -67,10 +67,11 @@ func OverrideTraceResourceName(sourceCtx context.Context, newResourceName string
 //	    "GetMyModel.SQL",
 //	    "GetMyModel",
 //	)
-func ExecuteWithTrace[T any](ctx context.Context, callable func() (T, error), source, op string) (T, error) {
+func ExecuteWithTrace[T any](ctx context.Context, callable func(context.Context) (T, error), source, op string) (T, error) {
 	traceSpan, traceSpanErr := CreateNestedTrace(ctx, fmt.Sprintf("%s.%s", source, op), op)
+	traceCtx := internal.ExtendedContextWithMetadata(ctx, internal.TraceContextKey{}, TraceDetails{DatadogSpan: traceSpan})
 
-	execResp, execErr := callable()
+	execResp, execErr := callable(traceCtx)
 
 	// NOTE: close only if context was given with Datadog metadata.
 	if traceSpanErr == nil {

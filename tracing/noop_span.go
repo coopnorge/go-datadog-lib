@@ -9,7 +9,7 @@ type (
 var _ ddtrace.Span = (*noopSpan)(nil)
 
 // BaggageItem implements ddtrace.Span.
-func (*noopSpan) BaggageItem(key string) string {
+func (*noopSpan) BaggageItem(_ string) string {
 	return ""
 }
 
@@ -19,17 +19,17 @@ func (*noopSpan) Context() ddtrace.SpanContext {
 }
 
 // Finish implements ddtrace.Span.
-func (*noopSpan) Finish(opts ...ddtrace.FinishOption) {
+func (*noopSpan) Finish(_ ...ddtrace.FinishOption) {
 }
 
 // SetBaggageItem implements ddtrace.Span.
-func (*noopSpan) SetBaggageItem(key string, val string) {
+func (*noopSpan) SetBaggageItem(_ string, _ string) {
 }
 
 // SetOperationName implements ddtrace.Span.
-func (*noopSpan) SetOperationName(operationName string) {
+func (*noopSpan) SetOperationName(_ string) {
 }
 
 // SetTag implements ddtrace.Span.
-func (*noopSpan) SetTag(key string, value interface{}) {
+func (*noopSpan) SetTag(_ string, _ interface{}) {
 }

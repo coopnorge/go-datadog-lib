@@ -9,7 +9,7 @@ type (
 var _ ddtrace.SpanContext = (*noopSpanContext)(nil)
 
 // ForeachBaggageItem implements ddtrace.SpanContext.
-func (*noopSpanContext) ForeachBaggageItem(handler func(k string, v string) bool) {
+func (*noopSpanContext) ForeachBaggageItem(_ func(k string, v string) bool) {
 }
 
 // SpanID implements ddtrace.SpanContext.

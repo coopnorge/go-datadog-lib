@@ -44,6 +44,7 @@ func OverrideTraceResourceName(sourceCtx context.Context, newResourceName string
 	return nil
 }
 
+// GetSpanFromContext returns span from context or noopSpan if ddContext cannot be found
 func GetSpanFromContext(ctx context.Context) tracer.Span {
 	if internal.IsExperimentalTracingEnabled() {
 		if span, exists := tracer.SpanFromContext(ctx); exists {

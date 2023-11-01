@@ -17,8 +17,8 @@ func TestCreateNestedTrace(t *testing.T) {
 
 	nestedTrace, nestedTraceErr := CreateNestedTrace(ctx, op, res)
 
-	assert.Error(t, nestedTraceErr, "expected error since context not extended")
-	assert.Nil(t, nestedTrace)
+	assert.Nil(t, nestedTraceErr)
+	assert.NotNil(t, nestedTrace)
 
 	span, spanCtx := tracer.StartSpanFromContext(ctx, "test", tracer.ResourceName("UnitTest"))
 	defer span.Finish()
@@ -36,8 +36,8 @@ func TestCreateNestedTraceExperimental(t *testing.T) {
 
 	nestedTrace, nestedTraceErr := CreateNestedTrace(ctx, op, res)
 
-	assert.Error(t, nestedTraceErr, "expected error since context not extended")
-	assert.Nil(t, nestedTrace)
+	assert.Nil(t, nestedTraceErr)
+	assert.NotNil(t, nestedTrace)
 
 	span, spanCtx := tracer.StartSpanFromContext(ctx, "test", tracer.ResourceName("UnitTest"))
 	defer span.Finish()
@@ -57,7 +57,7 @@ func TestAppendUserToTrace(t *testing.T) {
 
 	err := AppendUserToTrace(ctx, user)
 
-	assert.Error(t, err, "expected error since context not extended")
+	assert.Nil(t, err)
 
 	span, spanCtx := tracer.StartSpanFromContext(ctx, "test", tracer.ResourceName("UnitTest"))
 	defer span.Finish()
@@ -73,7 +73,7 @@ func TestAppendUserToTraceExperimental(t *testing.T) {
 
 	err := AppendUserToTrace(ctx, user)
 
-	assert.Error(t, err, "expected error since context not extended")
+	assert.Nil(t, err)
 
 	span, spanCtx := tracer.StartSpanFromContext(ctx, "test", tracer.ResourceName("UnitTest"))
 	defer span.Finish()
@@ -92,7 +92,7 @@ func TestOverrideTraceResourceName(t *testing.T) {
 
 	err := OverrideTraceResourceName(ctx, newRes)
 
-	assert.Error(t, err, "expected error since context not extended")
+	assert.Nil(t, err)
 
 	span, spanCtx := tracer.StartSpanFromContext(ctx, "test", tracer.ResourceName("UnitTest"))
 	defer span.Finish()
@@ -108,7 +108,7 @@ func TestOverrideTraceResourceNameExperimental(t *testing.T) {
 
 	err := OverrideTraceResourceName(ctx, newRes)
 
-	assert.Error(t, err, "expected error since context not extended")
+	assert.Nil(t, err)
 
 	span, spanCtx := tracer.StartSpanFromContext(ctx, "test", tracer.ResourceName("UnitTest"))
 	defer span.Finish()

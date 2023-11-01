@@ -55,6 +55,10 @@ func (d DatadogConfig) IsDataDogConfigValid() bool {
 	return true
 }
 
+func (d DatadogConfig) Validate() (bool, error) {
+	return d.IsDataDogConfigValid(), nil
+}
+
 // GetEnv where application is executed, dev, production, staging etc
 func (d DatadogConfig) GetEnv() string {
 	return d.Env

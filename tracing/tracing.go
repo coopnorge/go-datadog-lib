@@ -2,7 +2,6 @@ package tracing
 
 import (
 	"context"
-	"fmt"
 
 	"github.com/coopnorge/go-datadog-lib/v2/internal"
 	"gopkg.in/DataDog/dd-trace-go.v1/ddtrace"
@@ -20,10 +19,7 @@ type (
 
 // CreateNestedTrace will fork parent tracer to attach to parent one with new operation and resource from sourceCtx
 func CreateNestedTrace(sourceCtx context.Context, operation, resource string) (ddtrace.Span, error) {
-	span := getSpanFromContext(sourceCtx)
-	if span == nil {
-		return nil, fmt.Errorf("inheritance failed, parent span tracer not found in context")
-	}
+	span := GetSpanFromContext(sourceCtx)
 
 	nestedSpan := tracer.StartSpan(operation, tracer.ResourceName(resource), tracer.ChildOf(span.Context()))
 
@@ -32,10 +28,7 @@ func CreateNestedTrace(sourceCtx context.Context, operation, resource string) (d
 
 // AppendUserToTrace includes identifier of user that would be attached to span in datadog
 func AppendUserToTrace(sourceCtx context.Context, user string) error {
-	span := getSpanFromContext(sourceCtx)
-	if span == nil {
-		return fmt.Errorf("parent span tracer not found in context")
-	}
+	span := GetSpanFromContext(sourceCtx)
 
 	tracer.SetUser(span, user)
 
@@ -44,26 +37,23 @@ func AppendUserToTrace(sourceCtx context.Context, user string) error {
 
 // OverrideTraceResourceName set custom resource name for traced span aka SQL Query, Request, I/O etc
 func OverrideTraceResourceName(sourceCtx context.Context, newResourceName string) error {
-	span := getSpanFromContext(sourceCtx)
-	if span == nil {
-		return fmt.Errorf("parent span tracer not found in context")
-	}
+	span := GetSpanFromContext(sourceCtx)
 
 	span.SetTag(ext.ResourceName, newResourceName)
 
 	return nil
 }
 
-func getSpanFromContext(ctx context.Context) tracer.Span {
+func GetSpanFromContext(ctx context.Context) tracer.Span {
 	if internal.IsExperimentalTracingEnabled() {
 		if span, exists := tracer.SpanFromContext(ctx); exists {
 			return span
 		}
-		return nil
+		return &noopSpan{}
 	}
 	ddCtx, ddExist := internal.GetContextMetadata[TraceDetails](ctx, internal.TraceContextKey{})
 	if !ddExist || ddCtx.DatadogSpan == nil {
-		return nil
+		return &noopSpan{}
 	}
 	return ddCtx.DatadogSpan
 }

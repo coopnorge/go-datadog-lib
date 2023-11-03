@@ -2,11 +2,14 @@ package tracing
 
 import (
 	"context"
-	"os"
+	"fmt"
 	"testing"
 
 	"github.com/coopnorge/go-datadog-lib/v2/internal"
+
 	"github.com/stretchr/testify/assert"
+	"github.com/stretchr/testify/require"
+	"gopkg.in/DataDog/dd-trace-go.v1/ddtrace/mocktracer"
 	"gopkg.in/DataDog/dd-trace-go.v1/ddtrace/tracer"
 )
 
@@ -17,8 +20,8 @@ func TestCreateNestedTrace(t *testing.T) {
 
 	nestedTrace, nestedTraceErr := CreateNestedTrace(ctx, op, res)
 
-	assert.Error(t, nestedTraceErr, "expected error since context not extended")
-	assert.Nil(t, nestedTrace)
+	assert.NoError(t, nestedTraceErr)
+	assert.IsType(t, nestedTrace, noopSpan{})
 
 	span, spanCtx := tracer.StartSpanFromContext(ctx, "test", tracer.ResourceName("UnitTest"))
 	defer span.Finish()
@@ -36,15 +39,12 @@ func TestCreateNestedTraceExperimental(t *testing.T) {
 
 	nestedTrace, nestedTraceErr := CreateNestedTrace(ctx, op, res)
 
-	assert.Error(t, nestedTraceErr, "expected error since context not extended")
-	assert.Nil(t, nestedTrace)
+	assert.NoError(t, nestedTraceErr)
+	assert.IsType(t, nestedTrace, noopSpan{})
 
 	span, spanCtx := tracer.StartSpanFromContext(ctx, "test", tracer.ResourceName("UnitTest"))
 	defer span.Finish()
-	os.Setenv(internal.ExperimentalTracingEnabled, "true")
-	defer func() {
-		os.Setenv(internal.ExperimentalTracingEnabled, "")
-	}()
+	t.Setenv(internal.ExperimentalTracingEnabled, "true")
 	nestedTrace, nestedTraceErr = CreateNestedTrace(spanCtx, op, res)
 
 	assert.Nil(t, nestedTraceErr)
@@ -77,10 +77,7 @@ func TestAppendUserToTraceExperimental(t *testing.T) {
 
 	span, spanCtx := tracer.StartSpanFromContext(ctx, "test", tracer.ResourceName("UnitTest"))
 	defer span.Finish()
-	os.Setenv(internal.ExperimentalTracingEnabled, "true")
-	defer func() {
-		os.Setenv(internal.ExperimentalTracingEnabled, "")
-	}()
+	t.Setenv(internal.ExperimentalTracingEnabled, "true")
 	err = AppendUserToTrace(spanCtx, user)
 
 	assert.Nil(t, err)
@@ -112,11 +109,83 @@ func TestOverrideTraceResourceNameExperimental(t *testing.T) {
 
 	span, spanCtx := tracer.StartSpanFromContext(ctx, "test", tracer.ResourceName("UnitTest"))
 	defer span.Finish()
-	os.Setenv(internal.ExperimentalTracingEnabled, "true")
-	defer func() {
-		os.Setenv(internal.ExperimentalTracingEnabled, "")
-	}()
+	t.Setenv(internal.ExperimentalTracingEnabled, "true")
 	err = OverrideTraceResourceName(spanCtx, newRes)
 
 	assert.Nil(t, err)
+}
+
+func TestStartChildSpan(t *testing.T) {
+	// Start Datadog tracer, so that we don't create NoopSpans.
+	_ = mocktracer.Start()
+
+	type args struct {
+		spanInCtx    bool
+		experimental bool
+	}
+	tests := []struct {
+		name string
+		args args
+	}{
+		{
+			name: "legacy without span",
+			args: args{
+				spanInCtx:    false,
+				experimental: false,
+			},
+		},
+		{
+			name: "legacy with span",
+			args: args{
+				spanInCtx:    true,
+				experimental: false,
+			},
+		},
+		{
+			name: "experimental without span",
+			args: args{
+				spanInCtx:    false,
+				experimental: true,
+			},
+		},
+		{
+			name: "experimental with span",
+			args: args{
+				spanInCtx:    true,
+				experimental: true,
+			},
+		},
+	}
+	for _, tt := range tests {
+		tt := tt
+		t.Run(tt.name, func(t *testing.T) {
+			t.Setenv(internal.ExperimentalTracingEnabled, fmt.Sprintf("%v", tt.args.experimental))
+
+			ctx := context.Background()
+			if tt.args.spanInCtx {
+				if tt.args.experimental {
+					span, spanCtx := tracer.StartSpanFromContext(ctx, "test", tracer.ResourceName("UnitTest"))
+					defer span.Finish()
+					ctx = spanCtx
+				} else {
+					span, spanCtx := tracer.StartSpanFromContext(ctx, "test", tracer.ResourceName("UnitTest"))
+					defer span.Finish()
+					extCtx := internal.ExtendedContextWithMetadata(spanCtx, internal.TraceContextKey{}, TraceDetails{DatadogSpan: span})
+					ctx = extCtx
+				}
+			}
+
+			childSpan := CreateChildSpan(ctx, "my-operation", "my-resource")
+
+			require.NotNil(t, childSpan)
+			childSpan.Finish()
+			if tt.args.spanInCtx {
+				assert.NotEqual(t, uint64(0), childSpan.Context().SpanID())
+				assert.NotEqual(t, uint64(0), childSpan.Context().TraceID())
+			} else {
+				assert.Equal(t, uint64(0), childSpan.Context().SpanID())
+				assert.Equal(t, uint64(0), childSpan.Context().TraceID())
+			}
+		})
+	}
 }

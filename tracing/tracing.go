@@ -19,15 +19,23 @@ type (
 )
 
 // CreateNestedTrace will fork parent tracer to attach to parent one with new operation and resource from sourceCtx
+// Deprecated: Use CreateChildSpan instead.
 func CreateNestedTrace(sourceCtx context.Context, operation, resource string) (ddtrace.Span, error) {
-	span := getSpanFromContext(sourceCtx)
-	if span == nil {
-		return nil, fmt.Errorf("inheritance failed, parent span tracer not found in context")
+	return CreateChildSpan(sourceCtx, operation, resource), nil
+}
+
+// CreateChildSpan will create a child-span of the span embedded in sourceCtx.
+// If there is no trace-information in sourceCtx, a noop-span will be returned.
+// The caller is responsible for calling span.Finish().
+func CreateChildSpan(sourceCtx context.Context, operation, resource string) ddtrace.Span {
+	existingSpan := getSpanFromContext(sourceCtx)
+	if existingSpan == nil {
+		return noopSpan{}
 	}
 
-	nestedSpan := tracer.StartSpan(operation, tracer.ResourceName(resource), tracer.ChildOf(span.Context()))
+	span := tracer.StartSpan(operation, tracer.ResourceName(resource), tracer.ChildOf(existingSpan.Context()))
 
-	return nestedSpan, nil
+	return span
 }
 
 // AppendUserToTrace includes identifier of user that would be attached to span in datadog

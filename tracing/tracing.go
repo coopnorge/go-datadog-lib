@@ -62,6 +62,31 @@ func OverrideTraceResourceName(sourceCtx context.Context, newResourceName string
 	return nil
 }
 
+// ExecuteWithTrace wraps a callable function with a Datadog tracer span.
+// If the context.Context does not contain Datadog metadata, then
+// the tracer span will not be recorded and the callable function
+// will be executed as normal. Any error returned from the callable function
+// will be recorded in the span, and then propagated to the caller of ExecuteWithTrace.
+//
+// Example:
+//
+//	err := ExecuteWithTrace(
+//	    ctx,
+//	    myAmazingFunctionToCall,
+//	    "GetMyModel.SQL",
+//	    "GetMyModel",
+//	)
+func ExecuteWithTrace(ctx context.Context, callable func(context.Context) error, source, op string) error {
+	traceSpan := CreateChildSpan(ctx, fmt.Sprintf("%s.%s", source, op), op)
+	traceCtx := addSpanToContext(ctx, traceSpan)
+
+	execErr := callable(traceCtx)
+
+	traceSpan.Finish(tracer.WithError(execErr))
+
+	return execErr
+}
+
 func getSpanFromContext(ctx context.Context) tracer.Span {
 	if internal.IsExperimentalTracingEnabled() {
 		if span, exists := tracer.SpanFromContext(ctx); exists {
@@ -74,4 +99,11 @@ func getSpanFromContext(ctx context.Context) tracer.Span {
 		return nil
 	}
 	return ddCtx.DatadogSpan
+}
+
+func addSpanToContext(ctx context.Context, span tracer.Span) context.Context {
+	if internal.IsExperimentalTracingEnabled() {
+		return tracer.ContextWithSpan(ctx, span)
+	}
+	return internal.ExtendedContextWithMetadata(ctx, internal.TraceContextKey{}, TraceDetails{DatadogSpan: span})
 }

@@ -3,6 +3,7 @@ package tracing
 import (
 	"context"
 	"fmt"
+	"sort"
 	"testing"
 
 	"github.com/coopnorge/go-datadog-lib/v2/internal"
@@ -188,4 +189,43 @@ func TestStartChildSpan(t *testing.T) {
 			}
 		})
 	}
+}
+
+func TestExecuteWithTrace(t *testing.T) {
+	ctx := context.Background()
+
+	// Start Datadog tracer, so that we don't create NoopSpans.
+	mocktracer := mocktracer.Start()
+
+	span, spanCtx := tracer.StartSpanFromContext(ctx, "test", tracer.ResourceName("UnitTest"))
+	defer span.Finish()
+
+	ddCtx := internal.ExtendedContextWithMetadata(spanCtx, internal.TraceContextKey{}, TraceDetails{DatadogSpan: span})
+
+	var execRes bool
+	callableUnit := func(ctx context.Context) error {
+		metadata, ok := internal.GetContextMetadata[TraceDetails](ctx, internal.TraceContextKey{})
+		require.True(t, ok)
+		assert.Equal(t, span.Context().TraceID(), metadata.DatadogSpan.Context().TraceID(), "The TraceID of both spans should be the same (same root)")
+		assert.NotEqual(t, span.Context().SpanID(), metadata.DatadogSpan.Context().SpanID(), "The SpanID should be different, and it should be a child-span")
+		execRes = true
+		return nil
+	}
+	execErr := ExecuteWithTrace(ddCtx, callableUnit, "unit.test", "test")
+	assert.NoError(t, execErr, "expected context with Datadog tracer context")
+	assert.True(t, execRes, "expected response of ExecuteWithTrace to be true")
+
+	span.Finish() // Finish the original span
+
+	require.Equal(t, 0, len(mocktracer.OpenSpans()))
+	spans := mocktracer.FinishedSpans()
+	sort.Slice(spans, func(i, j int) bool {
+		return spans[i].StartTime().Before(spans[j].StartTime())
+	})
+	require.Equal(t, 2, len(spans))
+
+	assert.NotEqual(t, uint64(0), spans[0].SpanID())
+	assert.NotEqual(t, uint64(0), spans[1].SpanID())
+	assert.Equal(t, uint64(0), spans[0].ParentID())
+	assert.Equal(t, spans[0].SpanID(), spans[1].ParentID(), "spans[1] should be child of spans[0]")
 }

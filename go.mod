@@ -12,13 +12,13 @@ require (
 	github.com/stretchr/testify v1.8.4
 	go.uber.org/mock v0.3.0
 	google.golang.org/grpc v1.59.0
-	gopkg.in/DataDog/dd-trace-go.v1 v1.56.1
+	gopkg.in/DataDog/dd-trace-go.v1 v1.57.0
 )
 
 require (
 	github.com/DataDog/appsec-internal-go v1.0.0 // indirect
 	github.com/DataDog/datadog-agent/pkg/obfuscate v0.48.0 // indirect
-	github.com/DataDog/datadog-agent/pkg/remoteconfig/state v0.48.0-devel.0.20230725154044-2549ba9058df // indirect
+	github.com/DataDog/datadog-agent/pkg/remoteconfig/state v0.48.1 // indirect
 	github.com/DataDog/go-libddwaf v1.5.0 // indirect
 	github.com/DataDog/go-tuf v1.0.2-0.5.2 // indirect
 	github.com/DataDog/gostackparse v0.7.0 // indirect

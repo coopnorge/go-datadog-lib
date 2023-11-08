@@ -61,13 +61,6 @@ func defaults() *config {
 // Option allows for overriding our default-config.
 type Option func(cfg *config)
 
-// WithDriverName overrides the driver-name.
-func WithDriverName(serviceName string) Option {
-	return func(cfg *config) {
-		cfg.serviceName = serviceName
-	}
-}
-
 // WithServiceName overrides the service-name set in environment-variable "DD_SERVICE".
 func WithServiceName(serviceName string) Option {
 	return func(cfg *config) {

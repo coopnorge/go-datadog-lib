@@ -13,6 +13,7 @@ require (
 	go.uber.org/mock v0.3.0
 	google.golang.org/grpc v1.59.0
 	gopkg.in/DataDog/dd-trace-go.v1 v1.57.0
+	gorm.io/gorm v1.25.3
 )
 
 require (
@@ -31,6 +32,9 @@ require (
 	github.com/golang/protobuf v1.5.3 // indirect
 	github.com/google/pprof v0.0.0-20230817174616-7a8ec2ada47b // indirect
 	github.com/google/uuid v1.3.1 // indirect
+	github.com/jinzhu/inflection v1.0.0 // indirect
+	github.com/jinzhu/now v1.1.5 // indirect
+	github.com/kr/pretty v0.3.0 // indirect
 	github.com/labstack/gommon v0.4.0 // indirect
 	github.com/mattn/go-colorable v0.1.13 // indirect
 	github.com/mattn/go-isatty v0.0.20 // indirect

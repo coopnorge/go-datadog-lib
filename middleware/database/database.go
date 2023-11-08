@@ -1,4 +1,4 @@
-package mysql
+package database
 
 import (
 	"database/sql"
@@ -8,12 +8,8 @@ import (
 	sqltrace "gopkg.in/DataDog/dd-trace-go.v1/contrib/database/sql"
 )
 
-// MySQLDriverName is the default name of the driver we use for tracing MySQL-queries
-const MySQLDriverName = "mysql"
-
 // RegisterDriverAndOpen registers the selected driver with the datadog-lib, and opens a connection to the database using the dsn.
-// A good suggestion for a driver is https://pkg.go.dev/github.com/go-sql-driver/mysql#MySQLDriver
-func RegisterDriverAndOpen(driver driver.Driver, dsn string, options ...Option) (*sql.DB, error) {
+func RegisterDriverAndOpen(driverName string, driver driver.Driver, dsn string, options ...Option) (*sql.DB, error) {
 	cfg := defaults()
 	for _, opt := range options {
 		opt(cfg)
@@ -36,12 +32,11 @@ func RegisterDriverAndOpen(driver driver.Driver, dsn string, options ...Option) 
 		opts = append(opts, sqltrace.WithIgnoreQueryTypes(typed...))
 	}
 
-	sqltrace.Register(cfg.driverName, driver, opts...)
-	return sqltrace.Open(cfg.driverName, dsn)
+	sqltrace.Register(driverName, driver, opts...)
+	return sqltrace.Open(driverName, dsn)
 }
 
 type config struct {
-	driverName        string
 	serviceName       string
 	childSpansOnly    bool
 	tags              map[string]interface{}
@@ -51,7 +46,6 @@ type config struct {
 func defaults() *config {
 	serviceName := os.Getenv("DD_SERVICE")
 	return &config{
-		driverName:     MySQLDriverName,
 		serviceName:    serviceName,
 		childSpansOnly: true,
 		tags:           nil,

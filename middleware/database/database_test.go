@@ -1,4 +1,4 @@
-package mysql
+package database
 
 import (
 	"context"
@@ -26,7 +26,7 @@ func TestRegisterAndOpen(t *testing.T) {
 	// Start Datadog tracer, so that we don't create NoopSpans.
 	testTracer := mocktracer.Start()
 
-	db, err := RegisterDriverAndOpen(newMockDriver(), "")
+	db, err := RegisterDriverAndOpen("mysql", &fakeDriver{}, "")
 	require.NoError(t, err)
 
 	span, ctx := tracer.StartSpanFromContext(context.Background(), "http.request", tracer.ResourceName("/helloworld"))
@@ -75,7 +75,7 @@ func TestRegisterAndOpenNoTrace(t *testing.T) {
 	// Start Datadog tracer, so that we don't create NoopSpans.
 	testTracer := mocktracer.Start()
 
-	db, err := RegisterDriverAndOpen(newMockDriver(), "")
+	db, err := RegisterDriverAndOpen("mysql", &fakeDriver{}, "")
 	require.NoError(t, err)
 
 	ctx := context.Background() // Note: We are not creating a span in the context.
@@ -119,72 +119,61 @@ func readFromDB(ctx context.Context, db *sql.DB) (string, int, error) {
 	return myStr, count, nil
 }
 
-// Create mock driver and friends, to avoid having to import a specific mysql driver to test.
+// Create fake driver++, to avoid having to import a specific database driver to test.
 
-type mockDriver struct {
-	conn driver.Conn
+type fakeDriver struct{}
+
+func (d *fakeDriver) Open(_ string) (driver.Conn, error) {
+	return &fakeConn{}, nil
 }
 
-func (d *mockDriver) Open(_ string) (driver.Conn, error) {
-	return d.conn, nil
+type fakeConn struct{}
+
+func (c *fakeConn) Prepare(query string) (driver.Stmt, error) {
+	return &fakeStmt{query: query}, nil
 }
 
-func newMockDriver() *mockDriver {
-	conn := newMockDriverConn()
-	return &mockDriver{conn: conn}
-}
-
-type mockDriverConn struct{}
-
-func newMockDriverConn() *mockDriverConn {
-	return &mockDriverConn{}
-}
-
-func (c *mockDriverConn) Prepare(query string) (driver.Stmt, error) {
-	return &mockStmt{query: query}, nil
-}
-
-func (c *mockDriverConn) Close() error {
+func (c *fakeConn) Close() error {
 	return nil
 }
 
-func (c *mockDriverConn) Begin() (driver.Tx, error) {
+func (c *fakeConn) Begin() (driver.Tx, error) {
 	panic("Begin not implemented")
 }
 
-type mockStmt struct {
+type fakeStmt struct {
 	query string
 }
 
-func (s *mockStmt) Close() error {
+func (s *fakeStmt) Close() error {
 	return nil
 }
 
-func (s *mockStmt) NumInput() int {
+func (s *fakeStmt) NumInput() int {
 	return 0
 }
 
-func (s *mockStmt) Exec(_ []driver.Value) (driver.Result, error) {
+func (s *fakeStmt) Exec(_ []driver.Value) (driver.Result, error) {
 	panic("exec not implemented")
 }
 
-func (s *mockStmt) Query(_ []driver.Value) (driver.Rows, error) {
-	return &mockRows{}, nil
+func (s *fakeStmt) Query(_ []driver.Value) (driver.Rows, error) {
+	return &fakeRows{}, nil
 }
 
-type mockRows struct {
+type fakeRows struct {
 	doneReading bool
 }
 
-func (r *mockRows) Close() error {
+func (r *fakeRows) Close() error {
 	return nil
 }
 
-func (r *mockRows) Columns() []string {
+func (r *fakeRows) Columns() []string {
 	return []string{"value"}
 }
 
-func (r *mockRows) Next(dest []driver.Value) error {
+func (r *fakeRows) Next(dest []driver.Value) error {
 	if r.doneReading {
 		return io.EOF
 	}

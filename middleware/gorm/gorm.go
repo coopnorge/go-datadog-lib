@@ -1,16 +1,15 @@
 package gorm
 
 import (
-	"database/sql"
 	"os"
 
 	gormtrace "gopkg.in/DataDog/dd-trace-go.v1/contrib/gorm.io/gorm.v1"
-	"gorm.io/driver/mysql"
 	"gorm.io/gorm"
 )
 
-// NewMySQLORM returns a new gorm DB instance.
-func NewMySQLORM(db *sql.DB, gormCfg *gorm.Config, options ...Option) (*gorm.DB, error) {
+// NewORM returns a new gorm DB instance.
+// Create a dialector by calling e.g. https://pkg.go.dev/gorm.io/driver/mysql#New
+func NewORM(dialector gorm.Dialector, gormCfg *gorm.Config, options ...Option) (*gorm.DB, error) {
 	cfg := defaults()
 	for _, opt := range options {
 		opt(cfg)
@@ -27,7 +26,6 @@ func NewMySQLORM(db *sql.DB, gormCfg *gorm.Config, options ...Option) (*gorm.DB,
 		opts = append(opts, gormtrace.WithCustomTag(k, staticTagger))
 	}
 
-	dialector := mysql.New(mysql.Config{Conn: db})
 	return gormtrace.Open(dialector, gormCfg, opts...)
 }
 

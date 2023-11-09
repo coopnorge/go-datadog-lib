@@ -13,7 +13,7 @@ require (
 	go.uber.org/mock v0.3.0
 	google.golang.org/grpc v1.59.0
 	gopkg.in/DataDog/dd-trace-go.v1 v1.57.0
-	gorm.io/gorm v1.25.3
+	gorm.io/gorm v1.25.5
 )
 
 require (

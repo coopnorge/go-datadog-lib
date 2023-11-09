@@ -14,7 +14,7 @@ func RegisterDriverAndOpen(driverName string, driver driver.Driver, dsn string, 
 	for _, opt := range options {
 		opt(cfg)
 	}
-	opts := make([]sqltrace.Option, 0, 4)
+	opts := make([]sqltrace.Option, 0, 3+len(cfg.tags))
 	if cfg.serviceName != "" {
 		opts = append(opts, sqltrace.WithServiceName(cfg.serviceName))
 	}

@@ -17,4 +17,4 @@ jobs:
     permissions:
       pull-requests: write
       contents: write
-    uses: coopnorge/github-workflow-release-drafter/.github/workflows/release-drafter-go.yaml@v0.2.1
+    uses: coopnorge/github-workflow-release-drafter/.github/workflows/release-drafter-go.yaml@v0.3.0

@@ -3,6 +3,7 @@ package grpc
 import (
 	"context"
 	"net"
+	"sort"
 	"strconv"
 	"strings"
 	"testing"
@@ -143,5 +144,17 @@ func TestTraceUnaryClientInterceptorW3C(t *testing.T) {
 	assert.Equal(t, "01", parts[3], "w3c trace-flags not is not correct")
 
 	// Assert TraceState
-	assert.Equal(t, "dd=s:1;t.dm:-1", server.tracestate)
+	assert.False(t, strings.Contains(server.tracestate, ","), "w3c tracestate contained multiple list-members, but we only expected 1")
+	parts = strings.Split(server.tracestate, "=")
+	require.Equal(t, 2, len(parts))
+	require.Equal(t, "dd", parts[0], "w3c tracestate list-member did not contain Datadog list-member")
+
+	// Assert Datadog-part of TraceState
+	parts = strings.Split(parts[1], ";")
+	sort.Strings(parts) // The Datadog-part of the Tracestate can be in any order.
+	require.Equal(t, 3, len(parts))
+	assert.Equal(t, "s:1", parts[0])
+	assert.Equal(t, "t.dm:-1", parts[1])
+	assert.True(t, strings.HasPrefix(parts[2], "t.tid:"))
+	assert.Equal(t, len("t.tid:65796a3f00000000"), len(parts[2]), "t.tid had invalid length.\nExample: %s\nGot:     %s", "t.tid:65796a3f00000000", parts[2])
 }

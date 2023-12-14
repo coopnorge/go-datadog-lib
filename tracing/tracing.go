@@ -4,7 +4,6 @@ import (
 	"context"
 	"fmt"
 
-	"github.com/coopnorge/go-datadog-lib/v2/internal"
 	"gopkg.in/DataDog/dd-trace-go.v1/ddtrace"
 	"gopkg.in/DataDog/dd-trace-go.v1/ddtrace/ext"
 	"gopkg.in/DataDog/dd-trace-go.v1/ddtrace/tracer"
@@ -49,15 +48,8 @@ func OverrideTraceResourceName(sourceCtx context.Context, newResourceName string
 }
 
 func getSpanFromContext(ctx context.Context) tracer.Span {
-	if internal.IsExperimentalTracingEnabled() {
-		if span, exists := tracer.SpanFromContext(ctx); exists {
-			return span
-		}
-		return nil
+	if span, exists := tracer.SpanFromContext(ctx); exists {
+		return span
 	}
-	ddCtx, ddExist := internal.GetContextMetadata[TraceDetails](ctx, internal.TraceContextKey{})
-	if !ddExist || ddCtx.DatadogSpan == nil {
-		return nil
-	}
-	return ddCtx.DatadogSpan
+	return nil
 }

@@ -51,8 +51,6 @@ func TestTraceUnaryClientInterceptor(t *testing.T) {
 	// Ensure valid datadog config, even if we don't have a datadog agent running, to fully instrument the application.
 	t.Setenv("DD_ENV", "unittest")
 	require.True(t, internal.IsDatadogConfigured())
-	t.Setenv("DD_EXPERIMENTAL_TRACING_ENABLED", "true")
-	require.True(t, internal.IsExperimentalTracingEnabled())
 
 	// Start Datadog tracer, so that we don't create NoopSpans.
 	testTracer := mocktracer.Start()
@@ -97,8 +95,6 @@ func TestTraceUnaryClientInterceptorW3C(t *testing.T) {
 	// Ensure valid datadog config, even if we don't have a datadog agent running, to fully instrument the application.
 	t.Setenv("DD_ENV", "unittest")
 	require.True(t, internal.IsDatadogConfigured())
-	t.Setenv("DD_EXPERIMENTAL_TRACING_ENABLED", "true")
-	require.True(t, internal.IsExperimentalTracingEnabled())
 
 	// Start Datadog tracer, so that we don't create NoopSpans.
 	// Start real tracer (not mocktracer), to propagate Traceparent.

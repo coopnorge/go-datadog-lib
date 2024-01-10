@@ -8,9 +8,17 @@ import (
 )
 
 // WrapClient wraps the net/http.Client to automatically create child-spans, and append to HTTP Headers.
+// Deprecated: Use AddTracingToClient instead, and set a proper ResourceNamer. This function will be removed in a later version.
 func WrapClient(client *http.Client) *http.Client {
-	if internal.IsDatadogConfigured() {
-		client = httptrace.WrapClient(client)
+	// Note: Explicitly setting ResourceNamer to `nil`, to prevent leaking paths and keeping backwards-compatibility.
+	return AddTracingToClient(client, WithResourceNamer(nil))
+}
+
+// AddTracingToClient wraps the net/http.Client to automatically create child-spans, and append to HTTP Headers.
+func AddTracingToClient(client *http.Client, options ...Option) *http.Client {
+	if !internal.IsDatadogConfigured() {
+		return client
 	}
-	return client
+	opts := convertClientOptions(options...)
+	return httptrace.WrapClient(client, opts...)
 }

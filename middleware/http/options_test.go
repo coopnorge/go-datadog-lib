@@ -8,22 +8,6 @@ import (
 	"github.com/stretchr/testify/require"
 )
 
-func TestHostResourceNamer(t *testing.T) {
-	rn := HostResourceNamer()
-	req, err := http.NewRequest("GET", "https://www.coop.no/api/some-service/some-endpoint", nil)
-	require.NoError(t, err)
-	require.Equal(t, "www.coop.no", rn(req))
-
-	q := req.URL.Query()
-	q.Add("foo", "bar")
-	req.URL.RawQuery = q.Encode()
-	require.Equal(t, "www.coop.no", rn(req))
-
-	req.SetBasicAuth("bax", "baz")
-	req.URL.User = url.UserPassword("bax", "baz")
-	require.Equal(t, "www.coop.no", rn(req))
-}
-
 func TestResourceNamers(t *testing.T) {
 	testCases := []struct {
 		name                         string

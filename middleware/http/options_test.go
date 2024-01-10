@@ -3,6 +3,7 @@ package http
 import (
 	"net/http"
 	"net/url"
+	"strings"
 	"testing"
 
 	"github.com/stretchr/testify/require"
@@ -64,4 +65,29 @@ func TestResourceNamers(t *testing.T) {
 			require.Equal(t, tc.expectedFullWithQueryAndUser, tc.rn(req))
 		})
 	}
+}
+
+func TestCustomResourceNamer(t *testing.T) {
+	// Example ResourceNamer that can be used to e.g. not log customer-id.
+	rn := func(req *http.Request) string {
+		u := req.URL
+		path := u.Path
+		if strings.HasPrefix(path, "/api/some-service/customers/") {
+			path = "/api/some-service/customers/:customerid"
+		}
+		return req.Method + " " + u.Scheme + "://" + u.Host + path
+	}
+
+	req, err := http.NewRequest("GET", "https://www.coop.no/api/some-service/some-endpoint", nil)
+	require.NoError(t, err)
+	require.Equal(t, "GET https://www.coop.no/api/some-service/some-endpoint", rn(req))
+
+	q := req.URL.Query()
+	q.Add("foo", "bar")
+	req.URL.RawQuery = q.Encode()
+	require.Equal(t, "GET https://www.coop.no/api/some-service/some-endpoint", rn(req))
+
+	req, err = http.NewRequest("GET", "https://www.coop.no/api/some-service/customers/1234", nil)
+	require.NoError(t, err)
+	require.Equal(t, "GET https://www.coop.no/api/some-service/customers/:customerid", rn(req))
 }

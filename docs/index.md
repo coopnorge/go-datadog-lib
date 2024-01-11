@@ -225,7 +225,7 @@ Agent or Agent was started later.
 If your application is making outgoing gRPC calls, you can add the gRPC
 client-interceptor to automatically create child-spans for each outgoing gRPC-call.
 These spans will also be embedded in the outgoing gRPC-metadata, so if you are calling
-another service that is also instrumented with DataDog-integration, then you will
+another service that is also instrumented with Datadog-integration, then you will
 enable distributed tracing.
 
 It is important that the context used in the RPC contains trace-information,
@@ -263,7 +263,7 @@ func foo() {
 If your application is making outgoing HTTP calls, you can add the HTTP
 client-interceptor to automatically create child-spans for each outgoing HTTP-call.
 These spans will also be embedded in the outgoing HTTP Headers, so if you are calling
-another service that is also instrumented with DataDog-integration, then you will
+another service that is also instrumented with Datadog-integration, then you will
 enable distributed tracing.
 
 It is important that the context used in the http.Request contains trace-information,

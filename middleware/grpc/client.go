@@ -7,6 +7,7 @@ import (
 )
 
 // TraceUnaryClientInterceptor create a client-interceptor to automatically create child-spans, and append to gRPC metadata.
+//
 // Deprecated: Use UnaryClientInterceptor instead. This function will be removed in a later version.
 func TraceUnaryClientInterceptor() grpc.UnaryClientInterceptor {
 	return ddGrpc.UnaryClientInterceptor()

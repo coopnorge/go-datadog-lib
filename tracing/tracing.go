@@ -30,6 +30,7 @@ func CreateNestedTrace(sourceCtx context.Context, operation, resource string) (d
 }
 
 // AppendUserToTrace includes identifier of user that would be attached to span in datadog
+//
 // Deprecated: AppendUserToTrace previously added CoopID to Datadog-spans, which could be used to look up other PII-information. This is not wanted, and has been replaced with a no-op.
 func AppendUserToTrace(_ context.Context, _ string) error {
 	return nil

@@ -8,6 +8,7 @@ import (
 )
 
 // WrapClient wraps the net/http.Client to automatically create child-spans, and append to HTTP Headers.
+//
 // Deprecated: Use AddTracingToClient instead, and set a proper ResourceNamer. This function will be removed in a later version.
 func WrapClient(client *http.Client) *http.Client {
 	// Note: Explicitly setting ResourceNamer to `nil`, to prevent leaking paths and keeping backwards-compatibility.

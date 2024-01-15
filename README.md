@@ -1,7 +1,6 @@
 # Coop Datadog Go package
 
-![Test](https://github.com/coopnorge/go-datadog-lib/actions/workflows/test.yml/badge.svg)
-![Build](https://github.com/coopnorge/go-datadog-lib/actions/workflows/build.yml/badge.svg)
+![Build](https://github.com/coopnorge/go-datadog-lib/actions/workflows/cicd.yaml/badge.svg)
 
 Plug and play package that wraps base functionally and initialization of
 Datadog Service.
@@ -11,8 +10,12 @@ Datadog Service.
 
 Supported middleware to correlate/extend traceability and logs in Datadog.
 
-- [X] gRPC Unary Server
+- [X] gRPC Server
+- [X] gRPC Client
 - [X] HTTP - Echo
+- [X] HTTP - Standard library Client
+- [X] Database - GORM
+- [X] Database - Standard library
 
 ## Documentation
 

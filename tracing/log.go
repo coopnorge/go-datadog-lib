@@ -9,6 +9,10 @@ import (
 )
 
 // LogWithTrace will log message by logger.Level with trace if it's present in context.Context
+//
+// Deprecated: LogWithTrace will be removed in a future major version and
+// should not be used. Use logger.WithContext(ctx Context) from
+// github.com/coopnorge/go-logger
 func LogWithTrace(sourceCtx context.Context, severity logger.Level, message string) {
 	messageToLog := getMessageToLog(sourceCtx, message)
 	emptyEntry := logger.WithFields(map[string]interface{}{})
@@ -17,6 +21,10 @@ func LogWithTrace(sourceCtx context.Context, severity logger.Level, message stri
 }
 
 // LogFieldsWithTrace will log message by logger.Level with trace if it's present in context.Context
+//
+// Deprecated: LogFieldsWithTrace will be removed in a future major version and
+// should not be used. Use logger.WithContext(ctx Context) from
+// github.com/coopnorge/go-logger
 func LogFieldsWithTrace(sourceCtx context.Context, severity logger.Level, message string, fields logger.Fields) {
 	messageToLog := getMessageToLog(sourceCtx, message)
 	entry := logger.WithFields(fields)

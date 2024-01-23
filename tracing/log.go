@@ -37,7 +37,7 @@ func getMessageToLog(ctx context.Context, message string) string {
 	return messageToLog
 }
 
-func logWithSeverity(entry logger.Entry, severity logger.Level, message string) {
+func logWithSeverity(entry *logger.Entry, severity logger.Level, message string) {
 	switch severity {
 	case logger.LevelFatal:
 		entry.Fatalf(message)

@@ -5,7 +5,6 @@ import (
 	"fmt"
 	"strings"
 
-	"github.com/coopnorge/go-datadog-lib/v2/tracing"
 	"github.com/coopnorge/go-logger"
 
 	"github.com/iancoleman/strcase"
@@ -76,10 +75,6 @@ func (m BaseMetricCollector) AddMetric(ctx context.Context, d Data) {
 	}
 
 	if metricCollectionErr != nil {
-		tracing.LogWithTrace(
-			ctx,
-			logger.LevelError,
-			fmt.Sprintf("Failed to collect metrics metricData for Name=%s - error: %v", metricName, metricCollectionErr),
-		)
+		logger.WithContext(ctx).WithError(metricCollectionErr).Errorf("Failed to collect metrics metricData for Name=%s", metricName)
 	}
 }

@@ -3,7 +3,7 @@ module github.com/coopnorge/go-datadog-lib/v2
 go 1.20
 
 require (
-	github.com/DataDog/datadog-go/v5 v5.4.0
+	github.com/DataDog/datadog-go/v5 v5.5.0
 	github.com/coopnorge/go-logger v0.7.0
 	github.com/grpc-ecosystem/go-grpc-middleware/v2 v2.0.1
 	github.com/iancoleman/strcase v0.3.0

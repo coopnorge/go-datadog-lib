@@ -22,8 +22,8 @@ const (
 // StartDatadog parallel process to collect data for Datadog.
 // connectionType flag related to Datadog connection type, it supports HTTP or socket - values will be used from config.DatadogParameters
 func StartDatadog(cfg config.DatadogParameters, connectionType ConnectionType) error {
-	if !cfg.IsDataDogConfigValid() {
-		return fmt.Errorf("datadog configuration not valid, cannot initialize Datadog services")
+	if err := cfg.Validate(); err != nil {
+		return fmt.Errorf("Datadog configuration not valid, cannot initialize Datadog services: %w", err)
 	}
 
 	initTracer(cfg, connectionType)

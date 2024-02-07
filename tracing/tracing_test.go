@@ -2,10 +2,7 @@ package tracing
 
 import (
 	"context"
-	"fmt"
 	"testing"
-
-	"github.com/coopnorge/go-datadog-lib/v2/internal"
 
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
@@ -25,26 +22,6 @@ func TestCreateNestedTrace(t *testing.T) {
 
 	span, spanCtx := tracer.StartSpanFromContext(ctx, "test", tracer.ResourceName("UnitTest"))
 	defer span.Finish()
-	extCtx := internal.ExtendedContextWithMetadata(spanCtx, internal.TraceContextKey{}, TraceDetails{DatadogSpan: span})
-	nestedTrace, nestedTraceErr = CreateNestedTrace(extCtx, op, res)
-
-	assert.Nil(t, nestedTraceErr)
-	assert.NotNil(t, nestedTrace)
-}
-
-func TestCreateNestedTraceExperimental(t *testing.T) {
-	op := "test"
-	res := "unit"
-	ctx := context.Background()
-
-	nestedTrace, nestedTraceErr := CreateNestedTrace(ctx, op, res)
-
-	assert.NoError(t, nestedTraceErr)
-	assert.IsType(t, nestedTrace, noopSpan{})
-
-	span, spanCtx := tracer.StartSpanFromContext(ctx, "test", tracer.ResourceName("UnitTest"))
-	defer span.Finish()
-	t.Setenv(internal.ExperimentalTracingEnabled, "true")
 	nestedTrace, nestedTraceErr = CreateNestedTrace(spanCtx, op, res)
 
 	assert.Nil(t, nestedTraceErr)
@@ -52,35 +29,31 @@ func TestCreateNestedTraceExperimental(t *testing.T) {
 }
 
 func TestAppendUserToTrace(t *testing.T) {
+	// Start Datadog tracer, so that we don't create NoopSpans.
+	testTracer := mocktracer.Start()
+	t.Cleanup(testTracer.Stop)
 	user := "unit_tester"
 	ctx := context.Background()
 
 	err := AppendUserToTrace(ctx, user)
-
-	assert.Error(t, err, "expected error since context not extended")
-
-	span, spanCtx := tracer.StartSpanFromContext(ctx, "test", tracer.ResourceName("UnitTest"))
-	defer span.Finish()
-	extCtx := internal.ExtendedContextWithMetadata(spanCtx, internal.TraceContextKey{}, TraceDetails{DatadogSpan: span})
-	err = AppendUserToTrace(extCtx, user)
-
-	assert.Nil(t, err)
-}
-
-func TestAppendUserToTraceExperimental(t *testing.T) {
-	user := "unit_tester"
-	ctx := context.Background()
-
-	err := AppendUserToTrace(ctx, user)
-
-	assert.Error(t, err, "expected error since context not extended")
+	require.NoError(t, err)
 
 	span, spanCtx := tracer.StartSpanFromContext(ctx, "test", tracer.ResourceName("UnitTest"))
 	defer span.Finish()
-	t.Setenv(internal.ExperimentalTracingEnabled, "true")
 	err = AppendUserToTrace(spanCtx, user)
+	require.NoError(t, err)
+	span.Finish()
 
-	assert.Nil(t, err)
+	testTracer.Stop()
+
+	spans := testTracer.FinishedSpans()
+	require.Equal(t, 1, len(spans))
+	finishedSpan := spans[0]
+	tags := finishedSpan.Tags()
+	require.Equal(t, 1, len(tags), tags)
+	require.Equal(t, "UnitTest", tags["resource.name"])
+	require.Empty(t, tags["usr"])
+	require.Empty(t, tags["usr.id"])
 }
 
 func TestOverrideTraceResourceName(t *testing.T) {
@@ -93,23 +66,6 @@ func TestOverrideTraceResourceName(t *testing.T) {
 
 	span, spanCtx := tracer.StartSpanFromContext(ctx, "test", tracer.ResourceName("UnitTest"))
 	defer span.Finish()
-	extCtx := internal.ExtendedContextWithMetadata(spanCtx, internal.TraceContextKey{}, TraceDetails{DatadogSpan: span})
-	err = OverrideTraceResourceName(extCtx, newRes)
-
-	assert.Nil(t, err)
-}
-
-func TestOverrideTraceResourceNameExperimental(t *testing.T) {
-	newRes := "unit_test"
-	ctx := context.Background()
-
-	err := OverrideTraceResourceName(ctx, newRes)
-
-	assert.Error(t, err, "expected error since context not extended")
-
-	span, spanCtx := tracer.StartSpanFromContext(ctx, "test", tracer.ResourceName("UnitTest"))
-	defer span.Finish()
-	t.Setenv(internal.ExperimentalTracingEnabled, "true")
 	err = OverrideTraceResourceName(spanCtx, newRes)
 
 	assert.Nil(t, err)
@@ -120,59 +76,33 @@ func TestStartChildSpan(t *testing.T) {
 	_ = mocktracer.Start()
 
 	type args struct {
-		spanInCtx    bool
-		experimental bool
+		spanInCtx bool
 	}
 	tests := []struct {
 		name string
 		args args
 	}{
 		{
-			name: "legacy without span",
+			name: "without span",
 			args: args{
-				spanInCtx:    false,
-				experimental: false,
+				spanInCtx: false,
 			},
 		},
 		{
-			name: "legacy with span",
+			name: "with span",
 			args: args{
-				spanInCtx:    true,
-				experimental: false,
-			},
-		},
-		{
-			name: "experimental without span",
-			args: args{
-				spanInCtx:    false,
-				experimental: true,
-			},
-		},
-		{
-			name: "experimental with span",
-			args: args{
-				spanInCtx:    true,
-				experimental: true,
+				spanInCtx: true,
 			},
 		},
 	}
 	for _, tt := range tests {
 		tt := tt
 		t.Run(tt.name, func(t *testing.T) {
-			t.Setenv(internal.ExperimentalTracingEnabled, fmt.Sprintf("%v", tt.args.experimental))
-
 			ctx := context.Background()
 			if tt.args.spanInCtx {
-				if tt.args.experimental {
-					span, spanCtx := tracer.StartSpanFromContext(ctx, "test", tracer.ResourceName("UnitTest"))
-					defer span.Finish()
-					ctx = spanCtx
-				} else {
-					span, spanCtx := tracer.StartSpanFromContext(ctx, "test", tracer.ResourceName("UnitTest"))
-					defer span.Finish()
-					extCtx := internal.ExtendedContextWithMetadata(spanCtx, internal.TraceContextKey{}, TraceDetails{DatadogSpan: span})
-					ctx = extCtx
-				}
+				span, spanCtx := tracer.StartSpanFromContext(ctx, "test", tracer.ResourceName("UnitTest"))
+				defer span.Finish()
+				ctx = spanCtx
 			}
 
 			childSpan := CreateChildSpan(ctx, "my-operation", "my-resource")

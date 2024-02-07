@@ -28,7 +28,7 @@ func StartDatadog(cfg config.DatadogParameters, connectionType ConnectionType) e
 
 	initTracer(cfg, connectionType)
 	if initProfilerErr := initProfiler(cfg, connectionType); initProfilerErr != nil {
-		return fmt.Errorf("failed to start Datadog profiler: %v", initProfilerErr)
+		return fmt.Errorf("Failed to start Datadog profiler: %w", initProfilerErr)
 	}
 
 	return nil

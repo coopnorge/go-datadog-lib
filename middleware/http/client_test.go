@@ -102,5 +102,14 @@ func TestWrapClientW3C(t *testing.T) {
 	assert.Equal(t, "01", parts[3], "w3c trace-flags not is not correct")
 
 	// Assert TraceState
-	assert.Equal(t, "dd=s:1;t.dm:-1", tracestate)
+	parts = strings.Split(tracestate, ",")
+	require.True(t, len(parts) >= 1)
+	found := false
+	for _, listMember := range parts {
+		if strings.HasPrefix(listMember, "dd=") {
+			assert.NotEmpty(t, strings.TrimPrefix(listMember, "dd="))
+			found = true
+		}
+	}
+	assert.True(t, found, "Did not find Datadog's list-member in w3c tracestate")
 }

@@ -5,7 +5,7 @@ Also provides abstract code to work with metrics.
 
 ## APM
 
-In Coop No our default setup is tracing applications with CPU profiling
+In Coop Norge, our default setup is tracing applications with CPU profiling
 support, that is enabled by default in the package bootstrap.
 
 ## Custom metrics - DD StatsD
@@ -140,7 +140,7 @@ func main() {
 }
 ```
 
-### 3. Middleware gRPC
+### 3. Middleware gRPC server
 
 To have better tracing you need add to your gRPC custom middleware that will
 extend context.
@@ -149,52 +149,37 @@ It's needed to relate logs with your trace data in APM.
 
 To do that, simply add Go - Datadog middleware to your gRPC interceptor.
 
-Take a look at the function `TraceUnaryServerInterceptor` in
-[`github.com/coopnorge/go-datadog-lib/blob/main/middleware/grpc/grpc.go`](https://github.com/coopnorge/go-datadog-lib/blob/main/middleware/grpc/grpc.go).
+Take a look at the function `UnaryServerInterceptor` in
+[`github.com/coopnorge/go-datadog-lib/blob/main/middleware/grpc/server.go`](https://github.com/coopnorge/go-datadog-lib/blob/main/middleware/grpc/server.go).
 
 ```go
 import (
+	coopdatadog "github.com/coopnorge/go-datadog-lib/v2"
 	datadogMiddleware "github.com/coopnorge/go-datadog-lib/v2/middleware/grpc"
 	"google.golang.org/grpc"
 )
 
 func main() {
+	err := coopdatadog.StartDatadog(...)
+	if err != nil {
+		panic(err)
+	}
+	defer coopdatadog.GracefulDatadogShutdown()
+
+
+	ddOpts := []datadogMiddleware.Option{
+		// ...
+	}
 	serverOpts := []grpc.ServerOption{
-		grpc.UnaryInterceptor(datadogMiddleware.TraceUnaryServerInterceptor()),
+		grpc.UnaryInterceptor(datadogMiddleware.UnaryServerInterceptor(ddOpts...)),
+		grpc.StreamInterceptor(datadogMiddleware.StreamServerInterceptor(ddOpts...))
 	}
 
 	grpcServer := grpc.NewServer(serverOpts...)
 }
 ```
 
-#### Using `cfgBuilder`
-
-```go
-package myServer
-
-import (
-	"github.com/coopnorge/go-datadog-lib/v2/middleware/grpc"
-	"github.com/labstack/echo/v4"
-)
-
-func MyServer() {
-	// ...
-  
-	// This is gRPC server configuration builder
-	cfgBuilder.AddGrpcUnaryInterceptors(
-		grpctrace.UnaryServerInterceptor(
-			grpctrace.WithServiceName(cfg.DatadogService),
-			grpctrace.WithStreamCalls(false),
-		),
-		grpc.TraceUnaryServerInterceptor(),
-	)
-
-	// This middleware will extend context for tracing and logs
-	// grpc.TraceUnaryServerInterceptor()
-}
-```
-
-### 3. Middleware echo
+### 3. Middleware echo server
 
 Same as gRPC middleware but for Echo framework. It will extend request context
 and will allow to create nested spans for it, also correlate with logs.
@@ -210,6 +195,12 @@ import (
 )
 
 func MyServer() {
+	err := coopdatadog.StartDatadog(...)
+	if err != nil {
+		panic(err)
+	}
+	defer coopdatadog.GracefulDatadogShutdown()
+
 	// ...
 	echoServer := echo.New()
 	// Some other configuration
@@ -219,7 +210,7 @@ func MyServer() {
 }
 ```
 
-### Common issue
+#### Common issue
 
 After that Datadog will try to connect to the socket and will start to send all
 information in the background.
@@ -228,6 +219,161 @@ In different setup, you could have error logs that Datadog cannot connect to
 the socket and tried to connect via HTTP. That could be related to issue when
 your container starts faster and sockets were not ready to communicate with
 Agent or Agent was started later.
+
+### 4. Middleware gRPC client
+
+If your application is making outgoing gRPC calls, you can add the gRPC
+client-interceptor to automatically create child-spans for each outgoing gRPC-call.
+These spans will also be embedded in the outgoing gRPC-metadata, so if you are calling
+another service that is also instrumented with Datadog-integration, then you will
+enable distributed tracing.
+
+It is important that the context used in the RPC contains trace-information,
+preferably created from any server middleware from this module.
+
+Example:
+
+```go
+import (
+	datadogMiddleware "github.com/coopnorge/go-datadog-lib/v2/middleware/grpc"
+	"google.golang.org/grpc"
+	myprotov1 "some/import/path"
+)
+
+func foo() {
+	cc, err := grpc.Dial(
+		url,
+		grpc.WithUnaryInterceptor(ddGrpc.UnaryClientInterceptor()),
+	)
+	if err != nil {
+		panic(err)
+	}
+
+	client := myprotov1.NewFoobarAPIClient(cc)
+
+	_, err := client.SomeUnaryRPC(ctx, myprotov1.SomeUnaryRPCRequest{})
+	if err != nil {
+		panic(err)
+	}
+}
+```
+
+### 4. Middleware HTTP client
+
+If your application is making outgoing HTTP calls, you can add the HTTP
+client-interceptor to automatically create child-spans for each outgoing HTTP-call.
+These spans will also be embedded in the outgoing HTTP Headers, so if you are calling
+another service that is also instrumented with Datadog-integration, then you will
+enable distributed tracing.
+
+It is important that the context used in the http.Request contains trace-information,
+preferably created from any server middleware from this module.
+
+Example:
+
+```go
+import (
+	datadogMiddleware "github.com/coopnorge/go-datadog-lib/v2/middleware/grpc"
+	"google.golang.org/grpc"
+)
+
+func foo() {
+	client := &http.Client{
+		Timeout: 10*time.Second,
+	}
+	client = datadogMiddleware.AddTracingToClient(client)
+
+	req, err := http.NewRequestWithContext(ctx, "GET", url, nil)
+	if err != nil {
+		panic(err)
+	}
+
+	_, err := client.Do(req)
+	if err != nil {
+		panic(err)
+	}
+}
+```
+
+### 4. Middleware database standard library
+
+If your application is making outgoing call to a database, you can add the database
+driver to automatically create child-spans for each outgoing database-call.
+
+It is important that the context used in the call to the database contains trace-information,
+preferably created from any server middleware from this module.
+
+Example:
+
+```go
+import (
+	ddDatabase "github.com/coopnorge/go-datadog-lib/v2/middleware/database"
+	mysqlDriver "github.com/go-sql-driver/mysql"
+)
+
+func foo() {
+	// Example using mysql driver
+	db, err := ddDatabase.RegisterDriverAndOpen("mysql", mysqlDriver.MySQLDriver{}, dsn, opts...)
+	if err != nil{
+		panic(err)
+	}
+
+	_, err := db.QueryContext(ctx, "SELECT * FROM users")
+}
+```
+
+### 4. Middleware database GORM
+
+If your application is using GORM to make outgoing calls to a database, you can
+add the GORM middleware to automatically create child-spans for each outgoing database-call.
+
+It is important that the context used in the call to the database contains trace-information,
+preferably created from any server middleware from this module.
+
+Example:
+
+```go
+import (
+	ddGorm "github.com/coopnorge/go-datadog-lib/v2/middleware/gorm"
+	mysqlDriver "github.com/go-sql-driver/mysql"
+)
+
+func foo() {
+	// Example using mysql driver
+	gormDB, err := ddGorm.NewORM(mysql.New(mysql.Config{Conn: sqlDb}), &gorm.Config{})
+	if err != nil {
+		panic(err)
+	}
+
+	user := &entity.User{}
+	_ := gormDB.WithContext(ctx).Select("*").First(user)
+}
+```
+
+You can also combine this with the standard library tracer-middleware:
+
+```go
+import (
+	ddDatabase "github.com/coopnorge/go-datadog-lib/v2/middleware/database"
+	mysqlDriver "github.com/go-sql-driver/mysql"
+)
+
+func foo() {
+	// Example using mysql driver
+	db, err := ddDatabase.RegisterDriverAndOpen("mysql", mysqlDriver.MySQLDriver{}, dsn, opts...)
+	if err != nil{
+		panic(err)
+	}
+
+	gormDB, err := ddGorm.NewORM(mysql.New(mysql.Config{Conn: db}), &gorm.Config{})
+	if err != nil {
+		panic(err)
+	}
+
+	user := &entity.User{}
+	_ := gormDB.WithContext(ctx).Select("*").First(user)
+}
+```
 
 ## Metric - Datadog StatsD
 
@@ -308,20 +454,3 @@ func Example()  {
 	ddMetricCollector.AddMetric(context.Background(), tMetricData)
 }
 ```
-
-## Experimental Tracing
-
-For advanced tracing capabilities and features, you can enable experimental
-tracing by setting the environment variable "DD_EXPERIMENTAL_TRACING_ENABLED"
-to "true", "TRUE", or "True".
-
-When this environment variable is set, the package utilizes an experimental
-tracing interceptor from
-[dd-trace-go](https://github.com/DataDog/dd-trace-go/blob/main/contrib/google.golang.org/grpc/server.go)
-for gRPC servers, enhancing distributed tracing capabilities. Additionally, for
-the Echo middleware, the package leverages the interceptor from [dd-trace-go
-Echo
-Middleware](https://github.com/DataDog/dd-trace-go/tree/main/contrib/labstack/echo.v4).
-
-In a future release, these experimental tracing features will become the
-default behavior, eliminating the need for the feature flag.

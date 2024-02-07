@@ -4,7 +4,6 @@ import (
 	"context"
 	"fmt"
 
-	"github.com/coopnorge/go-datadog-lib/v2/internal"
 	"gopkg.in/DataDog/dd-trace-go.v1/ddtrace"
 	"gopkg.in/DataDog/dd-trace-go.v1/ddtrace/ext"
 	"gopkg.in/DataDog/dd-trace-go.v1/ddtrace/tracer"
@@ -39,14 +38,9 @@ func CreateChildSpan(sourceCtx context.Context, operation, resource string) ddtr
 }
 
 // AppendUserToTrace includes identifier of user that would be attached to span in datadog
-func AppendUserToTrace(sourceCtx context.Context, user string) error {
-	span := getSpanFromContext(sourceCtx)
-	if span == nil {
-		return fmt.Errorf("parent span tracer not found in context")
-	}
-
-	tracer.SetUser(span, user)
-
+//
+// Deprecated: AppendUserToTrace previously added CoopID to Datadog-spans, which could be used to look up other PII-information. This is not wanted, and has been replaced with a no-op.
+func AppendUserToTrace(_ context.Context, _ string) error {
 	return nil
 }
 
@@ -63,15 +57,8 @@ func OverrideTraceResourceName(sourceCtx context.Context, newResourceName string
 }
 
 func getSpanFromContext(ctx context.Context) tracer.Span {
-	if internal.IsExperimentalTracingEnabled() {
-		if span, exists := tracer.SpanFromContext(ctx); exists {
-			return span
-		}
-		return nil
+	if span, exists := tracer.SpanFromContext(ctx); exists {
+		return span
 	}
-	ddCtx, ddExist := internal.GetContextMetadata[TraceDetails](ctx, internal.TraceContextKey{})
-	if !ddExist || ddCtx.DatadogSpan == nil {
-		return nil
-	}
-	return ddCtx.DatadogSpan
+	return nil
 }

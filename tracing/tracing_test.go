@@ -17,8 +17,8 @@ func TestCreateNestedTrace(t *testing.T) {
 
 	nestedTrace, nestedTraceErr := CreateNestedTrace(ctx, op, res)
 
-	assert.Error(t, nestedTraceErr, "expected error since context not extended")
-	assert.Nil(t, nestedTrace)
+	assert.NoError(t, nestedTraceErr)
+	assert.IsType(t, nestedTrace, noopSpan{})
 
 	span, spanCtx := tracer.StartSpanFromContext(ctx, "test", tracer.ResourceName("UnitTest"))
 	defer span.Finish()
@@ -68,5 +68,54 @@ func TestOverrideTraceResourceName(t *testing.T) {
 	defer span.Finish()
 	err = OverrideTraceResourceName(spanCtx, newRes)
 
-	require.NoError(t, err)
+	assert.Nil(t, err)
+}
+
+func TestStartChildSpan(t *testing.T) {
+	// Start Datadog tracer, so that we don't create NoopSpans.
+	_ = mocktracer.Start()
+
+	type args struct {
+		spanInCtx bool
+	}
+	tests := []struct {
+		name string
+		args args
+	}{
+		{
+			name: "without span",
+			args: args{
+				spanInCtx: false,
+			},
+		},
+		{
+			name: "with span",
+			args: args{
+				spanInCtx: true,
+			},
+		},
+	}
+	for _, tt := range tests {
+		tt := tt
+		t.Run(tt.name, func(t *testing.T) {
+			ctx := context.Background()
+			if tt.args.spanInCtx {
+				span, spanCtx := tracer.StartSpanFromContext(ctx, "test", tracer.ResourceName("UnitTest"))
+				defer span.Finish()
+				ctx = spanCtx
+			}
+
+			childSpan := CreateChildSpan(ctx, "my-operation", "my-resource")
+
+			require.NotNil(t, childSpan)
+			childSpan.Finish()
+			if tt.args.spanInCtx {
+				assert.NotEqual(t, uint64(0), childSpan.Context().SpanID())
+				assert.NotEqual(t, uint64(0), childSpan.Context().TraceID())
+			} else {
+				assert.Equal(t, uint64(0), childSpan.Context().SpanID())
+				assert.Equal(t, uint64(0), childSpan.Context().TraceID())
+			}
+		})
+	}
 }

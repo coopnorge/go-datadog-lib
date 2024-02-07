@@ -18,6 +18,7 @@ type (
 )
 
 // CreateNestedTrace will fork parent tracer to attach to parent one with new operation and resource from sourceCtx
+//
 // Deprecated: Use CreateChildSpan instead.
 func CreateNestedTrace(sourceCtx context.Context, operation, resource string) (ddtrace.Span, error) {
 	return CreateChildSpan(sourceCtx, operation, resource), nil

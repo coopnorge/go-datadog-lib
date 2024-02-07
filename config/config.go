@@ -1,5 +1,9 @@
 package config
 
+import (
+	"errors"
+)
+
 type (
 	// DatadogParameters for connection and configuring background process to send information to Datadog Agent
 	DatadogParameters interface {
@@ -16,8 +20,14 @@ type (
 		// IsExtraProfilingEnabled flag enables more optional profilers not recommended for production.
 		IsExtraProfilingEnabled() bool
 		// IsDataDogConfigValid method to verify if configuration values are correct
+		//
+		// Deprecated: Use Validate()
 		IsDataDogConfigValid() bool
+		// Validate the DatadogConfig. Returns the first error found, returns nil if
+		// the configuration is good.
+		Validate() error
 	}
+
 	// DatadogConfig that required to connect to Datadog Agent
 	DatadogConfig struct {
 		// Env where application is executed, dev, production, staging etc
@@ -36,23 +46,34 @@ type (
 )
 
 // IsDataDogConfigValid method to verify if configuration values are correct
+//
+// Deprecated: Use Validate()
 func (d DatadogConfig) IsDataDogConfigValid() bool {
-	if d.Env == "" {
-		return false
-	}
-	if d.Service == "" {
-		return false
-	}
-	if d.ServiceVersion == "" {
-		return false
-	}
-
-	// DSD or APM must be configured`
-	if d.DSD == "" && d.APM == "" {
+	if err := d.Validate(); err != nil {
 		return false
 	}
 
 	return true
+}
+
+// Validate the DatadogConfig. Returns the first error found, returns nil if
+// the configuration is good.
+func (d DatadogConfig) Validate() error {
+	if d.Env == "" {
+		return errors.New("DD_ENV must be defined")
+	}
+	if d.Service == "" {
+		return errors.New("DD_SERVICE must be defined")
+	}
+	if d.ServiceVersion == "" {
+		return errors.New("DD_VERSION must be defined")
+	}
+
+	if d.DSD == "" && d.APM == "" {
+		return errors.New("DD_DOGSTATSD_URL and/or DD_TRACE_AGENT_URL must be defined")
+	}
+
+	return nil
 }
 
 // GetEnv where application is executed, dev, production, staging etc

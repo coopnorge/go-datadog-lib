@@ -37,6 +37,37 @@ func TestIsDataDogConfigValid(t *testing.T) {
 	assert.True(t, cfg.IsDataDogConfigValid())
 }
 
+func TestValidate(t *testing.T) {
+	cfg := DatadogConfig{}
+
+	assert.Error(t, cfg.Validate())
+
+	cfg.Env = "dev"
+	assert.Error(t, cfg.Validate())
+
+	cfg.Service = "Lib"
+	assert.Error(t, cfg.Validate())
+
+	cfg.ServiceVersion = "v1"
+	assert.Error(t, cfg.Validate())
+
+	cfg.APM = ""
+	cfg.DSD = ""
+	assert.Error(t, cfg.Validate())
+
+	cfg.APM = ""
+	cfg.DSD = "unix///tmp"
+	assert.Nil(t, cfg.Validate())
+
+	cfg.APM = "unix///tmp"
+	cfg.DSD = ""
+	assert.Nil(t, cfg.Validate())
+
+	cfg.DSD = "unix///tmp"
+	cfg.APM = "unix///tmp"
+	assert.Nil(t, cfg.Validate())
+}
+
 func TestConfigGetters(t *testing.T) {
 	expectedCfg := DatadogConfig{
 		Env:            "unit",

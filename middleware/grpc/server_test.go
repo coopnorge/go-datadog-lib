@@ -15,7 +15,7 @@ import (
 
 func TestTraceUnaryServerInterceptor(t *testing.T) {
 	grpcUnaryMW := TraceUnaryServerInterceptor()
-	grpcUnaryHandler := func(ctx context.Context, req interface{}) (interface{}, error) {
+	grpcUnaryHandler := func(ctx context.Context, _ interface{}) (interface{}, error) {
 		span, exists := tracer.SpanFromContext(ctx)
 		assert.True(t, exists)
 		assert.NotNil(t, span)

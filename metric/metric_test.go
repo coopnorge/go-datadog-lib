@@ -12,11 +12,6 @@ import (
 )
 
 func TestAddMetric(t *testing.T) {
-	ctrl := gomock.NewController(t)
-	mockDatadogClient := mock_metrics.NewMockDatadogMetricsClient(ctrl)
-	mockDatadogStatsd := mock_statsd.NewMockClientInterface(ctrl)
-	ctrl.Finish()
-
 	testCases := []struct {
 		name        string
 		metricType  Type
@@ -43,6 +38,10 @@ func TestAddMetric(t *testing.T) {
 
 	for _, tc := range testCases {
 		t.Run(tc.name, func(t *testing.T) {
+			ctrl := gomock.NewController(t)
+			mockDatadogClient := mock_metrics.NewMockDatadogMetricsClient(ctrl)
+			mockDatadogStatsd := mock_statsd.NewMockClientInterface(ctrl)
+			ctrl.Finish()
 			tMetricData := Data{
 				Name:  "RuntimeTest",
 				Type:  tc.metricType,

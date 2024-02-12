@@ -96,7 +96,7 @@ func WithCustomTag(key string, value any) Option {
 
 // StaticResourceNamer will set every span's ResourceName to str.
 func StaticResourceNamer(str string) ResourceNamer {
-	return func(req *http.Request) string {
+	return func(_ *http.Request) string {
 		return str
 	}
 }

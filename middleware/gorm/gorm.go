@@ -26,6 +26,11 @@ func NewORM(dialector gorm.Dialector, gormCfg *gorm.Config, options ...Option) (
 		opts = append(opts, gormtrace.WithCustomTag(k, staticTagger))
 	}
 
+	if gormCfg == nil {
+		// gormtrace panics if gormCfg is nil
+		// create a new one if it's not provided
+		gormCfg = &gorm.Config{}
+	}
 	return gormtrace.Open(dialector, gormCfg, opts...)
 }
 

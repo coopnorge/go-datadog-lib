@@ -66,7 +66,7 @@ func TestTraceUnaryClientInterceptor(t *testing.T) {
 	}()
 
 	conn, err := grpc.DialContext(ctx, "bufnet",
-		grpc.WithContextDialer(func(ctx context.Context, s string) (net.Conn, error) { return listener.Dial() }),
+		grpc.WithContextDialer(func(_ context.Context, _ string) (net.Conn, error) { return listener.Dial() }),
 		grpc.WithTransportCredentials(insecure.NewCredentials()),
 		grpc.WithUnaryInterceptor(TraceUnaryClientInterceptor()),
 	)
@@ -111,7 +111,7 @@ func TestTraceUnaryClientInterceptorW3C(t *testing.T) {
 	}()
 
 	conn, err := grpc.DialContext(ctx, "bufnet",
-		grpc.WithContextDialer(func(ctx context.Context, s string) (net.Conn, error) { return listener.Dial() }),
+		grpc.WithContextDialer(func(_ context.Context, _ string) (net.Conn, error) { return listener.Dial() }),
 		grpc.WithTransportCredentials(insecure.NewCredentials()),
 		grpc.WithUnaryInterceptor(TraceUnaryClientInterceptor()),
 	)

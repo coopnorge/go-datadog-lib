@@ -20,7 +20,7 @@ func NewORM(dialector gorm.Dialector, gormCfg *gorm.Config, options ...Option) (
 	}
 	for k, v := range cfg.tags {
 		v := v
-		staticTagger := func(db *gorm.DB) any {
+		staticTagger := func(_ *gorm.DB) any {
 			return v
 		}
 		opts = append(opts, gormtrace.WithCustomTag(k, staticTagger))

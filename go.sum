@@ -20,8 +20,8 @@ github.com/Microsoft/go-winio v0.6.1/go.mod h1:LRdKpFKfdobln8UmuiYcKPot9D2v6svN5
 github.com/cespare/xxhash/v2 v2.1.1/go.mod h1:VGX0DQ3Q6kWi7AoAeZDth3/j3BFtOZR5XLFGgcrjCOs=
 github.com/cespare/xxhash/v2 v2.2.0 h1:DC2CZ1Ep5Y4k3ZQ899DldepgrayRUGE6BBZ/cd9Cj44=
 github.com/cespare/xxhash/v2 v2.2.0/go.mod h1:VGX0DQ3Q6kWi7AoAeZDth3/j3BFtOZR5XLFGgcrjCOs=
-github.com/coopnorge/go-logger v0.7.1 h1:I7N+VsnBxZqJWPBwBsQSOUSPIw7VOpAD7MVB+I30RzA=
-github.com/coopnorge/go-logger v0.7.1/go.mod h1:P150qy87WEqxY6YtegmL0b1KKY5o1x6bSdk+DBVtnGA=
+github.com/coopnorge/go-logger v0.7.2 h1:GI8uSiwUMOAC/BN5rKzXGjjp+YsOgAs8V4+Ta2ZeK3k=
+github.com/coopnorge/go-logger v0.7.2/go.mod h1:P150qy87WEqxY6YtegmL0b1KKY5o1x6bSdk+DBVtnGA=
 github.com/creack/pty v1.1.9/go.mod h1:oKZEueFk5CKHvIhNR5MUki03XCEU+Q6VDXinZuGJ33E=
 github.com/davecgh/go-spew v1.1.0/go.mod h1:J7Y8YcW2NihsgmVo/mv3lAwl/skON4iLHjSsI+c5H38=
 github.com/davecgh/go-spew v1.1.1/go.mod h1:J7Y8YcW2NihsgmVo/mv3lAwl/skON4iLHjSsI+c5H38=

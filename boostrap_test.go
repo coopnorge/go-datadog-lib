@@ -8,12 +8,12 @@ import (
 )
 
 func TestDatadog(t *testing.T) {
-	ddCfg := config.DatadogConfig{}
+	ddCfg := new(config.DatadogConfig)
 
 	err := StartDatadog(ddCfg, ConnectionTypeHTTP)
 	assert.NotNil(t, err)
 
-	ddCfg = config.DatadogConfig{
+	ddCfg = &config.DatadogConfig{
 		Env:                  "local",
 		Service:              "Test-Go-Datadog-lib",
 		ServiceVersion:       "na",

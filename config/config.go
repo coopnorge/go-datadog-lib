@@ -159,7 +159,10 @@ func (d *DatadogConfig) UnmarshalJSON(b []byte) error {
 	}
 
 	if tmpCfg.IsValid() {
-		*d = tmpCfg.Interface().(DatadogConfig)
+		tmp, ok := tmpCfg.Interface().(DatadogConfig)
+		if ok {
+			*d = tmp
+		}
 	}
 
 	return nil

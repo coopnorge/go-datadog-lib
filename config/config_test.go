@@ -2,11 +2,11 @@ package config
 
 import (
 	"encoding/json"
-	"github.com/spf13/viper"
 	"os"
 	"strings"
 	"testing"
 
+	"github.com/spf13/viper"
 	"github.com/stretchr/testify/assert"
 )
 

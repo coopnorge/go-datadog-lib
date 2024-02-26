@@ -1,7 +1,12 @@
 package config
 
 import (
+	"encoding/json"
 	"errors"
+	"fmt"
+	"reflect"
+	"strconv"
+	"strings"
 )
 
 type (
@@ -106,4 +111,56 @@ func (d *DatadogConfig) GetApmEndpoint() string {
 // IsExtraProfilingEnabled return true if profilers not recommended for production are enabled.
 func (d *DatadogConfig) IsExtraProfilingEnabled() bool {
 	return d.EnableExtraProfiling
+}
+
+// UnmarshalJSON implements encoding/json/decode.go Unmarshaler
+// Allows support native json tag parsing of DatadogConfig.
+func (d *DatadogConfig) UnmarshalJSON(b []byte) error {
+	var tmpCfgMap map[string]json.RawMessage
+	if err := json.Unmarshal(b, &tmpCfgMap); err != nil {
+		return errors.Join(err, errors.New("failed to unmarshal DatadogConfig"))
+	}
+
+	tmpCfgType := reflect.TypeOf(*d)
+	tmpCfg := reflect.New(reflect.TypeOf(*d)).Elem()
+
+	for jsonField, jsonValue := range tmpCfgMap {
+		for i := 0; i < tmpCfgType.NumField(); i++ {
+			if !strings.Contains(fmt.Sprintf("%v", tmpCfgType.Field(i).Tag), jsonField) {
+				continue
+			}
+
+			// Extract from json field string value that must be parsed as boolean type
+			if jsonField == "dd_enable_extra_profiling" {
+				var strValue string
+				if err := json.Unmarshal(jsonValue, &strValue); err != nil {
+					return err
+				}
+
+				strBool, strBoolParseErr := strconv.ParseBool(strValue)
+				if strBoolParseErr != nil {
+					return errors.Join(strBoolParseErr, errors.New("property to parse config field EnableExtraProfiling to bool"))
+				}
+
+				tmpCfg.FieldByName("EnableExtraProfiling").SetBool(strBool)
+				break
+			}
+
+			// Handle rest of values as string and map them
+			property := tmpCfg.FieldByName(tmpCfgType.Field(i).Name)
+			if property.IsValid() && property.CanSet() {
+				propertyValue := reflect.New(property.Type()).Interface()
+				if err := json.Unmarshal(jsonValue, propertyValue); err != nil {
+					return err
+				}
+				property.Set(reflect.ValueOf(propertyValue).Elem())
+			}
+		}
+	}
+
+	if tmpCfg.IsValid() {
+		*d = tmpCfg.Interface().(DatadogConfig)
+	}
+
+	return nil
 }

@@ -96,10 +96,10 @@ func TestUnmarshalDatadogConfigWithVanillaJsonTag(t *testing.T) {
 	assert.NoError(t, err)
 	assert.NotEmpty(t, dogCfg)
 	assert.True(t, dogCfg.Env == "unit_test", "Env expected to be => unit_test")
-	assert.True(t, dogCfg.Service == "go_test", "Env expected to be => go_test")
-	assert.True(t, dogCfg.ServiceVersion == "unit", "Env expected to be => unit")
-	assert.True(t, dogCfg.DSD == "gl", "Env expected to be => gl")
-	assert.True(t, dogCfg.APM == "hf", "Env expected to be => hf")
+	assert.True(t, dogCfg.Service == "go_test", "Service expected to be => go_test")
+	assert.True(t, dogCfg.ServiceVersion == "unit", "ServiceVersion expected to be => unit")
+	assert.True(t, dogCfg.DSD == "gl", "DSD expected to be => gl")
+	assert.True(t, dogCfg.APM == "hf", "APM expected to be => hf")
 	assert.True(t, dogCfg.EnableExtraProfiling, "EnableExtraProfiling expected to be => true")
 }
 
@@ -152,5 +152,4 @@ func TestUnmarshalDatadogConfigWithMapstructureAndViper(t *testing.T) {
 			assert.Equal(t, tc.envValue, viper.GetString(tc.envField))
 		})
 	}
-
 }

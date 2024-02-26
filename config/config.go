@@ -48,7 +48,7 @@ type (
 // IsDataDogConfigValid method to verify if configuration values are correct
 //
 // Deprecated: Use Validate()
-func (d DatadogConfig) IsDataDogConfigValid() bool {
+func (d *DatadogConfig) IsDataDogConfigValid() bool {
 	if err := d.Validate(); err != nil {
 		return false
 	}
@@ -58,7 +58,7 @@ func (d DatadogConfig) IsDataDogConfigValid() bool {
 
 // Validate the DatadogConfig. Returns the first error found, returns nil if
 // the configuration is good.
-func (d DatadogConfig) Validate() error {
+func (d *DatadogConfig) Validate() error {
 	if d.Env == "" {
 		return errors.New("DD_ENV must be defined")
 	}
@@ -77,33 +77,33 @@ func (d DatadogConfig) Validate() error {
 }
 
 // GetEnv where application is executed, dev, production, staging etc
-func (d DatadogConfig) GetEnv() string {
+func (d *DatadogConfig) GetEnv() string {
 	return d.Env
 }
 
 // GetService how must be service called and displayed in Datadog system
-func (d DatadogConfig) GetService() string {
+func (d *DatadogConfig) GetService() string {
 	return d.Service
 }
 
 // GetServiceVersion depends on system, can be Git Tag or API version
-func (d DatadogConfig) GetServiceVersion() string {
+func (d *DatadogConfig) GetServiceVersion() string {
 	return d.ServiceVersion
 }
 
 // GetDsdEndpoint Socket path or URL for DD StatsD
 // for socket important to have unix prefix for that value, example: unix:///var/run/dd/dsd.socket
-func (d DatadogConfig) GetDsdEndpoint() string {
+func (d *DatadogConfig) GetDsdEndpoint() string {
 	return d.DSD
 }
 
 // GetApmEndpoint Socket path or URL for APM and profiler
 // unix prefix not needed, example: /var/run/dd/apm.socket
-func (d DatadogConfig) GetApmEndpoint() string {
+func (d *DatadogConfig) GetApmEndpoint() string {
 	return d.APM
 }
 
 // IsExtraProfilingEnabled return true if profilers not recommended for production are enabled.
-func (d DatadogConfig) IsExtraProfilingEnabled() bool {
+func (d *DatadogConfig) IsExtraProfilingEnabled() bool {
 	return d.EnableExtraProfiling
 }

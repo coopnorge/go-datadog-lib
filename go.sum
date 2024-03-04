@@ -6,8 +6,8 @@ github.com/DataDog/datadog-agent/pkg/remoteconfig/state v0.48.1 h1:5nE6N3JSs2IG3
 github.com/DataDog/datadog-agent/pkg/remoteconfig/state v0.48.1/go.mod h1:Vc+snp0Bey4MrrJyiV2tVxxJb6BmLomPvN1RgAvjGaQ=
 github.com/DataDog/datadog-go/v5 v5.5.0 h1:G5KHeB8pWBNXT4Jtw0zAkhdxEAWSpWH00geHI6LDrKU=
 github.com/DataDog/datadog-go/v5 v5.5.0/go.mod h1:K9kcYBlxkcPP8tvvjZZKs/m1edNAUFzBbdpTUKfCsuw=
-github.com/DataDog/go-libddwaf/v2 v2.2.3 h1:LpKE8AYhVrEhlmlw6FGD41udtDf7zW/aMdLNbCXpegQ=
-github.com/DataDog/go-libddwaf/v2 v2.2.3/go.mod h1:8nX0SYJMB62+fbwYmx5J7zuCGEjiC/RxAo3+AuYJuFE=
+github.com/DataDog/go-libddwaf/v2 v2.3.1 h1:bujaT5+KnLDFQqVA5ilvVvW+evUSHow9FrTHRgUwN4A=
+github.com/DataDog/go-libddwaf/v2 v2.3.1/go.mod h1:gsCdoijYQfj8ce/T2bEDNPZFIYnmHluAgVDpuQOWMZE=
 github.com/DataDog/go-tuf v1.0.2-0.5.2 h1:EeZr937eKAWPxJ26IykAdWA4A0jQXJgkhUjqEI/w7+I=
 github.com/DataDog/go-tuf v1.0.2-0.5.2/go.mod h1:zBcq6f654iVqmkk8n2Cx81E1JnNTMOAx1UEO/wZR+P0=
 github.com/DataDog/gostackparse v0.7.0 h1:i7dLkXHvYzHV308hnkvVGDL3BR4FWl7IsXNPz/IGQh4=
@@ -34,8 +34,8 @@ github.com/dgryski/go-farm v0.0.0-20190423205320-6a90982ecee2/go.mod h1:SqUrOPUn
 github.com/dustin/go-humanize v1.0.0/go.mod h1:HtrtbFcZ19U5GC7JDqmcUSB87Iq5E25KnS6fMYU6eOk=
 github.com/dustin/go-humanize v1.0.1 h1:GzkhY7T5VNhEkwH0PVJgjz+fX1rhBrR7pRT3mDkpeCY=
 github.com/dustin/go-humanize v1.0.1/go.mod h1:Mu1zIs6XwVuF/gI1OepvI0qD18qycQx+mFykh5fBlto=
-github.com/ebitengine/purego v0.5.2 h1:r2MQEtkGzZ4LRtFZVAg5bjYKnUbxxloaeuGxH0t7qfs=
-github.com/ebitengine/purego v0.5.2/go.mod h1:ah1In8AOtksoNK6yk5z1HTJeUkC1Ez4Wk2idgGslMwQ=
+github.com/ebitengine/purego v0.6.0-alpha.5 h1:EYID3JOAdmQ4SNZYJHu9V6IqOeRQDBYxqKAg9PyoHFY=
+github.com/ebitengine/purego v0.6.0-alpha.5/go.mod h1:ah1In8AOtksoNK6yk5z1HTJeUkC1Ez4Wk2idgGslMwQ=
 github.com/go-sql-driver/mysql v1.6.0 h1:BCTh4TKNUYmOmMUcQ3IipzF5prigylS7XXjEkfCHuOE=
 github.com/go-sql-driver/mysql v1.6.0/go.mod h1:DCzpHaOWr8IXmIStZouvnhqoel9Qv2LBy8hT2VhHyBg=
 github.com/golang-sql/civil v0.0.0-20220223132316-b832511892a9 h1:au07oEsX2xN0ktxqI+Sida1w446QrXBRJ0nee3SNZlA=
@@ -70,8 +70,8 @@ github.com/jackc/pgpassfile v1.0.0 h1:/6Hmqy13Ss2zCq62VdNG8tM1wchn8zjSGOBJ6icpsI
 github.com/jackc/pgpassfile v1.0.0/go.mod h1:CEx0iS5ambNFdcRtxPj5JhEz+xB6uRky5eyVu/W2HEg=
 github.com/jackc/pgservicefile v0.0.0-20221227161230-091c0ba34f0a h1:bbPeKD0xmW/Y25WS6cokEszi5g+S0QxI/d45PkRi7Nk=
 github.com/jackc/pgservicefile v0.0.0-20221227161230-091c0ba34f0a/go.mod h1:5TJZWKEWniPve33vlWYSoGYefn3gLQRzjfDlhSJ9ZKM=
-github.com/jackc/pgx/v5 v5.3.1 h1:Fcr8QJ1ZeLi5zsPZqQeUZhNhxfkkKBOgJuYkJHoBOtU=
-github.com/jackc/pgx/v5 v5.3.1/go.mod h1:t3JDKnCBlYIc0ewLF0Q7B8MXmoIaBOZj/ic7iHozM/8=
+github.com/jackc/pgx/v5 v5.4.2 h1:u1gmGDwbdRUZiwisBm/Ky2M14uQyUP65bG8+20nnyrg=
+github.com/jackc/pgx/v5 v5.4.2/go.mod h1:q6iHT8uDNXWiFNOlRqJzBTaSH3+2xCXkokxHZC5qWFY=
 github.com/jinzhu/inflection v1.0.0 h1:K317FqzuhWc8YvSVlFMCCUb36O/S9MCKRDI7QkRKD/E=
 github.com/jinzhu/inflection v1.0.0/go.mod h1:h+uFLlag+Qp1Va5pdKtLDYj+kHp5pxUVkryuEj+Srlc=
 github.com/jinzhu/now v1.1.5 h1:/o9tlHleP7gOFmsnYNz3RGnqzefHA47wQpKrrdTIwXQ=
@@ -223,8 +223,8 @@ google.golang.org/protobuf v1.27.1/go.mod h1:9q0QmTI4eRPtz6boOQmLYwt+qCgq0jsYwAQ
 google.golang.org/protobuf v1.28.0/go.mod h1:HV8QOd/L58Z+nl8r43ehVNZIU/HEI6OcFqwMG9pJV4I=
 google.golang.org/protobuf v1.32.0 h1:pPC6BG5ex8PDFnkbrGU3EixyhKcQ2aDuBS36lqK/C7I=
 google.golang.org/protobuf v1.32.0/go.mod h1:c6P6GXX6sHbq/GpV6MGZEdwhWPcYBgnhAHhKbcUYpos=
-gopkg.in/DataDog/dd-trace-go.v1 v1.60.3 h1:BbAk9qEUKTJcxDqwn7OGlTWTfKPNzt6jbhzmx4m33dw=
-gopkg.in/DataDog/dd-trace-go.v1 v1.60.3/go.mod h1:XF/Y0lFGnmgedNXnltCm6hXkt9iwyeVVVFbKhJvVwtY=
+gopkg.in/DataDog/dd-trace-go.v1 v1.61.0 h1:XKO91GwTjpIRhd56Xif/BZ2YgHkQufVTOvtkbRYSPi8=
+gopkg.in/DataDog/dd-trace-go.v1 v1.61.0/go.mod h1:NHKX1t9eKmajySb6H+zLdgZizCFzbt5iKvrTyxEyy8w=
 gopkg.in/check.v1 v0.0.0-20161208181325-20d25e280405/go.mod h1:Co6ibVJAznAaIkqp8huTwlJQCZ016jof/cbN4VW5Yz0=
 gopkg.in/check.v1 v1.0.0-20180628173108-788fd7840127/go.mod h1:Co6ibVJAznAaIkqp8huTwlJQCZ016jof/cbN4VW5Yz0=
 gopkg.in/check.v1 v1.0.0-20201130134442-10cb98267c6c h1:Hei/4ADfdWqJk1ZMxUNpqntNwaWcugrBjAiHlqqRiVk=

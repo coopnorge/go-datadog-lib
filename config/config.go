@@ -2,6 +2,8 @@ package config
 
 import (
 	"errors"
+	"os"
+	"strconv"
 )
 
 type (
@@ -106,4 +108,25 @@ func (d DatadogConfig) GetApmEndpoint() string {
 // IsExtraProfilingEnabled return true if profilers not recommended for production are enabled.
 func (d DatadogConfig) IsExtraProfilingEnabled() bool {
 	return d.EnableExtraProfiling
+}
+
+// LoadDatadogConfigFromEnvVars loads a new DatadogConfig from known environment-variables.
+func LoadDatadogConfigFromEnvVars() DatadogConfig {
+	return DatadogConfig{
+		Env:                  os.Getenv("DD_ENV"),
+		Service:              os.Getenv("DD_SERVICE"),
+		ServiceVersion:       os.Getenv("DD_VERSION"),
+		DSD:                  os.Getenv("DD_DOGSTATSD_URL"),
+		APM:                  os.Getenv("DD_TRACE_AGENT_URL"),
+		EnableExtraProfiling: getBoolEnv("DD_ENABLE_EXTRA_PROFILING"),
+	}
+}
+
+func getBoolEnv(key string) bool {
+	valStr := os.Getenv(key)
+	val, err := strconv.ParseBool(valStr)
+	if err != nil {
+		return false
+	}
+	return val
 }

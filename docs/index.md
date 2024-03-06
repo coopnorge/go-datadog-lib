@@ -118,14 +118,7 @@ func main() {
 	// Your app initialization
 	/// ... 
 	// From your core configuration add datadog related values
-	ddCfg := config.DatadogConfig{
-		Env:            "dd_env",
-		Service:        "dd_service",
-		ServiceVersion: "dd_version",
-		DSD:            "dd_dogstatsd_url",
-		APM:            "dd_trace_agent_url",
-		EnableExtraProfiling: "dd_enable_extra_profiling"
-	}
+	ddCfg := config.LoadDatadogConfigFromEnvVars()
 
 	// When you start other processes start datadog
 	startDatadogServiceError := coopdatadog.StartDatadog(ddCfg, coopdatadog.ConnectionTypeSocket)

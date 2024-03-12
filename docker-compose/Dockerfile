@@ -1,2 +1,2 @@
 FROM ghcr.io/coopnorge/engineering-docker-images/e0/devtools-golang-v1beta1:latest@sha256:da734a3f7d6ecf27ecf29d2468c515afee4f0833e9d4f351e08a564ae09db9bc AS golang-devtools
-FROM ghcr.io/coopnorge/engineering-docker-images/e0/techdocs:latest@sha256:bc52f54b51e244d0d3e3813972e0fdcfa649383228a368d6253bc499e828c004 as techdocs
+FROM ghcr.io/coopnorge/engineering-docker-images/e0/techdocs:latest@sha256:6169b6d36c0ccd108203ce2e6bda290b3db6a89b2a1dde24841d2d9ccd813e16 as techdocs

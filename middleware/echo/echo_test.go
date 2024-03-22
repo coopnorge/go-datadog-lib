@@ -5,6 +5,7 @@ import (
 	"testing"
 
 	mock_echo "github.com/coopnorge/go-datadog-lib/v2/internal/generated/mocks/labstack/echo/v4"
+	"github.com/coopnorge/go-datadog-lib/v2/testhelpers"
 
 	"github.com/labstack/echo/v4"
 	"github.com/stretchr/testify/assert"
@@ -12,6 +13,8 @@ import (
 )
 
 func TestTraceServerMiddleware(t *testing.T) {
+	testhelpers.ConfigureDatadog(t)
+
 	echoMiddlewareHandler := TraceServerMiddleware()
 	echoRequestHandler := func(reqCtx echo.Context) (err error) {
 		assert.NotNil(t, reqCtx.Request())

@@ -14,7 +14,8 @@ approval_rules:
     invalidate_on_push: true
     request_review:
       enabled: true
-      mode: all-users
+      mode: random-users
+      count: 8
     methods:
       github_review: true
   if:

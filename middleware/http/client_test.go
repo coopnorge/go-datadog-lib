@@ -9,7 +9,7 @@ import (
 	"testing"
 	"time"
 
-	"github.com/coopnorge/go-datadog-lib/v2/internal"
+	"github.com/coopnorge/go-datadog-lib/v2/testhelpers"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
 	"gopkg.in/DataDog/dd-trace-go.v1/ddtrace/mocktracer"
@@ -17,9 +17,7 @@ import (
 )
 
 func TestWrapClient(t *testing.T) {
-	// Ensure valid datadog config, even if we don't have a datadog agent running, to fully instrument the application.
-	t.Setenv("DD_ENV", "unittest")
-	require.True(t, internal.IsDatadogConfigured())
+	testhelpers.ConfigureDatadog(t)
 
 	// Start Datadog tracer, so that we don't create NoopSpans.
 	testTracer := mocktracer.Start()
@@ -58,9 +56,7 @@ func TestWrapClient(t *testing.T) {
 }
 
 func TestWrapClientW3C(t *testing.T) {
-	// Ensure valid datadog config, even if we don't have a datadog agent running, to fully instrument the application.
-	t.Setenv("DD_ENV", "unittest")
-	require.True(t, internal.IsDatadogConfigured())
+	testhelpers.ConfigureDatadog(t)
 
 	// Start Datadog tracer, so that we don't create NoopSpans.
 	// Start real tracer (not mocktracer), to propagate Traceparent.

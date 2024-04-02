@@ -12,7 +12,7 @@ import (
 //
 // Deprecated: Use UnaryServerInterceptor instead. This function will be removed in a later version.
 func TraceUnaryServerInterceptor() grpc.UnaryServerInterceptor {
-	if !internal.IsDatadogEnabled() {
+	if internal.IsDatadogDisabled() {
 		return noOpUnaryServerInterceptor()
 	}
 
@@ -23,7 +23,7 @@ func TraceUnaryServerInterceptor() grpc.UnaryServerInterceptor {
 //
 // Deprecated: Use StreamServerInterceptor instead. This function will be removed in a later version.
 func TraceStreamServerInterceptor() grpc.StreamServerInterceptor {
-	if !internal.IsDatadogEnabled() {
+	if internal.IsDatadogDisabled() {
 		return noOpStreamServerInterceptor()
 	}
 
@@ -32,7 +32,7 @@ func TraceStreamServerInterceptor() grpc.StreamServerInterceptor {
 
 // UnaryServerInterceptor returns a middleware that creates datadog-spans on incoming requests, and stores them in the requests' context.
 func UnaryServerInterceptor(options ...Option) grpc.UnaryServerInterceptor {
-	if !internal.IsDatadogEnabled() {
+	if internal.IsDatadogDisabled() {
 		return noOpUnaryServerInterceptor()
 	}
 	opts := convertOptions(options...)
@@ -41,7 +41,7 @@ func UnaryServerInterceptor(options ...Option) grpc.UnaryServerInterceptor {
 
 // StreamServerInterceptor returns a middleware that creates datadog-spans on incoming requests, and stores them in the requests' context.
 func StreamServerInterceptor(options ...Option) grpc.StreamServerInterceptor {
-	if !internal.IsDatadogEnabled() {
+	if internal.IsDatadogDisabled() {
 		return noOpStreamServerInterceptor()
 	}
 	opts := convertOptions(options...)

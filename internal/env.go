@@ -20,12 +20,14 @@ const (
 	DatadogEnableExtraProfiling = "DD_ENABLE_EXTRA_PROFILING"
 	// DatadogEnable is the environment variable key for whether to enable the Datadog integration.
 	DatadogEnable = "DD_ENABLE"
+	// DatadogDisable is the environment variable key for whether to disable the Datadog integration.
+	DatadogDisable = "DD_DISABLE"
 )
 
 // IsDatadogConfigured checks some common environment-variables to determine if
 // the service is configured to use Datadog.
 func IsDatadogConfigured() bool {
-	if !IsDatadogEnabled() {
+	if IsDatadogDisabled() {
 		return false
 	}
 	if val := os.Getenv(DatadogEnvironment); val != "" {
@@ -40,14 +42,14 @@ func IsDatadogConfigured() bool {
 	return false
 }
 
-// IsDatadogEnabled checks if the Datadog integration is enabled. The
-// environment variable DD_ENABLE is checked. If the variable is missing the
-// Datadog integration is assumed to be enabled.
-func IsDatadogEnabled() bool {
-	valStr := os.Getenv(DatadogEnable)
+// IsDatadogDisabled checks if the Datadog integration is disabled. The
+// environment variable DD_DISABLE is checked. If the variable is missing or
+// cannot be parsed to a bool the Datadog integration is assumed to be enabled.
+func IsDatadogDisabled() bool {
+	valStr := os.Getenv(DatadogDisable)
 	val, err := strconv.ParseBool(valStr)
 	if err != nil {
-		return true
+		return false
 	}
 	return val
 }

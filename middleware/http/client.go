@@ -17,7 +17,7 @@ func WrapClient(client *http.Client) *http.Client {
 
 // AddTracingToClient wraps the net/http.Client to automatically create child-spans, and append to HTTP Headers.
 func AddTracingToClient(client *http.Client, options ...Option) *http.Client {
-	if !internal.IsDatadogEnabled() {
+	if internal.IsDatadogDisabled() {
 		return client
 	}
 	opts := convertClientOptions(options...)

@@ -10,33 +10,33 @@ import (
 	"github.com/coopnorge/go-datadog-lib/v2/internal"
 )
 
-func TestIsDatadogEnabledFlagNotSet(t *testing.T) {
-	t.Setenv(internal.DatadogEnable, "")
-	os.Unsetenv(internal.DatadogEnable)
+func TestIsDatadogDisabledFlagNotSet(t *testing.T) {
+	t.Setenv(internal.DatadogDisable, "")
+	os.Unsetenv(internal.DatadogDisable)
 
-	assert.True(t, internal.IsDatadogEnabled())
+	assert.False(t, internal.IsDatadogDisabled())
 }
 
-func TestIsDatadogEnabledFlagEmpty(t *testing.T) {
-	t.Setenv(internal.DatadogEnable, "")
+func TestIsDatadogDisabledFlagEmpty(t *testing.T) {
+	t.Setenv(internal.DatadogDisable, "")
 
-	assert.True(t, internal.IsDatadogEnabled())
+	assert.False(t, internal.IsDatadogDisabled())
 }
 
-func TestIsDatadogEnabledFlagTrue(t *testing.T) {
-	t.Setenv(internal.DatadogEnable, strconv.FormatBool(true))
+func TestIsDatadogDisabledFlagTrue(t *testing.T) {
+	t.Setenv(internal.DatadogDisable, strconv.FormatBool(true))
 
-	assert.True(t, internal.IsDatadogEnabled())
+	assert.True(t, internal.IsDatadogDisabled())
 }
 
-func TestIsDatadogEnabledFlagFalse(t *testing.T) {
-	t.Setenv(internal.DatadogEnable, strconv.FormatBool(false))
+func TestIsDatadogDisabledFlagFalse(t *testing.T) {
+	t.Setenv(internal.DatadogDisable, strconv.FormatBool(false))
 
-	assert.False(t, internal.IsDatadogEnabled())
+	assert.False(t, internal.IsDatadogDisabled())
 }
 
-func TestIsDatadogEnabledNonBoolValue(t *testing.T) {
-	t.Setenv(internal.DatadogEnable, "Hello")
+func TestIsDatadogDisabledNonBoolValue(t *testing.T) {
+	t.Setenv(internal.DatadogDisable, "Hello")
 
-	assert.True(t, internal.IsDatadogEnabled())
+	assert.False(t, internal.IsDatadogDisabled())
 }

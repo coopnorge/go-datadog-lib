@@ -11,7 +11,7 @@ import (
 // NewORM returns a new gorm DB instance.
 // Create a dialector by calling e.g. https://pkg.go.dev/gorm.io/driver/mysql#New
 func NewORM(dialector gorm.Dialector, gormCfg *gorm.Config, options ...Option) (*gorm.DB, error) {
-	if !internal.IsDatadogEnabled() {
+	if internal.IsDatadogDisabled() {
 		return gorm.Open(dialector, gormCfg)
 	}
 

@@ -8,7 +8,7 @@ import (
 
 // TraceServerMiddleware for Datadog Log Integration, middleware will create span that can be used from context
 func TraceServerMiddleware() echo.MiddlewareFunc {
-	if !internal.IsDatadogEnabled() {
+	if internal.IsDatadogDisabled() {
 		return noOpMiddlewareFunc()
 	}
 

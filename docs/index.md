@@ -22,10 +22,10 @@ simple metric service that allows sending `Incr`, `Gauge`, and `Count`.
 In order for `go-datadog-lib` to send data to Datadog your service/application
 must be configured correctly.
 
-Setting the environment variable `DD_DISABLE` to a `true` or any other value
-that [`strconv#ParseBool`](https://pkg.go.dev/strconv#ParseBool) can parse to
-`true` with out returning an error. If `DD_DISABLE` is undefined or a value
-that [`strconv#ParseBool`](https://pkg.go.dev/strconv#ParseBool) can parse to
+Setting the environment variable `DD_DISABLE` to `true` or any other value that
+[`strconv#ParseBool`](https://pkg.go.dev/strconv#ParseBool) can parse to `true`
+without returning an error. If `DD_DISABLE` is undefined or a value that
+[`strconv#ParseBool`](https://pkg.go.dev/strconv#ParseBool) can parse to
 `false` or returns an error the library will be enabled. This is done to ensure
 that the library is not disabled in production by accident.
 

@@ -24,24 +24,6 @@ const (
 	DatadogDisable = "DD_DISABLE"
 )
 
-// IsDatadogConfigured checks some common environment-variables to determine if
-// the service is configured to use Datadog.
-func IsDatadogConfigured() bool {
-	if IsDatadogDisabled() {
-		return false
-	}
-	if val := os.Getenv(DatadogEnvironment); val != "" {
-		return true
-	}
-	if val := os.Getenv(DatadogService); val != "" {
-		return true
-	}
-	if val := os.Getenv(DatadogVersion); val != "" {
-		return true
-	}
-	return false
-}
-
 // IsDatadogDisabled checks if the Datadog integration is disabled. The
 // environment variable DD_DISABLE is checked. If the variable is missing or
 // cannot be parsed to a bool the Datadog integration is assumed to be enabled.

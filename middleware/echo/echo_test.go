@@ -5,7 +5,7 @@ import (
 	"testing"
 
 	mock_echo "github.com/coopnorge/go-datadog-lib/v2/internal/generated/mocks/labstack/echo/v4"
-	"github.com/coopnorge/go-datadog-lib/v2/testhelpers"
+	"github.com/coopnorge/go-datadog-lib/v2/internal/testhelpers"
 
 	"github.com/labstack/echo/v4"
 	"github.com/stretchr/testify/assert"

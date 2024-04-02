@@ -9,7 +9,7 @@ import (
 	"testing"
 	"time"
 
-	"github.com/coopnorge/go-datadog-lib/v2/testhelpers"
+	"github.com/coopnorge/go-datadog-lib/v2/internal/testhelpers"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
 	"gopkg.in/DataDog/dd-trace-go.v1/ddtrace/mocktracer"

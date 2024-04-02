@@ -5,7 +5,7 @@ import (
 	"net/http"
 	"testing"
 
-	"github.com/coopnorge/go-datadog-lib/v2/testhelpers"
+	"github.com/coopnorge/go-datadog-lib/v2/internal/testhelpers"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/suite"
 	"google.golang.org/grpc"

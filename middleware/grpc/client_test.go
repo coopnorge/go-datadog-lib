@@ -7,7 +7,7 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/coopnorge/go-datadog-lib/v2/testhelpers"
+	"github.com/coopnorge/go-datadog-lib/v2/internal/testhelpers"
 
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"

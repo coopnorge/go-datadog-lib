@@ -24,9 +24,10 @@ const (
 
 // IsDatadogConfigured checks some common environment-variables to determine if
 // the service is configured to use Datadog.
-//
-// Deprecated: Use IsDatadogEnabled()
 func IsDatadogConfigured() bool {
+	if !IsDatadogEnabled() {
+		return false
+	}
 	if val := os.Getenv(DatadogEnvironment); val != "" {
 		return true
 	}

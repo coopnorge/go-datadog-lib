@@ -18,8 +18,6 @@ const (
 	DatadogAPMEndpoint = "DD_TRACE_AGENT_URL"
 	// DatadogEnableExtraProfiling is the environment variable key for whether to enable extra profiling or not.
 	DatadogEnableExtraProfiling = "DD_ENABLE_EXTRA_PROFILING"
-	// DatadogEnable is the environment variable key for whether to enable the Datadog integration.
-	DatadogEnable = "DD_ENABLE"
 	// DatadogDisable is the environment variable key for whether to disable the Datadog integration.
 	DatadogDisable = "DD_DISABLE"
 )

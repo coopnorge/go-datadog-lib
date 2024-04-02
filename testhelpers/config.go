@@ -1,7 +1,6 @@
 package testhelpers
 
 import (
-	"strconv"
 	"testing"
 
 	"github.com/coopnorge/go-datadog-lib/v2/config"
@@ -11,7 +10,6 @@ import (
 
 // ConfigureDatadog prepares the environment for running tests
 func ConfigureDatadog(t *testing.T) {
-	t.Setenv(internal.DatadogEnable, strconv.FormatBool(true))
 	t.Setenv(internal.DatadogEnvironment, "unittest")
 	t.Setenv(internal.DatadogService, "unittest-service")
 	t.Setenv(internal.DatadogVersion, "v0.0.0")

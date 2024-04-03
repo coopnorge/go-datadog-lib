@@ -5,6 +5,7 @@ import (
 	"net/http"
 	"testing"
 
+	"github.com/coopnorge/go-datadog-lib/v2/internal/testhelpers"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/suite"
 	"google.golang.org/grpc"
@@ -14,6 +15,8 @@ import (
 )
 
 func TestTraceUnaryServerInterceptor(t *testing.T) {
+	testhelpers.ConfigureDatadog(t)
+
 	grpcUnaryMW := TraceUnaryServerInterceptor()
 	grpcUnaryHandler := func(ctx context.Context, _ interface{}) (interface{}, error) {
 		span, exists := tracer.SpanFromContext(ctx)

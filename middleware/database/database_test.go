@@ -9,7 +9,7 @@ import (
 	"strconv"
 	"testing"
 
-	"github.com/coopnorge/go-datadog-lib/v2/internal"
+	"github.com/coopnorge/go-datadog-lib/v2/internal/testhelpers"
 
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
@@ -18,10 +18,7 @@ import (
 )
 
 func TestRegisterAndOpen(t *testing.T) {
-	// Ensure valid datadog config, even if we don't have a datadog agent running, to fully instrument the application.
-	t.Setenv("DD_ENV", "unittest")
-	t.Setenv("DD_SERVICE", "unittest-service")
-	require.True(t, internal.IsDatadogConfigured())
+	testhelpers.ConfigureDatadog(t)
 
 	// Start Datadog tracer, so that we don't create NoopSpans.
 	testTracer := mocktracer.Start()
@@ -67,10 +64,7 @@ func TestRegisterAndOpen(t *testing.T) {
 }
 
 func TestRegisterAndOpenNoTrace(t *testing.T) {
-	// Ensure valid datadog config, even if we don't have a datadog agent running, to fully instrument the application.
-	t.Setenv("DD_ENV", "unittest")
-	t.Setenv("DD_SERVICE", "unittest-service")
-	require.True(t, internal.IsDatadogConfigured())
+	testhelpers.ConfigureDatadog(t)
 
 	// Start Datadog tracer, so that we don't create NoopSpans.
 	testTracer := mocktracer.Start()

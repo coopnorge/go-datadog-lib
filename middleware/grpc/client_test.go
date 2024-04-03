@@ -7,7 +7,7 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/coopnorge/go-datadog-lib/v2/internal"
+	"github.com/coopnorge/go-datadog-lib/v2/internal/testhelpers"
 
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
@@ -48,9 +48,7 @@ const bufSize = 1024 * 1024
 func TestTraceUnaryClientInterceptor(t *testing.T) {
 	ctx := context.Background()
 
-	// Ensure valid datadog config, even if we don't have a datadog agent running, to fully instrument the application.
-	t.Setenv("DD_ENV", "unittest")
-	require.True(t, internal.IsDatadogConfigured())
+	testhelpers.ConfigureDatadog(t)
 
 	// Start Datadog tracer, so that we don't create NoopSpans.
 	testTracer := mocktracer.Start()
@@ -92,9 +90,7 @@ func TestTraceUnaryClientInterceptor(t *testing.T) {
 func TestTraceUnaryClientInterceptorW3C(t *testing.T) {
 	ctx := context.Background()
 
-	// Ensure valid datadog config, even if we don't have a datadog agent running, to fully instrument the application.
-	t.Setenv("DD_ENV", "unittest")
-	require.True(t, internal.IsDatadogConfigured())
+	testhelpers.ConfigureDatadog(t)
 
 	// Start Datadog tracer, so that we don't create NoopSpans.
 	// Start real tracer (not mocktracer), to propagate Traceparent.

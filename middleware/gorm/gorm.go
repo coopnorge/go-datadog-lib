@@ -3,6 +3,7 @@ package gorm
 import (
 	"os"
 
+	"github.com/coopnorge/go-datadog-lib/v2/internal"
 	gormtrace "gopkg.in/DataDog/dd-trace-go.v1/contrib/gorm.io/gorm.v1"
 	"gorm.io/gorm"
 )
@@ -10,6 +11,10 @@ import (
 // NewORM returns a new gorm DB instance.
 // Create a dialector by calling e.g. https://pkg.go.dev/gorm.io/driver/mysql#New
 func NewORM(dialector gorm.Dialector, gormCfg *gorm.Config, options ...Option) (*gorm.DB, error) {
+	if internal.IsDatadogDisabled() {
+		return gorm.Open(dialector, gormCfg)
+	}
+
 	cfg := defaults()
 	for _, opt := range options {
 		opt(cfg)

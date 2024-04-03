@@ -2,6 +2,7 @@ package internal
 
 import (
 	"os"
+	"strconv"
 )
 
 const (
@@ -17,18 +18,18 @@ const (
 	DatadogAPMEndpoint = "DD_TRACE_AGENT_URL"
 	// DatadogEnableExtraProfiling is the environment variable key for whether to enable extra profiling or not.
 	DatadogEnableExtraProfiling = "DD_ENABLE_EXTRA_PROFILING"
+	// DatadogDisable is the environment variable key for whether to disable the Datadog integration.
+	DatadogDisable = "DD_DISABLE"
 )
 
-// IsDatadogConfigured checks some common environment-variables to determine if the service is configured to use Datadog.
-func IsDatadogConfigured() bool {
-	if val := os.Getenv(DatadogEnvironment); val != "" {
-		return true
+// IsDatadogDisabled checks if the Datadog integration is disabled. The
+// environment variable DD_DISABLE is checked. If the variable is missing or
+// cannot be parsed to a bool the Datadog integration is assumed to be enabled.
+func IsDatadogDisabled() bool {
+	valStr := os.Getenv(DatadogDisable)
+	val, err := strconv.ParseBool(valStr)
+	if err != nil {
+		return false
 	}
-	if val := os.Getenv(DatadogService); val != "" {
-		return true
-	}
-	if val := os.Getenv(DatadogVersion); val != "" {
-		return true
-	}
-	return false
+	return val
 }

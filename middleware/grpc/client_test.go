@@ -46,8 +46,6 @@ func (s *testServer) EmptyCall(ctx context.Context, _ *testgrpc.Empty) (*testgrp
 const bufSize = 1024 * 1024
 
 func TestTraceUnaryClientInterceptor(t *testing.T) {
-	ctx := context.Background()
-
 	testhelpers.ConfigureDatadog(t)
 
 	// Start Datadog tracer, so that we don't create NoopSpans.
@@ -63,7 +61,7 @@ func TestTraceUnaryClientInterceptor(t *testing.T) {
 		errCh <- grpcServer.Serve(listener)
 	}()
 
-	conn, err := grpc.DialContext(ctx, "bufnet",
+	conn, err := grpc.NewClient("dns:///localhost",
 		grpc.WithContextDialer(func(_ context.Context, _ string) (net.Conn, error) { return listener.Dial() }),
 		grpc.WithTransportCredentials(insecure.NewCredentials()),
 		grpc.WithUnaryInterceptor(TraceUnaryClientInterceptor()),
@@ -88,8 +86,6 @@ func TestTraceUnaryClientInterceptor(t *testing.T) {
 }
 
 func TestTraceUnaryClientInterceptorW3C(t *testing.T) {
-	ctx := context.Background()
-
 	testhelpers.ConfigureDatadog(t)
 
 	// Start Datadog tracer, so that we don't create NoopSpans.
@@ -106,7 +102,7 @@ func TestTraceUnaryClientInterceptorW3C(t *testing.T) {
 		errCh <- grpcServer.Serve(listener)
 	}()
 
-	conn, err := grpc.DialContext(ctx, "bufnet",
+	conn, err := grpc.NewClient("dns:///localhost",
 		grpc.WithContextDialer(func(_ context.Context, _ string) (net.Conn, error) { return listener.Dial() }),
 		grpc.WithTransportCredentials(insecure.NewCredentials()),
 		grpc.WithUnaryInterceptor(TraceUnaryClientInterceptor()),

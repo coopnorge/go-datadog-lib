@@ -78,3 +78,21 @@ func (m BaseMetricCollector) AddMetric(ctx context.Context, d Data) {
 		logger.WithContext(ctx).WithError(metricCollectionErr).Errorf("Failed to collect metrics metricData for Name=%s", metricName)
 	}
 }
+
+// GracefulShutdown flushes and closes Datadog client
+// ensuring that all metrics are sent before the program exits
+func (m BaseMetricCollector) GracefulShutdown() {
+	if m.DatadogMetrics == nil || m.DatadogMetrics.GetClient() == nil {
+		return
+	}
+
+	err := m.DatadogMetrics.GetClient().Flush()
+	if err != nil {
+		logger.Warn("cannot flush Datadog client", err)
+	}
+
+	err = m.DatadogMetrics.GetClient().Close()
+	if err != nil {
+		logger.Warn("cannot close Datadog client", err)
+	}
+}

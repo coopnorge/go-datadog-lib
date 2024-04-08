@@ -418,6 +418,9 @@ func MyServiceContainer(ddCfg *config.DatadogConfig) error {
 		// Handle error / log error
   }
 	// ddMetricCollector -> *BaseMetricCollector allows you to send metrics to Datadog
+    
+	// ensure the metrics are sent before the program is terminated
+	defer ddMetricCollector.GracefulShutdown()
 }
 ```
 

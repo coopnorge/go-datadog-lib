@@ -119,3 +119,15 @@ func TestAddMetricNoClient(t *testing.T) {
 	bmc := &BaseMetricCollector{DatadogMetrics: mockDatadogClient}
 	bmc.AddMetric(context.Background(), Data{})
 }
+
+func TestGracefulShutdown(t *testing.T) {
+	ctrl := gomock.NewController(t)
+	mockDatadogStatsd := mock_statsd.NewMockClientInterface(ctrl)
+	mockDatadogStatsd.EXPECT().Flush().Return(nil).Times(1)
+	mockDatadogStatsd.EXPECT().Close().Return(nil).Times(1)
+	mockDatadogClient := mock_metrics.NewMockDatadogMetricsClient(ctrl)
+	mockDatadogClient.EXPECT().GetClient().Return(mockDatadogStatsd).AnyTimes()
+
+	collector := &BaseMetricCollector{DatadogMetrics: mockDatadogClient}
+	collector.GracefulShutdown()
+}

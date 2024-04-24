@@ -7,7 +7,9 @@ import (
 	"github.com/coopnorge/go-datadog-lib/v2/config"
 	"github.com/coopnorge/go-datadog-lib/v2/internal"
 	"github.com/coopnorge/go-logger"
+	datadogLogger "github.com/coopnorge/go-logger/adapter/datadog"
 
+	"gopkg.in/DataDog/dd-trace-go.v1/ddtrace"
 	"gopkg.in/DataDog/dd-trace-go.v1/ddtrace/tracer"
 	"gopkg.in/DataDog/dd-trace-go.v1/profiler"
 )
@@ -32,6 +34,12 @@ func StartDatadog(cfg config.DatadogParameters, connectionType ConnectionType) e
 	if err := cfg.Validate(); err != nil {
 		return fmt.Errorf("Datadog configuration not valid, cannot initialize Datadog services: %w", err)
 	}
+
+	l, err := datadogLogger.NewLogger(datadogLogger.WithGlobalLogger())
+	if err != nil {
+		return fmt.Errorf("Failed to initialize the Datadog logger: %w", err)
+	}
+	ddtrace.UseLogger(l)
 
 	compareConfigWithEnv(cfg)
 

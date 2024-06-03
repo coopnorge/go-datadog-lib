@@ -31,16 +31,31 @@ type testServer struct {
 	ddParentID  string
 }
 
-func (s *testServer) EmptyCall(ctx context.Context, _ *testgrpc.Empty) (*testgrpc.Empty, error) {
+func (s *testServer) hydrateTraceData(ctx context.Context) error {
 	md, ok := metadata.FromIncomingContext(ctx)
 	if !ok {
-		return nil, status.Error(codes.InvalidArgument, "not metadata in request")
+		return status.Error(codes.InvalidArgument, "not metadata in request")
 	}
-	s.traceparent = strings.Join(md.Get("Traceparent"), "")
-	s.tracestate = strings.Join(md.Get("Tracestate"), "")
-	s.ddTraceID = strings.Join(md.Get("X-Datadog-Trace-Id"), "")
-	s.ddParentID = strings.Join(md.Get("X-Datadog-Parent-Id"), "")
+	s.traceparent = strings.Join(md.Get("traceparent"), "")
+	s.tracestate = strings.Join(md.Get("tracestate"), "")
+	s.ddParentID = strings.Join(md.Get("x-datadog-parent-id"), "")
+	s.ddTraceID = strings.Join(md.Get("x-datadog-trace-id"), "")
+
+	return nil
+}
+
+func (s *testServer) EmptyCall(ctx context.Context, _ *testgrpc.Empty) (*testgrpc.Empty, error) {
+	if err := s.hydrateTraceData(ctx); err != nil {
+		return nil, err
+	}
 	return new(testgrpc.Empty), nil
+}
+
+func (s *testServer) StreamingOutputCall(_ *testgrpc.StreamingOutputCallRequest, streamingServer grpc.ServerStreamingServer[testgrpc.StreamingOutputCallResponse]) error {
+	if err := s.hydrateTraceData(streamingServer.Context()); err != nil {
+		return err
+	}
+	return nil
 }
 
 const bufSize = 1024 * 1024
@@ -93,7 +108,6 @@ func TestTraceUnaryClientInterceptorW3C(t *testing.T) {
 	tracer.Start()
 
 	server := &testServer{}
-
 	listener := bufconn.Listen(bufSize)
 	grpcServer := grpc.NewServer()
 	testgrpc.RegisterTestServiceServer(grpcServer, server)
@@ -141,4 +155,46 @@ func TestTraceUnaryClientInterceptorW3C(t *testing.T) {
 		}
 	}
 	assert.True(t, found, "Did not find Datadog's list-member in w3c tracestate")
+}
+
+func TestStreamClientInterceptor(t *testing.T) {
+	testhelpers.ConfigureDatadog(t)
+
+	// Start Datadog tracer, so that we don't create NoopSpans.
+	testTracer := mocktracer.Start()
+
+	server := &testServer{}
+
+	listener := bufconn.Listen(bufSize)
+	grpcServer := grpc.NewServer()
+	testgrpc.RegisterTestServiceServer(grpcServer, server)
+	errCh := make(chan error, 1)
+	go func() {
+		errCh <- grpcServer.Serve(listener)
+	}()
+
+	conn, err := grpc.NewClient("dns:///localhost",
+		grpc.WithContextDialer(func(_ context.Context, _ string) (net.Conn, error) { return listener.Dial() }),
+		grpc.WithTransportCredentials(insecure.NewCredentials()),
+		grpc.WithStreamInterceptor(StreamClientInterceptor()),
+	)
+	require.NoError(t, err)
+
+	client := testgrpc.NewTestServiceClient(conn)
+	span, spanCtx := tracer.StartSpanFromContext(context.Background(), "grpc.request", tracer.ResourceName("/helloworld"))
+	defer span.Finish()
+	c, err := client.StreamingOutputCall(spanCtx, &testgrpc.StreamingOutputCallRequest{})
+	require.NoError(t, err)
+
+	c.Recv()
+
+	testTracer.Stop()
+
+	spans := testTracer.FinishedSpans()
+	require.Equal(t, 2, len(spans))
+	assert.Equal(t, strconv.Itoa(int(span.Context().TraceID())), server.ddTraceID)
+	for _, finishedSpan := range spans {
+		assert.Equal(t, strconv.Itoa(int(finishedSpan.TraceID())), server.ddTraceID)
+		assert.Equal(t, strconv.Itoa(int(finishedSpan.ParentID())), server.ddParentID)
+	}
 }

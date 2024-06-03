@@ -31,6 +31,21 @@ func UnaryClientInterceptor(options ...Option) grpc.UnaryClientInterceptor {
 	return ddGrpc.UnaryClientInterceptor(opts...)
 }
 
+// StreamClientInterceptor create a client-interceptor to automatically create child-spans, and append to gRPC metadata.
+func StreamClientInterceptor(options ...Option) grpc.StreamClientInterceptor {
+	if internal.IsDatadogDisabled() {
+		return noOpStreamClientInterceptor()
+	}
+	opts := convertOptions(options...)
+	return ddGrpc.StreamClientInterceptor(opts...)
+}
+
+func noOpStreamClientInterceptor() grpc.StreamClientInterceptor {
+	return func(ctx context.Context, desc *grpc.StreamDesc, cc *grpc.ClientConn, method string, streamer grpc.Streamer, opts ...grpc.CallOption) (grpc.ClientStream, error) {
+		return streamer(ctx, desc, cc, method, opts...)
+	}
+}
+
 func noOpUnaryClientInterceptor() grpc.UnaryClientInterceptor {
 	return func(ctx context.Context, method string, req, reply interface{}, cc *grpc.ClientConn, invoker grpc.UnaryInvoker, opts ...grpc.CallOption) error {
 		return invoker(ctx, method, req, reply, cc, opts...)

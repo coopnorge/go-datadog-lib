@@ -4,7 +4,7 @@ go 1.21
 
 require (
 	github.com/DataDog/datadog-go/v5 v5.5.0
-	github.com/coopnorge/go-logger v0.10.0
+	github.com/coopnorge/go-logger v0.11.0
 	github.com/grpc-ecosystem/go-grpc-middleware/v2 v2.1.0
 	github.com/iancoleman/strcase v0.3.0
 	github.com/labstack/echo/v4 v4.12.0

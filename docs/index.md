@@ -267,8 +267,9 @@ These spans will also be embedded in the outgoing HTTP Headers, so if you are ca
 another service that is also instrumented with Datadog-integration, then you will
 enable distributed tracing.
 
-It is important that the context used in the http.Request contains trace-information,
-preferably created from any server middleware from this module.
+It is important that the context used in the `http.Request` contains
+trace-information, preferably created from any server middleware from this
+module.
 
 Example:
 

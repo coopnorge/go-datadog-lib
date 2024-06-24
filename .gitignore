@@ -21,3 +21,6 @@
 go.work
 
 mkdocs.yml
+
+.vale
+!./.vale/styles/config/vocabularies/General

@@ -23,3 +23,7 @@ updates:
       - coop-ghcr
     schedule:
       interval: "daily"
+    groups:
+      devtools:
+        patterns:
+          - coopnorge/engineering-docker-images/e0/*

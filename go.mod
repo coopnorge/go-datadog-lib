@@ -1,10 +1,13 @@
 module github.com/coopnorge/go-datadog-lib/v2
 
-go 1.21
+go 1.22.5
+
+// replace github.com/coopnorge/mage => ../mage
 
 require (
 	github.com/DataDog/datadog-go/v5 v5.5.0
 	github.com/coopnorge/go-logger v0.11.0
+	github.com/coopnorge/mage v0.0.0-20240813090224-25f596d5cbed
 	github.com/grpc-ecosystem/go-grpc-middleware/v2 v2.1.0
 	github.com/iancoleman/strcase v0.3.0
 	github.com/labstack/echo/v4 v4.12.0
@@ -38,6 +41,7 @@ require (
 	github.com/jinzhu/now v1.1.5 // indirect
 	github.com/kr/pretty v0.3.0 // indirect
 	github.com/labstack/gommon v0.4.2 // indirect
+	github.com/magefile/mage v1.15.0 // indirect
 	github.com/mattn/go-colorable v0.1.13 // indirect
 	github.com/mattn/go-isatty v0.0.20 // indirect
 	github.com/mitchellh/mapstructure v1.5.0 // indirect

@@ -33,8 +33,8 @@ that the library is not disabled in production by accident.
 
 Following configuration example related to Kubernetes and Kustomize.
 
-NOTE: Don't forget to set `DD_ENV` for each env, otherwise it will be not
-visible in APM list.
+NOTE: Don't forget to set `DD_ENV` for each environment, otherwise it will be
+not visible in APM list.
 
 ```yaml
 apiVersion: apps/v1
@@ -457,5 +457,42 @@ func Example()  {
 	}
 
 	ddMetricCollector.AddMetric(context.Background(), tMetricData)
+}
+```
+
+## Datadog Context Log Hook
+
+Relate log-entries to traces in Datadog. Configure
+`github.com/cooopnorge/go-logger` with a Hook (documentation:
+[Inventory](https://github.com/coopnorge/go-logger/blob/main/docs/index.md#hooks),
+[GitHub](https://inventory.internal.coop/docs/default/component/go-logger/#hooks))
+to capture the `trace_id` `span_id`.
+
+```go
+package main
+
+import (
+	"github.com/coopnorge/go-datadog-lib/v2/tracelogger"
+	"github.com/coopnorge/go-logger"
+
+	"gopkg.in/DataDog/dd-trace-go.v1/ddtrace/tracer"
+)
+
+func main() {
+	logger.ConfigureGlobalLogger(
+		logger.WithHook(tracelogger.NewHook()),
+	)
+	ctx := context.Background()
+	a(ctx)
+}
+
+func a(ctx context.Context) {
+	span, ctx := tracer.StartSpanFromContext(ctx, "a")
+	err = b(ctx)
+	span.Finish(tracer.WithError(err))
+}
+
+func b(ctx context.Context) {
+	logger.WithContext(ctx).Info("Hello")
 }
 ```

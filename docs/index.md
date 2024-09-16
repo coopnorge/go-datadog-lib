@@ -464,8 +464,8 @@ func Example()  {
 
 Relate log-entries to traces in Datadog. Configure
 `github.com/cooopnorge/go-logger` with a Hook (documentation:
-[Inventory](https://github.com/coopnorge/go-logger/blob/main/docs/index.md#hooks),
-[GitHub](https://inventory.internal.coop/docs/default/component/go-logger/#hooks))
+[Inventory](https://inventory.internal.coop/docs/default/component/go-logger/#hooks),
+[GitHub](https://github.com/coopnorge/go-logger/blob/main/docs/index.md#hooks))
 to capture the `trace_id` `span_id`.
 
 ```go

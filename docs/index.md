@@ -494,5 +494,7 @@ func a(ctx context.Context) {
 
 func b(ctx context.Context) {
 	logger.WithContext(ctx).Info("Hello")
+  // Output:
+  // {"dd.span_id":8047616890857967865,"dd.trace_id":8160264448608745330,"file":"/srv/workspace/app/main.go:25","function":"github.com/coopnorge/app/main.b","level":"info","msg":"Hello","time":"2024-09-12T19:01:34+02:00"}
 }
 ```

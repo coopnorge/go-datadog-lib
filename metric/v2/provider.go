@@ -68,42 +68,42 @@ func NewStatsdProvider(client *statsd.Client) *StatsdProvider {
 }
 
 func (p *StatsdProvider) NewCounter(name string, options ...MetricOption) *Counter {
-	metric := Counter{
+	c := Counter{
 		metric: metric{
 			name:   name,
 			client: p.client,
 		},
 	}
 	for _, opt := range options {
-		opt(&metric.metric)
+		opt(&c.metric)
 	}
-	return &metric
+	return &c
 }
 
 func (p *StatsdProvider) NewGauge(name string, options ...MetricOption) *Gauge {
-	metric := Gauge{
+	g := Gauge{
 		metric: metric{
 			name:   name,
 			client: p.client,
 		},
 	}
 	for _, opt := range options {
-		opt(&metric.metric)
+		opt(&g.metric)
 	}
-	return &metric
+	return &g
 }
 
 func (p *StatsdProvider) NewHistogram(name string, options ...MetricOption) *Histogram {
-	metric := Histogram{
+	h := Histogram{
 		metric: metric{
 			name:   name,
 			client: p.client,
 		},
 	}
 	for _, opt := range options {
-		opt(&metric.metric)
+		opt(&h.metric)
 	}
-	return &metric
+	return &h
 }
 
 type NoopProvider struct{}

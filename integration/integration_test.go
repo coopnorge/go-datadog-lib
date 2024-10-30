@@ -9,37 +9,34 @@ import (
 	"net/http"
 	"net/http/httptest"
 	"sync"
-	"sync/atomic"
 	"testing"
 	"time"
 
-	"github.com/coopnorge/go-datadog-lib/v2/config"
+	"github.com/coopnorge/go-datadog-lib/v2/internal/testhelpers"
 	grpcMiddleware "github.com/coopnorge/go-datadog-lib/v2/middleware/grpc"
 	httpMiddleware "github.com/coopnorge/go-datadog-lib/v2/middleware/http"
+
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
+	"golang.org/x/sync/errgroup"
 	"google.golang.org/grpc"
+	"google.golang.org/grpc/codes"
 	"google.golang.org/grpc/credentials/insecure"
-
 	testgrpc "google.golang.org/grpc/interop/grpc_testing"
+	"google.golang.org/grpc/status"
 	"google.golang.org/grpc/test/bufconn"
 	"gopkg.in/DataDog/dd-trace-go.v1/ddtrace/tracer"
 )
 
+const bufSize = 1024 * 1024
+
 func TestGRPCServerHttpClientTracing(t *testing.T) {
 	// This test aims to ensure that spans are created on incoming gRPC-requests, and then child-spans are created for each outgoing HTTP request, and included in their HTTP Headers.
 
-	// Ensure valid datadog config, even if we don't have a datadog agent running, to fully instrument the application.
-	t.Setenv("DD_ENV", "unittest")
-	t.Setenv("DD_SERVICE", "unittest")
-	t.Setenv("DD_VERSION", "unittest")
-	t.Setenv("DD_TRACE_AGENT_URL", "/dev/null")
-	t.Setenv("DD_EXPERIMENTAL_TRACING_ENABLED", "true")
+	testhelpers.ConfigureDatadog(t)
 
-	datadogCfg := config.LoadDatadogConfigFromEnvVars()
-	require.NoError(t, datadogCfg.Validate())
-
-	// Start Datadog tracer
+	// Start Datadog tracer, so that we don't create NoopSpans.
+	// Start real tracer (not mocktracer), to propagate Traceparent.
 	tracer.Start(tracer.WithService("unittest"))
 	t.Cleanup(tracer.Flush)
 	t.Cleanup(tracer.Stop)
@@ -69,113 +66,81 @@ func TestGRPCServerHttpClientTracing(t *testing.T) {
 		grpc.UnaryInterceptor(grpcMiddleware.UnaryServerInterceptor()),
 	}
 	grpcServer := grpc.NewServer(serverOpts...)
-	testgrpc.RegisterTestServiceServer(grpcServer, newStubHealthServer(s.URL))
+	testgrpc.RegisterTestServiceServer(grpcServer, newTestServer(s.URL, 3))
 
-	// Create in-memory buffer connection and listener
-	buffer := 1024 * 1024
-	listener := bufconn.Listen(buffer)
+	listener := bufconn.Listen(bufSize)
 
 	errCh := make(chan error, 1)
 	go func() {
-		if err := grpcServer.Serve(listener); err != nil && !errors.Is(err, grpc.ErrServerStopped) {
-			errCh <- err
-			return
-		}
-	}()
-
-	go func() {
-		<-ctx.Done()
-		close(errCh)
+		errCh <- grpcServer.Serve(listener)
 	}()
 
 	conn, err := grpc.NewClient("dns:///localhost",
-		// WithContextDialer connects the client directly to the server over the buffered connection
 		grpc.WithContextDialer(func(context.Context, string) (net.Conn, error) { return listener.Dial() }),
 		grpc.WithTransportCredentials(insecure.NewCredentials()),
+		grpc.WithUnaryInterceptor(grpcMiddleware.UnaryClientInterceptor()),
 	)
 	require.NoError(t, err)
 	defer conn.Close()
 
 	client := testgrpc.NewTestServiceClient(conn)
-	response, err := client.UnaryCall(ctx, &testgrpc.SimpleRequest{})
+	_, err = client.EmptyCall(ctx, &testgrpc.Empty{})
 	require.NoError(t, err)
-	assert.Equal(t, "OK", string(response.GetPayload().GetBody()))
 
 	// Assert that we have 1 trace with 3 different spans:
 	assert.Equal(t, 3, httpRequestCounter)
 	assert.Equal(t, 1, len(traceparentFirst36))
 	assert.Equal(t, 3, len(traceparents))
 	assert.Equal(t, 1, len(ddTraceIDs))
-	assert.Equal(t, 3, len(ddParentIDs)) // note: parent-id is span-id
+	assert.Equal(t, 3, len(ddParentIDs)) // note: X-Datadog-Parent-Id is span-id
 
 	// Make second call
-	response, err = client.UnaryCall(ctx, &testgrpc.SimpleRequest{})
+	_, err = client.EmptyCall(ctx, &testgrpc.Empty{})
 	require.NoError(t, err)
-	assert.Equal(t, "OK", string(response.GetPayload().GetBody()))
 
 	// Assert that we now have 2 traces, and total 6 different spans:
 	assert.Equal(t, 6, httpRequestCounter)
-	assert.Equal(t, 6, len(traceparents))
 	assert.Equal(t, 2, len(traceparentFirst36))
-	assert.Equal(t, 6, len(ddParentIDs))
+	assert.Equal(t, 6, len(traceparents))
 	assert.Equal(t, 2, len(ddTraceIDs))
+	assert.Equal(t, 6, len(ddParentIDs)) // note: X-Datadog-Parent-Id is span-id
 
-	cancel() // Signals the gRPC server to stop
+	grpcServer.Stop()
 	err = <-errCh
 	require.NoError(t, err)
 }
 
 type testServer struct {
 	testgrpc.UnimplementedTestServiceServer
-	baseURL string
-	client  *http.Client
+
+	baseURL          string
+	client           *http.Client
+	numExternalCalls int
 }
 
-// newStubHealthServer creates a new healthserver that calls external services with tracing.
-func newStubHealthServer(baseURL string) *testServer {
+// newTestServer creates a new server that implements testgrpc.TestServiceServer that calls external services via HTTP with tracing.
+func newTestServer(baseURL string, numExternalCalls int) *testServer {
 	netClient := &http.Client{Timeout: 3 * time.Second}
 	netClient = httpMiddleware.AddTracingToClient(
 		netClient,
 		httpMiddleware.WithResourceNamer(httpMiddleware.FullURLResourceNamer()),
 	)
-	return &testServer{client: netClient, baseURL: baseURL}
+	return &testServer{client: netClient, baseURL: baseURL, numExternalCalls: numExternalCalls}
 }
 
-// Check implements grpc_health_v1.HealthServer.
-func (h *testServer) UnaryCall(ctx context.Context, _ *testgrpc.SimpleRequest) (*testgrpc.SimpleResponse, error) {
-	const numServices int = 3
-	wg := &sync.WaitGroup{}
-	wg.Add(numServices)
-
-	ready := atomic.Bool{}
-	ready.Store(true)
-
-	go func() {
-		defer wg.Done()
-		if err := h.doHTTPRequest(ctx); err != nil {
-			ready.Store(false)
-		}
-	}()
-
-	go func() {
-		defer wg.Done()
-		if err := h.doHTTPRequest(ctx); err != nil {
-			ready.Store(false)
-		}
-	}()
-	go func() {
-		defer wg.Done()
-		if err := h.doHTTPRequest(ctx); err != nil {
-			ready.Store(false)
-		}
-	}()
-
-	wg.Wait()
-
-	if ready.Load() {
-		return &testgrpc.SimpleResponse{Payload: &testgrpc.Payload{Body: []byte("OK")}}, nil
+// Check implements testgrpc.TestServiceServer.
+func (h *testServer) EmptyCall(ctx context.Context, _ *testgrpc.Empty) (*testgrpc.Empty, error) {
+	g, ctx := errgroup.WithContext(ctx)
+	for i := 0; i < h.numExternalCalls; i++ {
+		g.Go(func() error { return h.doHTTPRequest(ctx) })
 	}
-	return &testgrpc.SimpleResponse{Payload: &testgrpc.Payload{Body: []byte("NOT OK")}}, nil
+
+	err := g.Wait()
+	if err != nil {
+		return nil, status.Errorf(codes.Unavailable, "Service is not ready")
+	}
+
+	return &testgrpc.Empty{}, nil
 }
 
 func (h *testServer) doHTTPRequest(ctx context.Context) (err error) {

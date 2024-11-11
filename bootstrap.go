@@ -3,6 +3,7 @@ package coopdatadog
 import (
 	"fmt"
 	"os"
+	"strings"
 
 	"github.com/coopnorge/go-datadog-lib/v2/config"
 	"github.com/coopnorge/go-datadog-lib/v2/internal"
@@ -22,6 +23,9 @@ const (
 	ConnectionTypeSocket ConnectionType = iota
 	// ConnectionTypeHTTP sets the connection to Datadog to go over HTTP
 	ConnectionTypeHTTP
+    // ConnectionTypeAuto sets connection to HTTP or UNIX depending on supplied configuration of DD_TRACE_AGENT_URL
+	ConnectionTypeAuto
+
 )
 
 // StartDatadog parallel process to collect data for Datadog.
@@ -42,6 +46,11 @@ func StartDatadog(cfg config.DatadogParameters, connectionType ConnectionType) e
 	ddtrace.UseLogger(l)
 
 	compareConfigWithEnv(cfg)
+
+    connectionType, err = setConnectionType(cfg, connectionType)
+	if err != nil {
+		return err
+	}
 
 	initTracer(cfg, connectionType)
 	if initProfilerErr := initProfiler(cfg, connectionType); initProfilerErr != nil {
@@ -94,6 +103,24 @@ func GracefulDatadogShutdown() {
 	defer profiler.Stop()
 }
 
+func setConnectionType(cfg config.DatadogParameters, connectionType ConnectionType) (ConnectionType error) {
+    switch connectionType {
+	case ConnectionTypeSocket:
+		return connectionType, nil
+	case ConnectionTypeHTTP:
+		return connectionType, nil
+	case ConnectionTypeAuto:
+	    switch cfg.GetApmEndpoint() {
+		case strings.HasPrefix("http://"):
+			return ConnectionTypeHTTP, nil
+		case strings.HasPrefix("/"):
+		    return ConnectionTypeSocket
+		default:
+			return ConnectionTypeAuto, fmt.Errorf("Unable to automaticly detect connection type based on DD_TRACE_AGENT_URL=%s",cfg.GetApmEndpoint())
+	    }
+    }
+}
+
 func initTracer(cfg config.DatadogParameters, connectionType ConnectionType) {
 	var tracerOptions []tracer.StartOption
 	switch connectionType {
@@ -101,7 +128,6 @@ func initTracer(cfg config.DatadogParameters, connectionType ConnectionType) {
 		tracerOptions = append(tracerOptions, tracer.WithUDS(cfg.GetApmEndpoint()))
 	case ConnectionTypeHTTP:
 		tracerOptions = append(tracerOptions, tracer.WithAgentAddr(cfg.GetApmEndpoint()))
-	}
 
 	tracerOptions = append(
 		tracerOptions,

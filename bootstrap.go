@@ -116,7 +116,7 @@ func setConnectionType(cfg config.DatadogParameters, connectionType ConnectionTy
 			return ConnectionTypeSocket, nil
 		}
 	}
-	return ConnectionTypeAuto, fmt.Errorf("Unable to automatically detect connection type based on DD_TRACE_AGENT_URL=%s", cfg.GetApmEndpoint())
+	return connectionType, fmt.Errorf("Unable to automatically detect connection type based on DD_TRACE_AGENT_URL=%s", cfg.GetApmEndpoint())
 }
 
 func initTracer(cfg config.DatadogParameters, connectionType ConnectionType) {

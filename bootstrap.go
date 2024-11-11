@@ -23,9 +23,8 @@ const (
 	ConnectionTypeSocket ConnectionType = iota
 	// ConnectionTypeHTTP sets the connection to Datadog to go over HTTP
 	ConnectionTypeHTTP
-    // ConnectionTypeAuto sets connection to HTTP or UNIX depending on supplied configuration of DD_TRACE_AGENT_URL
+	// ConnectionTypeAuto sets connection to HTTP or UNIX depending on supplied configuration of DD_TRACE_AGENT_URL
 	ConnectionTypeAuto
-
 )
 
 // StartDatadog parallel process to collect data for Datadog.
@@ -47,7 +46,7 @@ func StartDatadog(cfg config.DatadogParameters, connectionType ConnectionType) e
 
 	compareConfigWithEnv(cfg)
 
-    connectionType, err = setConnectionType(cfg, connectionType)
+	connectionType, err = setConnectionType(cfg, connectionType)
 	if err != nil {
 		return err
 	}
@@ -103,22 +102,21 @@ func GracefulDatadogShutdown() {
 	defer profiler.Stop()
 }
 
-func setConnectionType(cfg config.DatadogParameters, connectionType ConnectionType) (ConnectionType error) {
-    switch connectionType {
+func setConnectionType(cfg config.DatadogParameters, connectionType ConnectionType) (ConnectionType, error) {
+	switch connectionType {
 	case ConnectionTypeSocket:
 		return connectionType, nil
 	case ConnectionTypeHTTP:
 		return connectionType, nil
 	case ConnectionTypeAuto:
-	    switch cfg.GetApmEndpoint() {
-		case strings.HasPrefix("http://"):
+		switch {
+		case strings.HasPrefix(cfg.GetApmEndpoint(), "http://"):
 			return ConnectionTypeHTTP, nil
-		case strings.HasPrefix("/"):
-		    return ConnectionTypeSocket
-		default:
-			return ConnectionTypeAuto, fmt.Errorf("Unable to automaticly detect connection type based on DD_TRACE_AGENT_URL=%s",cfg.GetApmEndpoint())
-	    }
-    }
+		case strings.HasPrefix(cfg.GetApmEndpoint(), "/"):
+			return ConnectionTypeSocket, nil
+		}
+	}
+	return ConnectionTypeAuto, fmt.Errorf("Unable to automatically detect connection type based on DD_TRACE_AGENT_URL=%s", cfg.GetApmEndpoint())
 }
 
 func initTracer(cfg config.DatadogParameters, connectionType ConnectionType) {
@@ -128,6 +126,7 @@ func initTracer(cfg config.DatadogParameters, connectionType ConnectionType) {
 		tracerOptions = append(tracerOptions, tracer.WithUDS(cfg.GetApmEndpoint()))
 	case ConnectionTypeHTTP:
 		tracerOptions = append(tracerOptions, tracer.WithAgentAddr(cfg.GetApmEndpoint()))
+	}
 
 	tracerOptions = append(
 		tracerOptions,

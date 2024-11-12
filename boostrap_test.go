@@ -29,7 +29,6 @@ func TestDatadog(t *testing.T) {
 }
 
 func TestSetConnectionType(t *testing.T) {
-
 	ddCfg := config.DatadogConfig{
 		Env:                  "local",
 		Service:              "Test-Go-Datadog-lib",
@@ -54,5 +53,4 @@ func TestSetConnectionType(t *testing.T) {
 	connectionType, err = setConnectionType(ddCfg, ConnectionTypeAuto)
 	assert.Error(t, err)
 	assert.Equal(t, ConnectionTypeAuto, connectionType)
-
 }

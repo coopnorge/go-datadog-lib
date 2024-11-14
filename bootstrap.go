@@ -50,7 +50,7 @@ func StartDatadog(cfg config.DatadogParameters, connectionType ConnectionType) e
 
 	compareConfigWithEnv(cfg)
 
-	connectionType, err = setConnectionType(cfg, connectionType)
+	connectionType, err = determineConnectionType(cfg, connectionType)
 	if err != nil {
 		return err
 	}
@@ -106,7 +106,7 @@ func GracefulDatadogShutdown() {
 	defer profiler.Stop()
 }
 
-func setConnectionType(cfg config.DatadogParameters, connectionType ConnectionType) (ConnectionType, error) {
+func determineConnectionType(cfg config.DatadogParameters, connectionType ConnectionType) (ConnectionType, error) {
 	switch connectionType {
 	case ConnectionTypeSocket:
 		return connectionType, nil

@@ -39,18 +39,18 @@ func TestSetConnectionType(t *testing.T) {
 	}
 
 	// If not auto it should just pass through
-	connectionType, err := setConnectionType(ddCfg, ConnectionTypeSocket)
+	connectionType, err := determineConnectionType(ddCfg, ConnectionTypeSocket)
 	assert.NoError(t, err)
 	assert.Equal(t, ConnectionTypeSocket, connectionType)
 
 	// Auto should detect
-	connectionType, err = setConnectionType(ddCfg, ConnectionTypeAuto)
+	connectionType, err = determineConnectionType(ddCfg, ConnectionTypeAuto)
 	assert.NoError(t, err)
 	assert.Equal(t, ConnectionTypeHTTP, connectionType)
 
 	// Fail on unable to detect when auto
 	ddCfg.APM = "tmp"
-	connectionType, err = setConnectionType(ddCfg, ConnectionTypeAuto)
+	connectionType, err = determineConnectionType(ddCfg, ConnectionTypeAuto)
 	assert.Error(t, err)
 	assert.Equal(t, ConnectionTypeAuto, connectionType)
 }

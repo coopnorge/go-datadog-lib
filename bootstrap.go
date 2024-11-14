@@ -25,7 +25,7 @@ const (
 	ConnectionTypeSocket ConnectionType = iota
 	// ConnectionTypeHTTP sets the connection to Datadog to go over HTTP
 	//
-	// Deprecated: 	// Deprecated: ConnectionTypeHTTP. ConnectionTypeAuto should be used.
+	// Deprecated: ConnectionTypeHTTP. ConnectionTypeAuto should be used.
 	ConnectionTypeHTTP
 	// ConnectionTypeAuto sets connection to HTTP or UNIX depending on supplied configuration of DD_TRACE_AGENT_URL
 	ConnectionTypeAuto

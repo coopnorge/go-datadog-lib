@@ -3,6 +3,7 @@ package coopdatadog
 import (
 	"fmt"
 	"os"
+	"strings"
 
 	"github.com/coopnorge/go-datadog-lib/v2/config"
 	"github.com/coopnorge/go-datadog-lib/v2/internal"
@@ -19,9 +20,15 @@ type ConnectionType byte
 
 const (
 	// ConnectionTypeSocket sets the connection to Datadog to go throug a UNIX socket
+	//
+	// Deprecated: ConnectionTypeSocket. ConnectionTypeAuto should be used.
 	ConnectionTypeSocket ConnectionType = iota
 	// ConnectionTypeHTTP sets the connection to Datadog to go over HTTP
+	//
+	// Deprecated: ConnectionTypeHTTP. ConnectionTypeAuto should be used.
 	ConnectionTypeHTTP
+	// ConnectionTypeAuto sets connection to HTTP or UNIX depending on supplied configuration of DD_TRACE_AGENT_URL
+	ConnectionTypeAuto
 )
 
 // StartDatadog parallel process to collect data for Datadog.
@@ -42,6 +49,11 @@ func StartDatadog(cfg config.DatadogParameters, connectionType ConnectionType) e
 	ddtrace.UseLogger(l)
 
 	compareConfigWithEnv(cfg)
+
+	connectionType, err = determineConnectionType(cfg, connectionType)
+	if err != nil {
+		return err
+	}
 
 	initTracer(cfg, connectionType)
 	if initProfilerErr := initProfiler(cfg, connectionType); initProfilerErr != nil {
@@ -92,6 +104,23 @@ func compareConfigWithEnv(cfg config.DatadogParameters) {
 func GracefulDatadogShutdown() {
 	defer tracer.Stop()
 	defer profiler.Stop()
+}
+
+func determineConnectionType(cfg config.DatadogParameters, connectionType ConnectionType) (ConnectionType, error) {
+	switch connectionType {
+	case ConnectionTypeSocket:
+		return connectionType, nil
+	case ConnectionTypeHTTP:
+		return connectionType, nil
+	case ConnectionTypeAuto:
+		switch {
+		case strings.HasPrefix(cfg.GetApmEndpoint(), "http://"):
+			return ConnectionTypeHTTP, nil
+		case strings.HasPrefix(cfg.GetApmEndpoint(), "/"):
+			return ConnectionTypeSocket, nil
+		}
+	}
+	return connectionType, fmt.Errorf("Unable to automatically detect connection type based on DD_TRACE_AGENT_URL=%s", cfg.GetApmEndpoint())
 }
 
 func initTracer(cfg config.DatadogParameters, connectionType ConnectionType) {

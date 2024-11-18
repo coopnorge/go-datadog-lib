@@ -3,7 +3,6 @@ package coopdatadog
 import (
 	"fmt"
 	"os"
-	"strings"
 
 	"github.com/coopnorge/go-datadog-lib/v2/config"
 	"github.com/coopnorge/go-datadog-lib/v2/internal"
@@ -19,7 +18,7 @@ import (
 type ConnectionType byte
 
 const (
-	// ConnectionTypeSocket sets the connection to Datadog to go throug a UNIX socket
+	// ConnectionTypeSocket sets the connection to Datadog to go through a UNIX socket
 	//
 	// Deprecated: ConnectionTypeSocket. ConnectionTypeAuto should be used.
 	ConnectionTypeSocket ConnectionType = iota
@@ -50,8 +49,7 @@ func StartDatadog(cfg config.DatadogParameters, connectionType ConnectionType) e
 
 	compareConfigWithEnv(cfg)
 
-	connectionType, err = determineConnectionType(cfg, connectionType)
-	if err != nil {
+	if err := validateConnectionType(connectionType); err != nil {
 		return err
 	}
 
@@ -106,30 +104,26 @@ func GracefulDatadogShutdown() {
 	defer profiler.Stop()
 }
 
-func determineConnectionType(cfg config.DatadogParameters, connectionType ConnectionType) (ConnectionType, error) {
-	switch connectionType {
-	case ConnectionTypeSocket:
-		return connectionType, nil
-	case ConnectionTypeHTTP:
-		return connectionType, nil
-	case ConnectionTypeAuto:
-		switch {
-		case strings.HasPrefix(cfg.GetApmEndpoint(), "http://"):
-			return ConnectionTypeHTTP, nil
-		case strings.HasPrefix(cfg.GetApmEndpoint(), "/"):
-			return ConnectionTypeSocket, nil
+func validateConnectionType(connectionType ConnectionType) error {
+	if connectionType == ConnectionTypeAuto {
+		// When using ConnectionTypeAuto, we offload the determining of the connection-type to the underlying library, which only reads known environment-variables.
+		envVal := os.Getenv(internal.DatadogAPMEndpoint)
+		if envVal == "" {
+			return fmt.Errorf("to use ConnectionTypeAuto, the environment-variable %q MUST be set", internal.DatadogAPMEndpoint)
 		}
 	}
-	return connectionType, fmt.Errorf("Unable to automatically detect connection type based on DD_TRACE_AGENT_URL=%s", cfg.GetApmEndpoint())
+	return nil
 }
 
 func initTracer(cfg config.DatadogParameters, connectionType ConnectionType) {
-	var tracerOptions []tracer.StartOption
+	tracerOptions := make([]tracer.StartOption, 0, 5)
 	switch connectionType {
 	case ConnectionTypeSocket:
 		tracerOptions = append(tracerOptions, tracer.WithUDS(cfg.GetApmEndpoint()))
 	case ConnectionTypeHTTP:
 		tracerOptions = append(tracerOptions, tracer.WithAgentAddr(cfg.GetApmEndpoint()))
+	case ConnectionTypeAuto:
+		// Let the underlying library determine the URL from environment-variables
 	}
 
 	tracerOptions = append(
@@ -159,12 +153,14 @@ func initProfiler(cfg config.DatadogParameters, connectionType ConnectionType) e
 		profilerTypes = []profiler.ProfileType{profiler.CPUProfile}
 	}
 
-	var profilerOptions []profiler.Option
+	profilerOptions := make([]profiler.Option, 0, 5)
 	switch connectionType {
 	case ConnectionTypeSocket:
 		profilerOptions = append(profilerOptions, profiler.WithUDS(cfg.GetApmEndpoint()))
 	case ConnectionTypeHTTP:
 		profilerOptions = append(profilerOptions, profiler.WithAgentAddr(cfg.GetApmEndpoint()))
+	case ConnectionTypeAuto:
+		// Let the underlying library determine the URL from environment-variables
 	}
 
 	profilerOptions = append(

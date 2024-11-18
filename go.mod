@@ -11,16 +11,16 @@ require (
 	github.com/stretchr/testify v1.9.0
 	go.uber.org/mock v0.5.0
 	google.golang.org/grpc v1.67.1
-	gopkg.in/DataDog/dd-trace-go.v1 v1.68.0
+	gopkg.in/DataDog/dd-trace-go.v1 v1.69.1
 	gorm.io/gorm v1.25.12
 )
 
 require (
-	github.com/DataDog/appsec-internal-go v1.7.0 // indirect
+	github.com/DataDog/appsec-internal-go v1.8.0 // indirect
 	github.com/DataDog/datadog-agent/pkg/obfuscate v0.48.0 // indirect
-	github.com/DataDog/datadog-agent/pkg/remoteconfig/state v0.48.1 // indirect
-	github.com/DataDog/go-libddwaf/v3 v3.3.0 // indirect
-	github.com/DataDog/go-tuf v1.0.2-0.5.2 // indirect
+	github.com/DataDog/datadog-agent/pkg/remoteconfig/state v0.57.0 // indirect
+	github.com/DataDog/go-libddwaf/v3 v3.4.0 // indirect
+	github.com/DataDog/go-tuf v1.1.0-0.5.2 // indirect
 	github.com/DataDog/gostackparse v0.7.0 // indirect
 	github.com/DataDog/sketches-go v1.4.5 // indirect
 	github.com/Microsoft/go-winio v0.6.1 // indirect
@@ -42,7 +42,7 @@ require (
 	github.com/mattn/go-isatty v0.0.20 // indirect
 	github.com/mitchellh/mapstructure v1.5.0 // indirect
 	github.com/outcaste-io/ristretto v0.2.3 // indirect
-	github.com/philhofer/fwd v1.1.2 // indirect
+	github.com/philhofer/fwd v1.1.3-0.20240612014219-fbbf4953d986 // indirect
 	github.com/pkg/errors v0.9.1 // indirect
 	github.com/pmezard/go-difflib v1.0.1-0.20181226105442-5d4384ee4fb2 // indirect
 	github.com/richardartoul/molecule v1.0.1-0.20240531184615-7ca0df43c0b3 // indirect
@@ -50,7 +50,7 @@ require (
 	github.com/secure-systems-lab/go-securesystemslib v0.7.0 // indirect
 	github.com/sirupsen/logrus v1.9.3 // indirect
 	github.com/spaolacci/murmur3 v1.1.0 // indirect
-	github.com/tinylib/msgp v1.1.8 // indirect
+	github.com/tinylib/msgp v1.2.1 // indirect
 	github.com/valyala/bytebufferpool v1.0.0 // indirect
 	github.com/valyala/fasttemplate v1.2.2 // indirect
 	go.uber.org/atomic v1.11.0 // indirect

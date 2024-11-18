@@ -4,6 +4,7 @@ import (
 	"testing"
 
 	"github.com/coopnorge/go-datadog-lib/v2/config"
+	"github.com/coopnorge/go-datadog-lib/v2/internal"
 	"github.com/stretchr/testify/assert"
 )
 
@@ -28,29 +29,28 @@ func TestDatadog(t *testing.T) {
 	GracefulDatadogShutdown()
 }
 
-func TestSetConnectionType(t *testing.T) {
-	ddCfg := config.DatadogConfig{
-		Env:                  "local",
-		Service:              "Test-Go-Datadog-lib",
-		ServiceVersion:       "na",
-		DSD:                  "unix:///tmp/",
-		APM:                  "http://localhost:3899",
-		EnableExtraProfiling: true,
+func TestValidateConnectionType(t *testing.T) {
+	testCases := map[string]struct {
+		envVal    string
+		connType  ConnectionType
+		expectErr bool
+	}{
+		"Socket no env":   {envVal: "", connType: ConnectionTypeSocket, expectErr: false},
+		"Socket with env": {envVal: "foobar", connType: ConnectionTypeSocket, expectErr: false},
+		"HTTP no env":     {envVal: "", connType: ConnectionTypeHTTP, expectErr: false},
+		"HTTP with env":   {envVal: "foobar", connType: ConnectionTypeHTTP, expectErr: false},
+		"Auto no env":     {envVal: "", connType: ConnectionTypeAuto, expectErr: true},
+		"Auto with env":   {envVal: "foobar", connType: ConnectionTypeAuto, expectErr: false},
 	}
-
-	// If not auto it should just pass through
-	connectionType, err := determineConnectionType(ddCfg, ConnectionTypeSocket)
-	assert.NoError(t, err)
-	assert.Equal(t, ConnectionTypeSocket, connectionType)
-
-	// Auto should detect
-	connectionType, err = determineConnectionType(ddCfg, ConnectionTypeAuto)
-	assert.NoError(t, err)
-	assert.Equal(t, ConnectionTypeHTTP, connectionType)
-
-	// Fail on unable to detect when auto
-	ddCfg.APM = "tmp"
-	connectionType, err = determineConnectionType(ddCfg, ConnectionTypeAuto)
-	assert.Error(t, err)
-	assert.Equal(t, ConnectionTypeAuto, connectionType)
+	for k, tt := range testCases {
+		t.Run(k, func(t *testing.T) {
+			t.Setenv(internal.DatadogAPMEndpoint, tt.envVal)
+			err := validateConnectionType(tt.connType)
+			if tt.expectErr {
+				assert.Error(t, err)
+			} else {
+				assert.NoError(t, err)
+			}
+		})
+	}
 }

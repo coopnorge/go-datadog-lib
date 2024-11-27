@@ -1,20 +1,29 @@
 package coopdatadog
 
 import (
+	"os"
 	"testing"
 
-	"github.com/coopnorge/go-datadog-lib/v2/config"
+	legacyConfig "github.com/coopnorge/go-datadog-lib/v2/config"
 	"github.com/coopnorge/go-datadog-lib/v2/internal"
 	"github.com/stretchr/testify/assert"
 )
 
 func TestDatadog(t *testing.T) {
-	ddCfg := config.DatadogConfig{}
+	t.Cleanup(func() {
+		os.Unsetenv(internal.DatadogEnvironment)
+		os.Unsetenv(internal.DatadogService)
+		os.Unsetenv(internal.DatadogVersion)
+		os.Unsetenv(internal.DatadogDSDEndpoint)
+		os.Unsetenv(internal.DatadogAPMEndpoint)
+	})
+
+	ddCfg := legacyConfig.DatadogConfig{}
 
 	err := StartDatadog(ddCfg, ConnectionTypeHTTP)
 	assert.NotNil(t, err)
 
-	ddCfg = config.DatadogConfig{
+	ddCfg = legacyConfig.DatadogConfig{
 		Env:                  "local",
 		Service:              "Test-Go-Datadog-lib",
 		ServiceVersion:       "na",

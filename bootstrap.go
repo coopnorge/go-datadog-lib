@@ -4,7 +4,7 @@ import (
 	"fmt"
 	"os"
 
-	"github.com/coopnorge/go-datadog-lib/v2/config"
+	legacyConfig "github.com/coopnorge/go-datadog-lib/v2/config"
 	"github.com/coopnorge/go-datadog-lib/v2/internal"
 	"github.com/coopnorge/go-logger"
 	datadogLogger "github.com/coopnorge/go-logger/adapter/datadog"
@@ -32,7 +32,9 @@ const (
 
 // StartDatadog parallel process to collect data for Datadog.
 // connectionType flag related to Datadog connection type, it supports HTTP or socket - values will be used from config.DatadogParameters
-func StartDatadog(cfg config.DatadogParameters, connectionType ConnectionType) error {
+//
+// Deprecated: Use coopdatadog.Start() instead.
+func StartDatadog(cfg legacyConfig.DatadogParameters, connectionType ConnectionType) error {
 	if internal.IsDatadogDisabled() {
 		return nil
 	}
@@ -61,8 +63,8 @@ func StartDatadog(cfg config.DatadogParameters, connectionType ConnectionType) e
 	return nil
 }
 
-func compareConfigWithEnv(cfg config.DatadogParameters) {
-	envCfg := config.LoadDatadogConfigFromEnvVars()
+func compareConfigWithEnv(cfg legacyConfig.DatadogParameters) {
+	envCfg := legacyConfig.LoadDatadogConfigFromEnvVars()
 
 	fields := map[string]any{}
 	if cfg.GetEnv() != envCfg.GetEnv() {
@@ -115,7 +117,7 @@ func validateConnectionType(connectionType ConnectionType) error {
 	return nil
 }
 
-func initTracer(cfg config.DatadogParameters, connectionType ConnectionType) {
+func initTracer(cfg legacyConfig.DatadogParameters, connectionType ConnectionType) {
 	tracerOptions := make([]tracer.StartOption, 0, 5)
 	switch connectionType {
 	case ConnectionTypeSocket:
@@ -139,7 +141,7 @@ func initTracer(cfg config.DatadogParameters, connectionType ConnectionType) {
 	tracer.Start(tracerOptions...)
 }
 
-func initProfiler(cfg config.DatadogParameters, connectionType ConnectionType) error {
+func initProfiler(cfg legacyConfig.DatadogParameters, connectionType ConnectionType) error {
 	var profilerTypes []profiler.ProfileType
 	if cfg.IsExtraProfilingEnabled() {
 		profilerTypes = []profiler.ProfileType{

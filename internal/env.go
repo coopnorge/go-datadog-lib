@@ -39,7 +39,6 @@ func IsDatadogDisabled() bool {
 func VerifyEnvVarsSet(keys ...string) error {
 	for _, key := range keys {
 		val, ok := os.LookupEnv(key)
-		println(key, val)
 		if !ok || val == "" {
 			return fmt.Errorf("required environmental variable not set: %q", key)
 		}

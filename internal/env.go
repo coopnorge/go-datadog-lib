@@ -15,6 +15,8 @@ const (
 	DatadogEnableProfiling = "DD_ENABLE_PROFILING"
 	// DatadogEnableExtraProfiling is the environment variable key for whether to enable extra profiling or not.
 	DatadogEnableExtraProfiling = "DD_ENABLE_EXTRA_PROFILING"
+	// DatadogEnableMetrics is the environment variable key for whether to enable custom metrics collection.
+	DatadogEnableMetrics = "DD_ENABLE_METRICS"
 
 	// DatadogEnvironment is the environment variable key determining the Datadog Environment to use.
 	DatadogEnvironment = "DD_ENV"

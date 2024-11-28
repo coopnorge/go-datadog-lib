@@ -20,7 +20,7 @@ func Start(ctx context.Context, options ...Option) (context.Context, context.Can
 		return ctx, context.CancelFunc(func() {}), nil
 	}
 
-	err := verifyEnvVarsSet(
+	err := internal.VerifyEnvVarsSet(
 		internal.DatadogAPMEndpoint,
 		internal.DatadogDSDEndpoint,
 		internal.DatadogService,
@@ -31,12 +31,9 @@ func Start(ctx context.Context, options ...Option) (context.Context, context.Can
 		return ctx, context.CancelFunc(func() {}), err
 	}
 
-	cfg := defaultConfig()
-
-	options = append([]Option{withConfigFromEnvVars()}, options...)
-
-	for _, option := range options {
-		option(cfg)
+	cfg, err := resolveConfig(options)
+	if err != nil {
+		return ctx, context.CancelFunc(func() {}), err
 	}
 
 	ctx, cancel := context.WithCancel(ctx)
@@ -57,7 +54,11 @@ func Start(ctx context.Context, options ...Option) (context.Context, context.Can
 
 func start(_ context.Context, cfg *config) error {
 	startTracer(cfg)
-	return startProfiler(cfg)
+	err := startProfiler(cfg)
+	if err != nil {
+		return err
+	}
+	return nil
 }
 
 func startTracer(cfg *config) {
@@ -94,17 +95,6 @@ func startProfiler(cfg *config) error {
 func stop(_ *config) {
 	defer tracer.Stop()
 	defer profiler.Stop()
-}
-
-func verifyEnvVarsSet(keys ...string) error {
-	for _, key := range keys {
-		val, ok := os.LookupEnv(key)
-		println(key, val)
-		if !ok || val == "" {
-			return fmt.Errorf("required environmental variable not set: %q", key)
-		}
-	}
-	return nil
 }
 
 func getBoolEnv(key string, fallback bool) bool {

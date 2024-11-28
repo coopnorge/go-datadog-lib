@@ -15,21 +15,31 @@ type config struct {
 	enableExtraProfiling bool
 }
 
-func defaultConfig() *config {
-	return &config{
+func resolveConfig(options []Option) (*config, error) {
+	cfg := &config{
 		enableTracing:        defaultEnableTracing,
 		enableProfiling:      defaultEnableProfiling,
 		enableExtraProfiling: defaultEnableExtraProfiling,
 	}
+	options = append([]Option{withConfigFromEnvVars()}, options...)
+
+	for _, option := range options {
+		err := option(cfg)
+		if err != nil {
+			return nil, err
+		}
+	}
+	return cfg, nil
 }
 
 // Option is used to configure the behaviour of the Datadog integration.
-type Option func(*config)
+type Option func(*config) error
 
 func withConfigFromEnvVars() Option {
-	return func(cfg *config) {
+	return func(cfg *config) error {
 		cfg.enableTracing = getBoolEnv(internal.DatadogEnableTracing, cfg.enableTracing)
 		cfg.enableProfiling = getBoolEnv(internal.DatadogEnableProfiling, cfg.enableProfiling)
 		cfg.enableExtraProfiling = getBoolEnv(internal.DatadogEnableExtraProfiling, cfg.enableExtraProfiling)
+		return nil
 	}
 }

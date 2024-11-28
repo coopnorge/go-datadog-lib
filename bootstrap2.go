@@ -93,8 +93,8 @@ func startProfiler(cfg *config) error {
 
 // stop with a graceful shutdown that includes flushing signals.
 func stop(_ *config) {
-	defer tracer.Stop()
-	defer profiler.Stop()
+	tracer.Stop()
+	profiler.Stop()
 }
 
 func getBoolEnv(key string, fallback bool) bool {

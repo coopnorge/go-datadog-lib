@@ -33,7 +33,7 @@ func Start(ctx context.Context, options ...Option) (context.Context, context.Can
 
 	cfg := defaultConfig()
 
-	withConfigFromEnvVars()(cfg)
+	options = append([]Option{withConfigFromEnvVars()}, options...)
 
 	for _, option := range options {
 		option(cfg)

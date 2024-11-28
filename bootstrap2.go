@@ -3,8 +3,6 @@ package coopdatadog
 import (
 	"context"
 	"fmt"
-	"os"
-	"strconv"
 
 	"github.com/coopnorge/go-datadog-lib/v2/internal"
 	datadogLogger "github.com/coopnorge/go-logger/adapter/datadog"
@@ -95,16 +93,4 @@ func startProfiler(cfg *config) error {
 func stop(_ *config) {
 	tracer.Stop()
 	profiler.Stop()
-}
-
-func getBoolEnv(key string, fallback bool) bool {
-	valStr, ok := os.LookupEnv(key)
-	if !ok {
-		return fallback
-	}
-	val, err := strconv.ParseBool(valStr)
-	if err != nil {
-		return fallback
-	}
-	return val
 }

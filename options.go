@@ -37,9 +37,9 @@ type Option func(*config) error
 
 func withConfigFromEnvVars() Option {
 	return func(cfg *config) error {
-		cfg.enableTracing = getBoolEnv(internal.DatadogEnableTracing, cfg.enableTracing)
-		cfg.enableProfiling = getBoolEnv(internal.DatadogEnableProfiling, cfg.enableProfiling)
-		cfg.enableExtraProfiling = getBoolEnv(internal.DatadogEnableExtraProfiling, cfg.enableExtraProfiling)
+		cfg.enableTracing = internal.GetBool(internal.DatadogEnableTracing, cfg.enableTracing)
+		cfg.enableProfiling = internal.GetBool(internal.DatadogEnableProfiling, cfg.enableProfiling)
+		cfg.enableExtraProfiling = internal.GetBool(internal.DatadogEnableExtraProfiling, cfg.enableExtraProfiling)
 		return nil
 	}
 }

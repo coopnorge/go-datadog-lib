@@ -32,12 +32,7 @@ const (
 // environment variable DD_DISABLE is checked. If the variable is missing or
 // cannot be parsed to a bool the Datadog integration is assumed to be enabled.
 func IsDatadogDisabled() bool {
-	valStr := os.Getenv(DatadogDisable)
-	val, err := strconv.ParseBool(valStr)
-	if err != nil {
-		return false
-	}
-	return val
+	return GetBool(DatadogDisable, false)
 }
 
 // VerifyEnvVarsSet checks if the provided environmental variables are defined
@@ -50,4 +45,18 @@ func VerifyEnvVarsSet(keys ...string) error {
 		}
 	}
 	return nil
+}
+
+// GetBool returns the boolean value of the environmental variable, if the key
+// is not set or parsing fails the fallback value is returned.
+func GetBool(key string, fallback bool) bool {
+	valStr, ok := os.LookupEnv(key)
+	if !ok {
+		return fallback
+	}
+	val, err := strconv.ParseBool(valStr)
+	if err != nil {
+		return fallback
+	}
+	return val
 }

@@ -55,7 +55,6 @@ func Start(ctx context.Context, options ...Option) (context.Context, context.Can
 	return ctx, canceldd, err
 }
 
-// start all relevant collectors, tracing, metrics, profiling etc
 func start(_ context.Context, cfg *config) error {
 	startTracer(cfg)
 	return startProfiler(cfg)

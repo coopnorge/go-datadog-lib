@@ -36,7 +36,10 @@ func Start(ctx context.Context, options ...Option) (context.Context, context.Can
 
 	ctx, cancel := context.WithCancel(ctx)
 	canceldd := context.CancelFunc(func() {
-		stop(cfg)
+		err := stop(cfg)
+		if err != nil {
+			cfg.errorHandler(fmt.Errorf("failed to stop: %w", err))
+		}
 		cancel()
 	})
 
@@ -90,7 +93,8 @@ func startProfiler(cfg *config) error {
 }
 
 // stop with a graceful shutdown that includes flushing signals.
-func stop(_ *config) {
+func stop(_ *config) error {
 	tracer.Stop()
 	profiler.Stop()
+	return nil
 }

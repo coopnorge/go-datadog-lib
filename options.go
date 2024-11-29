@@ -1,6 +1,7 @@
 package coopdatadog
 
 import (
+	"github.com/coopnorge/go-datadog-lib/v2/errors"
 	"github.com/coopnorge/go-datadog-lib/v2/internal"
 	"github.com/coopnorge/go-logger"
 )
@@ -11,16 +12,12 @@ const (
 	defaultEnableExtraProfiling = false
 )
 
-// ErrorHandler allows for handling of error that cannot be returned to the
-// caller
-type ErrorHandler func(error)
-
 // config is the internal configuration for the Datadog integration
 type config struct {
 	enableTracing        bool
 	enableProfiling      bool
 	enableExtraProfiling bool
-	errorHandler         ErrorHandler
+	errorHandler         errors.ErrorHandler
 }
 
 func resolveConfig(options []Option) (*config, error) {
@@ -57,7 +54,7 @@ func withConfigFromEnvVars() Option {
 
 // WithErrorHandler allows for setting a custom ErrorHandler to be called on
 // function that may error but does not return an error
-func WithErrorHandler(handler ErrorHandler) Option {
+func WithErrorHandler(handler errors.ErrorHandler) Option {
 	return func(cfg *config) error {
 		cfg.errorHandler = handler
 		return nil

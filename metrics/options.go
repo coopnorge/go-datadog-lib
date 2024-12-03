@@ -4,7 +4,6 @@ import (
 	"fmt"
 	"os"
 
-	"github.com/DataDog/datadog-go/v5/statsd"
 	"github.com/coopnorge/go-datadog-lib/v2/errors"
 	"github.com/coopnorge/go-datadog-lib/v2/internal"
 	"github.com/coopnorge/go-logger"
@@ -22,7 +21,6 @@ type config struct {
 	errorHandler  errors.ErrorHandler
 	dsdEndpoint   string
 	tags          []string
-	statsdOptions []statsd.Option
 }
 
 func resolveConfig(options []Option) (*config, error) {

@@ -37,9 +37,7 @@ func GlobalSetup(options ...Option) error {
 			return
 		}
 
-		statsdOptions := append(cfg.statsdOptions, statsd.WithTags(cfg.tags))
-
-		statsdClient, setupErr = statsd.New(cfg.dsdEndpoint, statsdOptions...)
+		statsdClient, setupErr = statsd.New(cfg.dsdEndpoint, statsd.WithTags(cfg.tags))
 		if setupErr != nil {
 			return
 		}

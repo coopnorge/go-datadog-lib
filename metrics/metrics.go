@@ -159,5 +159,8 @@ func Event(e *statsd.Event) {
 
 // SimpleEvent sends an event with the provided title and text.
 func SimpleEvent(title, text string) {
-	Event(statsd.NewEvent(title, text))
+	err := statsdClient.SimpleEvent(title, text)
+	if err != nil {
+		errorHandler(fmt.Errorf("failed to send Event: %w", err))
+	}
 }

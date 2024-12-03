@@ -67,15 +67,6 @@ func WithTags(tags ...string) Option {
 	}
 }
 
-// WithStatsdOptions allows for passing all options that available for the
-// statsd.Client
-func WithStatsdOptions(options ...statsd.Option) Option {
-	return func(cfg *config) error {
-		cfg.statsdOptions = options
-		return nil
-	}
-}
-
 // WithErrorHandler allows for setting a custom ErrorHandler to be called on
 // function that may error but does not return an error
 func WithErrorHandler(handler errors.ErrorHandler) Option {

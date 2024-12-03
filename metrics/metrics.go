@@ -147,14 +147,6 @@ func TimeInMilliseconds(name string, value float64, tags ...string) {
 	}
 }
 
-// Event sends the provided Event.
-func Event(e *statsd.Event) {
-	err := statsdClient.Event(e)
-	if err != nil {
-		errorHandler(fmt.Errorf("failed to send Event: %w", err))
-	}
-}
-
 // SimpleEvent sends an event with the provided title and text.
 func SimpleEvent(title, text string) {
 	err := statsdClient.SimpleEvent(title, text)

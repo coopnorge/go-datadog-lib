@@ -1,6 +1,8 @@
 package coopdatadog
 
 import (
+	"context"
+
 	"github.com/coopnorge/go-datadog-lib/v2/errors"
 	"github.com/coopnorge/go-datadog-lib/v2/internal"
 	"github.com/coopnorge/go-logger"
@@ -25,8 +27,9 @@ func resolveConfig(options []Option) (*config, error) {
 		enableTracing:        defaultEnableTracing,
 		enableProfiling:      defaultEnableProfiling,
 		enableExtraProfiling: defaultEnableExtraProfiling,
-		errorHandler: func(err error) {
-			logger.WithError(err).Error(err.Error())
+		errorHandler: func(ctx context.Context, err error) error {
+			logger.WithContext(ctx).WithError(err).Error(err.Error())
+			return nil
 		},
 	}
 	options = append([]Option{withConfigFromEnvVars()}, options...)

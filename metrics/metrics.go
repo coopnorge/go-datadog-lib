@@ -15,6 +15,7 @@ var (
 	setupErr     error
 	statsdClient statsd.ClientInterface
 	errorHandler errors.ErrorHandler
+	cfg          *config
 )
 
 // GlobalSetup configures the Dogstatsd Client. GlobalSetup is intended to be
@@ -26,7 +27,6 @@ func GlobalSetup(options ...Option) error {
 			return
 		}
 
-		var cfg *config
 		cfg, setupErr = resolveConfig(options)
 		if setupErr != nil {
 			return
@@ -55,8 +55,8 @@ func Flush() error {
 }
 
 // Gauge measures the value of a metric at a particular time.
-func Gauge(name string, value float64, tags []string, rate float64) {
-	err := statsdClient.Gauge(name, value, tags, rate)
+func Gauge(name string, value float64, tags ...string) {
+	err := statsdClient.Gauge(name, value, tags, cfg.metricSampleRate)
 	if err != nil {
 		errorHandler(fmt.Errorf("failed to send Gauge: %w", err))
 	}
@@ -68,16 +68,16 @@ func Gauge(name string, value float64, tags []string, rate float64) {
 // useful when sending points in the past.
 //
 // Minimum Datadog Agent version: 7.40.0
-func GaugeWithTimestamp(name string, value float64, tags []string, rate float64, timestamp time.Time) {
-	err := statsdClient.GaugeWithTimestamp(name, value, tags, rate, timestamp)
+func GaugeWithTimestamp(name string, value float64, timestamp time.Time, tags ...string) {
+	err := statsdClient.GaugeWithTimestamp(name, value, tags, cfg.metricSampleRate, timestamp)
 	if err != nil {
 		errorHandler(fmt.Errorf("failed to send GaugeWithTimestamp: %w", err))
 	}
 }
 
 // Count tracks how many times something happened per second.
-func Count(name string, value int64, tags []string, rate float64) {
-	err := statsdClient.Count(name, value, tags, rate)
+func Count(name string, value int64, tags ...string) {
+	err := statsdClient.Count(name, value, tags, cfg.metricSampleRate)
 	if err != nil {
 		errorHandler(fmt.Errorf("failed to to send Count: %w", err))
 	}
@@ -89,16 +89,16 @@ func Count(name string, value int64, tags []string, rate float64) {
 // useful when sending points in the past.
 //
 // Minimum Datadog Agent version: 7.40.0
-func CountWithTimestamp(name string, value int64, tags []string, rate float64, timestamp time.Time) {
-	err := statsdClient.CountWithTimestamp(name, value, tags, rate, timestamp)
+func CountWithTimestamp(name string, value int64, timestamp time.Time, tags ...string) {
+	err := statsdClient.CountWithTimestamp(name, value, tags, cfg.metricSampleRate, timestamp)
 	if err != nil {
 		errorHandler(fmt.Errorf("failed to to send CountWithTimestamp: %w", err))
 	}
 }
 
 // Histogram tracks the statistical distribution of a set of values on each host.
-func Histogram(name string, value float64, tags []string, rate float64) {
-	err := statsdClient.Histogram(name, value, tags, rate)
+func Histogram(name string, value float64, tags ...string) {
+	err := statsdClient.Histogram(name, value, tags, cfg.metricSampleRate)
 	if err != nil {
 		errorHandler(fmt.Errorf("failed to to send Histogram: %w", err))
 	}
@@ -106,42 +106,42 @@ func Histogram(name string, value float64, tags []string, rate float64) {
 
 // Distribution tracks the statistical distribution of a set of values across your infrastructure.
 //
-// It is recommended to use `WithMaxBufferedMetricsPerContext` to avoid dropping metrics at high throughput, `rate` can
+// It is recommended to use `WithMaxBufferedMetricsPerContext` to avoid dropping metrics at high throughput, `cfg.metricSampleRate` can
 // also be used to limit the load. Both options can *not* be used together.
-func Distribution(name string, value float64, tags []string, rate float64) {
-	err := statsdClient.Distribution(name, value, tags, rate)
+func Distribution(name string, value float64, tags ...string) {
+	err := statsdClient.Distribution(name, value, tags, cfg.metricSampleRate)
 	if err != nil {
 		errorHandler(fmt.Errorf("failed to to send Distribution: %w", err))
 	}
 }
 
 // Decr is just Count of -1
-func Decr(name string, tags []string, rate float64) {
-	Count(name, -1, tags, rate)
+func Decr(name string, tags ...string) {
+	Count(name, -1, tags...)
 }
 
 // Incr is just Count of 1
-func Incr(name string, tags []string, rate float64) {
-	Count(name, 1, tags, rate)
+func Incr(name string, tags ...string) {
+	Count(name, 1, tags...)
 }
 
 // Set counts the number of unique elements in a group.
-func Set(name string, value string, tags []string, rate float64) {
-	err := statsdClient.Set(name, value, tags, rate)
+func Set(name string, value string, tags ...string) {
+	err := statsdClient.Set(name, value, tags, cfg.metricSampleRate)
 	if err != nil {
 		errorHandler(fmt.Errorf("failed to to send Set: %w", err))
 	}
 }
 
 // Timing sends timing information, it is an alias for TimeInMilliseconds
-func Timing(name string, value time.Duration, tags []string, rate float64) {
-	TimeInMilliseconds(name, value.Seconds()*1000, tags, rate)
+func Timing(name string, value time.Duration, tags ...string) {
+	TimeInMilliseconds(name, value.Seconds()*1000, tags...)
 }
 
 // TimeInMilliseconds sends timing information in milliseconds.
 // It is flushed by statsd with percentiles, mean and other info (https://github.com/etsy/statsd/blob/master/docs/metric_types.md#timing)
-func TimeInMilliseconds(name string, value float64, tags []string, rate float64) {
-	err := statsdClient.TimeInMilliseconds(name, value, tags, rate)
+func TimeInMilliseconds(name string, value float64, tags ...string) {
+	err := statsdClient.TimeInMilliseconds(name, value, tags, cfg.metricSampleRate)
 	if err != nil {
 		errorHandler(fmt.Errorf("failed to to send TimeInMilliseconds: %w", err))
 	}

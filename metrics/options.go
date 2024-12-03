@@ -11,16 +11,18 @@ import (
 
 const (
 	defaultEnableMetrics = true
+	defaultMetricSampleRate = 1
 )
 
 // Option is used to configure the behaviour of the metrics integration.
 type Option func(*config) error
 
 type config struct {
-	enableMetrics bool
-	errorHandler  errors.ErrorHandler
-	dsdEndpoint   string
-	tags          []string
+	enableMetrics    bool
+	errorHandler     errors.ErrorHandler
+	dsdEndpoint      string
+	metricSampleRate float64
+	tags             []string
 }
 
 func resolveConfig(options []Option) (*config, error) {
@@ -39,6 +41,7 @@ func resolveConfig(options []Option) (*config, error) {
 			logger.WithError(err).Error(err.Error())
 		},
 		dsdEndpoint: os.Getenv(internal.DatadogDSDEndpoint),
+		metricSampleRate: defaultMetricSampleRate,
 		tags: []string{
 			fmt.Sprintf("environment:%s", os.Getenv(internal.DatadogEnvironment)),
 			fmt.Sprintf("service:%s", os.Getenv(internal.DatadogService)),
@@ -61,6 +64,14 @@ func resolveConfig(options []Option) (*config, error) {
 func WithTags(tags ...string) Option {
 	return func(cfg *config) error {
 		cfg.tags = tags
+		return nil
+	}
+}
+
+// WithMetricSampleRate sets the sampling rate for metrics
+func WithMetricSampleRate(rate float64) Option {
+	return func(cfg *config) error {
+		cfg.metricSampleRate = rate
 		return nil
 	}
 }

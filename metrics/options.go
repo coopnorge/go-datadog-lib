@@ -10,7 +10,7 @@ import (
 )
 
 const (
-	defaultEnableMetrics = true
+	defaultEnableMetrics    = true
 	defaultMetricSampleRate = 1
 )
 
@@ -40,7 +40,7 @@ func resolveConfig(options []Option) (*config, error) {
 		errorHandler: func(err error) {
 			logger.WithError(err).Error(err.Error())
 		},
-		dsdEndpoint: os.Getenv(internal.DatadogDSDEndpoint),
+		dsdEndpoint:      os.Getenv(internal.DatadogDSDEndpoint),
 		metricSampleRate: defaultMetricSampleRate,
 		tags: []string{
 			fmt.Sprintf("environment:%s", os.Getenv(internal.DatadogEnvironment)),

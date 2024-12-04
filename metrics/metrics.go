@@ -62,37 +62,11 @@ func Gauge(name string, value float64, tags ...string) {
 	}
 }
 
-// GaugeWithTimestamp measures the value of a metric at a given time.
-// BETA - Please contact our support team for more information to use this feature: https://www.datadoghq.com/support/
-// The value will bypass any aggregation on the client side and agent side, this is
-// useful when sending points in the past.
-//
-// Minimum Datadog Agent version: 7.40.0
-func GaugeWithTimestamp(name string, value float64, timestamp time.Time, tags ...string) {
-	err := statsdClient.GaugeWithTimestamp(name, value, tags, cfg.metricSampleRate, timestamp)
-	if err != nil {
-		errorHandler(fmt.Errorf("failed to send GaugeWithTimestamp: %w", err))
-	}
-}
-
 // Count tracks how many times something happened per second.
 func Count(name string, value int64, tags ...string) {
 	err := statsdClient.Count(name, value, tags, cfg.metricSampleRate)
 	if err != nil {
 		errorHandler(fmt.Errorf("failed to to send Count: %w", err))
-	}
-}
-
-// CountWithTimestamp tracks how many times something happened at the given second.
-// BETA - Please contact our support team for more information to use this feature: https://www.datadoghq.com/support/
-// The value will bypass any aggregation on the client side and agent side, this is
-// useful when sending points in the past.
-//
-// Minimum Datadog Agent version: 7.40.0
-func CountWithTimestamp(name string, value int64, timestamp time.Time, tags ...string) {
-	err := statsdClient.CountWithTimestamp(name, value, tags, cfg.metricSampleRate, timestamp)
-	if err != nil {
-		errorHandler(fmt.Errorf("failed to to send CountWithTimestamp: %w", err))
 	}
 }
 

@@ -32,6 +32,8 @@ const (
 
 // StartDatadog parallel process to collect data for Datadog.
 // connectionType flag related to Datadog connection type, it supports HTTP or socket - values will be used from config.DatadogParameters
+//
+// Deprecated: Use coopdatadog.Start() instead.
 func StartDatadog(cfg config.DatadogParameters, connectionType ConnectionType) error {
 	if internal.IsDatadogDisabled() {
 		return nil

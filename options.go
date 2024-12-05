@@ -7,23 +7,17 @@ import (
 )
 
 const (
-	defaultEnableTracing        = true
-	defaultEnableProfiling      = true
 	defaultEnableExtraProfiling = false
 )
 
 // options is the internal configuration for the Datadog integration
 type options struct {
-	enableTracing        bool
-	enableProfiling      bool
 	enableExtraProfiling bool
 	errorHandler         errors.ErrorHandler
 }
 
 func resolveOptions(opts []Option) (*options, error) {
 	options := &options{
-		enableTracing:        defaultEnableTracing,
-		enableProfiling:      defaultEnableProfiling,
 		enableExtraProfiling: defaultEnableExtraProfiling,
 		errorHandler: func(err error) {
 			logger.WithError(err).Error(err.Error())
@@ -45,8 +39,6 @@ type Option func(*options) error
 
 func withConfigFromEnvVars() Option {
 	return func(options *options) error {
-		options.enableTracing = internal.GetBool(internal.DatadogEnableTracing, options.enableTracing)
-		options.enableProfiling = internal.GetBool(internal.DatadogEnableProfiling, options.enableProfiling)
 		options.enableExtraProfiling = internal.GetBool(internal.DatadogEnableExtraProfiling, options.enableExtraProfiling)
 		return nil
 	}

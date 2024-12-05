@@ -72,7 +72,7 @@ func noop() error {
 var _ Cancel = noop
 
 func start(options *options) error {
-	startTracer(options)
+	startTracer()
 	err := startProfiler(options)
 	if err != nil {
 		return err
@@ -80,20 +80,13 @@ func start(options *options) error {
 	return nil
 }
 
-func startTracer(options *options) {
-	if !options.enableTracing {
-		return
-	}
+func startTracer() {
 	tracer.Start(
 		tracer.WithRuntimeMetrics(),
 	)
 }
 
 func startProfiler(options *options) error {
-	if !options.enableProfiling {
-		return nil
-	}
-
 	var profilerTypes []profiler.ProfileType
 	if options.enableExtraProfiling {
 		profilerTypes = []profiler.ProfileType{

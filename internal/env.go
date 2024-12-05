@@ -9,10 +9,6 @@ import (
 const (
 	// DatadogDisable is the environment variable key for whether to disable the Datadog integration.
 	DatadogDisable = "DD_DISABLE"
-	// DatadogEnableTracing is the environment variable key for whether to enable tracing or not.
-	DatadogEnableTracing = "DD_ENABLE_TRACING"
-	// DatadogEnableProfiling is the environment variable key for whether to enable profiling or not.
-	DatadogEnableProfiling = "DD_ENABLE_PROFILING"
 	// DatadogEnableExtraProfiling is the environment variable key for whether to enable extra profiling or not.
 	DatadogEnableExtraProfiling = "DD_ENABLE_EXTRA_PROFILING"
 

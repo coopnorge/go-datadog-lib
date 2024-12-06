@@ -33,7 +33,7 @@ import (
 //		if err != nil {
 //			panic(err)
 //		}
-//	}}
+//	}
 func Start(ctx context.Context, opts ...Option) (Cancel, error) {
 	if ctx == nil {
 		return noop, errors.New("ctx cannot be nil")

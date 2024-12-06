@@ -1,6 +1,7 @@
 package coopdatadog
 
 import (
+	"context"
 	"testing"
 
 	"github.com/coopnorge/go-datadog-lib/v2/internal"
@@ -10,7 +11,7 @@ import (
 func TestBootstrapDatadogDisabled(t *testing.T) {
 	t.Setenv(internal.DatadogDisable, "true")
 
-	cancel, err := Start()
+	cancel, err := Start(context.Background())
 
 	assert.NoError(t, err)
 	assert.NotNil(t, cancel)
@@ -24,7 +25,7 @@ func TestBootstrap(t *testing.T) {
 	t.Setenv(internal.DatadogService, "go-datadog-lib-unit-test")
 	t.Setenv(internal.DatadogVersion, "42345kjh435")
 
-	cancel, err := Start()
+	cancel, err := Start(context.Background())
 	assert.NoError(t, err)
 	assert.NotNil(t, cancel)
 
@@ -35,7 +36,7 @@ func TestBootstrap(t *testing.T) {
 func TestBootstrapMissingEnvVar(t *testing.T) {
 	t.Setenv(internal.DatadogDisable, "false")
 
-	cancel, err := Start()
+	cancel, err := Start(context.Background())
 	assert.ErrorContains(t, err, "required environmental variable not set: ")
 	assert.NotNil(t, cancel)
 }

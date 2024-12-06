@@ -1,6 +1,8 @@
 package coopdatadog
 
 import (
+	"context"
+	"errors"
 	"fmt"
 
 	"github.com/coopnorge/go-datadog-lib/v2/internal"
@@ -16,7 +18,13 @@ import (
 //
 // Usage:
 //
-//	cancel, err := Start()
+//	package main
+//
+//	import (
+//		"github.com/coopnorge/go-datadog-lib"
+//	)
+//
+//	cancel, err := coopdatadog.Start(context.Background())
 //	if err != nil {
 //		panic(err)
 //	}
@@ -26,7 +34,10 @@ import (
 //			panic(err)
 //		}
 //	}}
-func Start(opts ...Option) (Cancel, error) {
+func Start(ctx context.Context, opts ...Option) (Cancel, error) {
+	if ctx == nil {
+		return noop, errors.New("ctx cannot be nil")
+	}
 	if internal.IsDatadogDisabled() {
 		return noop, nil
 	}

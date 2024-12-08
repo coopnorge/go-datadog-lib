@@ -1,6 +1,7 @@
 package coopdatadog
 
 import (
+	"os"
 	"testing"
 
 	"github.com/coopnorge/go-datadog-lib/v2/config"
@@ -9,6 +10,14 @@ import (
 )
 
 func TestDatadog(t *testing.T) {
+	t.Cleanup(func() {
+		os.Unsetenv(internal.DatadogEnvironment)
+		os.Unsetenv(internal.DatadogService)
+		os.Unsetenv(internal.DatadogVersion)
+		os.Unsetenv(internal.DatadogDSDEndpoint)
+		os.Unsetenv(internal.DatadogAPMEndpoint)
+	})
+
 	ddCfg := config.DatadogConfig{}
 
 	err := StartDatadog(ddCfg, ConnectionTypeHTTP)

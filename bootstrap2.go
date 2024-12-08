@@ -13,8 +13,8 @@ import (
 )
 
 // Start the Datadog integration, use the returned Cancel function to stop the
-// Datadog integration. When calling the Cancel function traces will be flushed
-// and profiling will be stopped to Datadog.
+// Datadog integration. When calling the StopFunc function traces will be
+// flushed and profiling will be stopped to Datadog.
 //
 // Usage:
 //
@@ -24,7 +24,7 @@ import (
 //		"github.com/coopnorge/go-datadog-lib"
 //	)
 //
-//	cancel, err := coopdatadog.Start(context.Background())
+//	stop, err := coopdatadog.Start(context.Background())
 //	if err != nil {
 //		panic(err)
 //	}
@@ -33,8 +33,8 @@ import (
 //		if err != nil {
 //			panic(err)
 //		}
-//	}
-func Start(ctx context.Context, opts ...Option) (Cancel, error) {
+//	}()
+func Start(ctx context.Context, opts ...Option) (StopFunc, error) {
 	if ctx == nil {
 		return noop, errors.New("ctx cannot be nil")
 	}
@@ -72,15 +72,15 @@ func Start(ctx context.Context, opts ...Option) (Cancel, error) {
 	return cancel, err
 }
 
-// Cancel is a function signature for functions that stops the Datadog
+// StopFunc is a function signature for functions that stops the Datadog
 // integration.
-type Cancel func() error
+type StopFunc func() error
 
 func noop() error {
 	return nil
 }
 
-var _ Cancel = noop
+var _ StopFunc = noop
 
 func start(options *options) error {
 	startTracer()

@@ -11,10 +11,14 @@ import (
 func TestBootstrapDatadogDisabled(t *testing.T) {
 	t.Setenv(internal.DatadogDisable, "true")
 
-	cancel, err := Start(context.Background())
+	stop, err := Start(context.Background())
+	defer func() {
+		err := stop()
+		assert.NoError(t, err)
+	}()
 
 	assert.NoError(t, err)
-	assert.NotNil(t, cancel)
+	assert.NotNil(t, stop)
 }
 
 func TestBootstrap(t *testing.T) {
@@ -25,18 +29,24 @@ func TestBootstrap(t *testing.T) {
 	t.Setenv(internal.DatadogService, "go-datadog-lib-unit-test")
 	t.Setenv(internal.DatadogVersion, "42345kjh435")
 
-	cancel, err := Start(context.Background())
-	assert.NoError(t, err)
-	assert.NotNil(t, cancel)
+	stop, err := Start(context.Background())
+	defer func() {
+		err := stop()
+		assert.NoError(t, err)
+	}()
 
-	err = cancel()
 	assert.NoError(t, err)
+	assert.NotNil(t, stop)
 }
 
 func TestBootstrapMissingEnvVar(t *testing.T) {
 	t.Setenv(internal.DatadogDisable, "false")
 
-	cancel, err := Start(context.Background())
+	stop, err := Start(context.Background())
+	defer func() {
+		err := stop()
+		assert.NoError(t, err)
+	}()
 	assert.ErrorContains(t, err, "required environmental variable not set: ")
-	assert.NotNil(t, cancel)
+	assert.NotNil(t, stop)
 }

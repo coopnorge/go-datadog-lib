@@ -11,7 +11,7 @@ require (
 	github.com/stretchr/testify v1.10.0
 	go.uber.org/mock v0.5.0
 	golang.org/x/sync v0.10.0
-	google.golang.org/grpc v1.68.1
+	google.golang.org/grpc v1.69.0
 	gopkg.in/DataDog/dd-trace-go.v1 v1.68.0
 	gorm.io/gorm v1.25.12
 )
@@ -63,7 +63,7 @@ require (
 	golang.org/x/time v0.8.0 // indirect
 	golang.org/x/tools v0.22.0 // indirect
 	golang.org/x/xerrors v0.0.0-20231012003039-104605ab7028 // indirect
-	google.golang.org/genproto/googleapis/rpc v0.0.0-20240903143218-8af14fe29dc1 // indirect
-	google.golang.org/protobuf v1.34.2 // indirect
+	google.golang.org/genproto/googleapis/rpc v0.0.0-20241015192408-796eee8c2d53 // indirect
+	google.golang.org/protobuf v1.35.1 // indirect
 	gopkg.in/yaml.v3 v3.0.1 // indirect
 )

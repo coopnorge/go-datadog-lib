@@ -1,21 +1,9 @@
 # Go Datadog Library
 
-Reduces the complexity of initializing these services inside your application.
-Also provides abstract code to work with metrics.
-
-## APM
-
-In Coop Norge, our default setup is tracing applications with CPU profiling
-support, that is enabled by default in the package bootstrap.
-
-## Custom metrics - DD StatsD
-
-Inside the `metric` package you can find the base client for Datadog StatsD and
-simple metric service that allows sending `Incr`, `Gauge`, and `Count`.
-
-## How Datadog works
-
-![Datadog diagram](dd_com_app.png)
+Reduces the complexity of initializing and using Datadog functionality. See
+[Datadog - Getting
+Started](https://docs.datadoghq.com/getting_started/?site=eu) for more
+information about how Datadog works.
 
 ## Setup
 
@@ -29,14 +17,38 @@ without returning an error. If `DD_DISABLE` is undefined or a value that
 `false` or returns an error the library will be enabled. This is done to ensure
 that the library is not disabled in production by accident.
 
-### 1. Setup container
+### Kubernetes setup
 
-Following configuration example related to Kubernetes and Kustomize.
+To instrument an application running inside Kubernetes configure Datadog
+[Unified Service
+Tagging](https://docs.datadoghq.com/getting_started/tagging/unified_service_tagging/?tab=kubernetes)
+and set the required environmental variables. If you are using an official Coop
+Norge SA Helm chart skip to [application setup](#application-setup).
 
-NOTE: Don't forget to set `DD_ENV` for each environment, otherwise it will be
-not visible in APM list.
+Kubernetes resource labels:
 
-```yaml
+- `tags.datadoghq.com/service`
+- `tags.datadoghq.com/env`
+- `tags.datadoghq.com/version`
+
+For resources that defines a template, define the labels for the templated
+resource as well.
+
+Environmental variables:
+
+- `DD_AGENT_HOST`
+- `DD_DOGSTATSD_URL`
+- `DD_TRACE_AGENT_URL`
+- `DD_SERVICE`
+- `DD_VERSION`
+- `DD_ENV`
+
+!!! note
+    Don't forget to set `DD_ENV` for each environment, `production` or
+    `staging`, otherwise the application will be not visible in APM Service
+    Catalog.
+
+```yaml title="deployment.yaml"
 apiVersion: apps/v1
 kind: Deployment
 metadata:
@@ -95,26 +107,7 @@ spec:
           name: ddsocket
 ```
 
-It's how the application will be shown in Datadog APM.
-
-```yaml
-- name: DD_SERVICE
-  valueFrom:
-    fieldRef:
-      fieldPath: metadata.labels['tags.datadoghq.com/service']
-```
-
-Depending on your policy,
-you can have an API version or tag/commit from git.
-
-```yaml
-- name: DD_VERSION
-  valueFrom:
-    fieldRef:
-      fieldPath: metadata.labels['tags.datadoghq.com/version']
-```
-
-### 2. Application setup
+### Application setup
 
 First, we’ll initialize the `go-datadog-lib`. This is required for any
 application that exports telemetry.
@@ -122,7 +115,7 @@ application that exports telemetry.
 `coopdatadog.Start` returns a `StopFunc` and an `error`. The `StopFunc` must be
 called before the application exits.
 
-```go
+```go title="cmd/helloworld/main.go"
 package main
 
 import (
@@ -154,19 +147,29 @@ func run() error {
 }
 ```
 
-### 3. Middleware gRPC server
+!!! note
+    After that Datadog will try to connect to the socket and will start to send all
+    information in the background.
 
-To have better tracing you need add to your gRPC custom middleware that will
-extend context.
+    In different setup, you could have error logs that Datadog cannot connect to
+    the socket and tried to connect via HTTP. That could be related to issue when
+    your container starts faster and sockets were not ready to communicate with
+    Agent or Agent was started later.
 
-It's needed to relate logs with your trace data in APM.
+## Tracing
 
-To do that, simply add Go - Datadog middleware to your gRPC interceptor.
+### Inbound request tracing
 
-Take a look at the function `UnaryServerInterceptor` in
-[`github.com/coopnorge/go-datadog-lib/blob/main/middleware/grpc/server.go`](https://github.com/coopnorge/go-datadog-lib/blob/main/middleware/grpc/server.go).
+Inbound request can be traced using the gRPC server interceptors or the Echo
+HTTP Server middleware. If the upstream application is instrumented to support
+distributed tracing the traces will be linked.
 
-```go
+#### gRPC server interceptor
+
+`go-datadog-lib` provides gRPC interceptors for tracing inbound request for
+both Unary and Stream gRPC endpoints.
+
+```go title="cmd/helloworld/main.go"
 package main
 
 import (
@@ -208,14 +211,12 @@ func run() error {
 }
 ```
 
-### 3. Middleware echo server
+#### Echo HTTP server middleware
 
-Same as gRPC middleware but for Echo framework. It will extend request context
-and will allow to create nested spans for it, also correlate with logs.
+`go-datadog-lib` provides middleware for the Echo framework for tracing inbound
+request.
 
-Example:
-
-```go
+```go title="cmd/helloworld/main.go"
 package main
 
 import (
@@ -254,28 +255,22 @@ func run() error {
 }
 ```
 
-#### Common issue
+### Outbound request tracing
 
-After that Datadog will try to connect to the socket and will start to send all
-information in the background.
+Outbound requests to other applications/services or storage can be traced. If
+the downstream application is instrumented to support distributed tracing the
+traces will be linked.
 
-In different setup, you could have error logs that Datadog cannot connect to
-the socket and tried to connect via HTTP. That could be related to issue when
-your container starts faster and sockets were not ready to communicate with
-Agent or Agent was started later.
+#### gRPC client interceptor
 
-### 4. Middleware gRPC client
-
-If your application is making outgoing gRPC calls, you can add the gRPC
-client-interceptor to automatically create child-spans for each outgoing gRPC-call.
-These spans will also be embedded in the outgoing gRPC-metadata, so if you are calling
-another service that is also instrumented with Datadog-integration, then you will
-enable distributed tracing.
+If your application is making gRPC calls, you can add the gRPC
+client-interceptor to automatically create child-spans for each gRPC-call.
+These spans will also be embedded in the outbound gRPC-metadata, so if you are
+calling another service that is also instrumented with Datadog-integration,
+then you will enable distributed tracing.
 
 It is important that the context used in the RPC contains trace-information,
 preferably created from any server middleware from this module.
-
-Example:
 
 ```go
 import (
@@ -302,19 +297,17 @@ func foo() {
 }
 ```
 
-### 4. Middleware HTTP client
+#### HTTP client middleware
 
-If your application is making outgoing HTTP calls, you can add the HTTP
-client-interceptor to automatically create child-spans for each outgoing HTTP-call.
-These spans will also be embedded in the outgoing HTTP Headers, so if you are calling
-another service that is also instrumented with Datadog-integration, then you will
-enable distributed tracing.
+If your application is making HTTP calls, you can add the HTTP
+client-interceptor to automatically create child-spans for each HTTP-call.
+These spans will also be embedded in the outbound HTTP Headers, so if you are
+calling another service that is also instrumented with Datadog-integration,
+then you will enable distributed tracing.
 
 It is important that the context used in the `http.Request` contains
 trace-information, preferably created from any server middleware from this
 module.
-
-Example:
 
 ```go
 import (
@@ -340,15 +333,14 @@ func foo() {
 }
 ```
 
-### 4. Middleware database standard library
+#### Standard library SQL middleware
 
-If your application is making outgoing call to a database, you can add the database
-driver to automatically create child-spans for each outgoing database-call.
+If your application is making calls to a database, you can add the database
+driver to automatically create child-spans for each database-call.
 
-It is important that the context used in the call to the database contains trace-information,
-preferably created from any server middleware from this module.
-
-Example:
+It is important that the context used in the call to the database contains
+trace-information, preferably created from any server middleware from this
+module.
 
 ```go
 import (
@@ -367,15 +359,14 @@ func foo() {
 }
 ```
 
-### 4. Middleware database GORM
+#### GORM middleware
 
-If your application is using GORM to make outgoing calls to a database, you can
-add the GORM middleware to automatically create child-spans for each outgoing database-call.
+If your application is using GORM to make calls to a database, you can add the
+GORM middleware to automatically create child-spans for each database-call.
 
-It is important that the context used in the call to the database contains trace-information,
-preferably created from any server middleware from this module.
-
-Example:
+It is important that the context used in the call to the database contains
+trace-information, preferably created from any server middleware from this
+module.
 
 ```go
 import (

@@ -64,6 +64,8 @@ spec:
       serviceAccountName: my-app
       containers:
           env:
+            - name: DD_AGENT_HOST
+              value: "localhost:????????"
             - name: DD_DOGSTATSD_URL
               value: "unix:///var/run/datadog/dsd.socket"
             - name: DD_TRACE_AGENT_URL
@@ -112,32 +114,41 @@ you can have an API version or tag/commit from git.
 
 ### 2. Application setup
 
-Create pkg configuration for bootstrap Datadog.
+First, we’ll initialize the `go-datadog-lib`. This is required for any
+application that exports telemetry.
+
+`coopdatadog.Start` returns a `StopFunc` and an `error`. The `StopFunc` must be
+called before the application exits.
 
 ```go
 package main
 
 import (
-	coopdatadog "github.com/coopnorge/go-datadog-lib/v2"
-	"github.com/coopnorge/go-datadog-lib/v2/config"
+	"github.com/coopnorge/go-datadog-lib/v2"
 )
 
 func main() {
-	// Your app initialization
-	/// ... 
-	// From your core configuration add datadog related values
-	ddCfg := config.LoadDatadogConfigFromEnvVars()
-
-	// When you start other processes start datadog
-	startDatadogServiceError := coopdatadog.StartDatadog(ddCfg, coopdatadog.ConnectionTypeSocket)
-	if startDatadogServiceError != nil {
-	// Handle error / log error
+	err := run()
+	if err != nil {
+		panic(err)
 	}
+}
 
-	// Stop datadog with yours other processes
-	handleGracefulShutdown(coopdatadog.GracefulDatadogShutdown)
-	// or simply call with defer
-	defer coopdatadog.GracefulDatadogShutdown()
+func run() error {
+	stop, err := coopdatadog.Start(context.Background())
+	if err != nil {
+		return err
+	}
+	defer func() {
+		err := stop()
+		if err != nil {
+			panic(err)
+		}
+	}()
+
+	// ...
+
+	return nil
 }
 ```
 
@@ -154,19 +165,32 @@ Take a look at the function `UnaryServerInterceptor` in
 [`github.com/coopnorge/go-datadog-lib/blob/main/middleware/grpc/server.go`](https://github.com/coopnorge/go-datadog-lib/blob/main/middleware/grpc/server.go).
 
 ```go
+package main
+
 import (
-	coopdatadog "github.com/coopnorge/go-datadog-lib/v2"
+	"github.com/coopnorge/go-datadog-lib/v2"
 	datadogMiddleware "github.com/coopnorge/go-datadog-lib/v2/middleware/grpc"
 	"google.golang.org/grpc"
 )
 
 func main() {
-	err := coopdatadog.StartDatadog(...)
+	err := run()
 	if err != nil {
 		panic(err)
 	}
-	defer coopdatadog.GracefulDatadogShutdown()
+}
 
+func run() error {
+	stop, err := coopdatadog.Start(context.Background())
+	if err != nil {
+		panic(err)
+	}
+	defer func() {
+		err := cancel()
+		if err != nil {
+			panic(err)
+		}
+	}()
 
 	ddOpts := []datadogMiddleware.Option{
 		// ...
@@ -177,6 +201,8 @@ func main() {
 	}
 
 	grpcServer := grpc.NewServer(serverOpts...)
+
+	return nil
 }
 ```
 
@@ -188,19 +214,32 @@ and will allow to create nested spans for it, also correlate with logs.
 Example:
 
 ```go
-package myServer
+package main
 
 import (
-	coopEchoDatadog "github.com/coopnorge/go-datadog-lib/v2/middleware/echo"
+	"github.com/coopnorge/go-datadog-lib/v2"
+	"github.com/coopnorge/go-datadog-lib/v2/middleware/echo"
 	"github.com/labstack/echo/v4"
 )
 
-func MyServer() {
-	err := coopdatadog.StartDatadog(...)
+func main() {
+	err := run()
 	if err != nil {
 		panic(err)
 	}
-	defer coopdatadog.GracefulDatadogShutdown()
+}
+
+func run() error {
+	stop, err := coopdatadog.Start(context.Background())
+	if err != nil {
+		panic(err)
+	}
+	defer func() {
+		err := cancel()
+		if err != nil {
+			panic(err)
+		}
+	}()
 
 	// ...
 	echoServer := echo.New()
@@ -208,6 +247,8 @@ func MyServer() {
 	// ...
 	// Add middleware to extend context for better traceability
 	echoServer.Use(coopEchoDatadog.TraceServerMiddleware())
+
+	return nil
 }
 ```
 

@@ -182,19 +182,26 @@ func TestStreamClientInterceptor(t *testing.T) {
 
 	client := testgrpc.NewTestServiceClient(conn)
 	span, spanCtx := tracer.StartSpanFromContext(context.Background(), "grpc.request", tracer.ResourceName("/helloworld"))
-	defer span.Finish()
 	c, err := client.StreamingOutputCall(spanCtx, &testgrpc.StreamingOutputCallRequest{})
 	require.NoError(t, err)
+	span.Finish()
 
 	c.Recv()
 
 	testTracer.Stop()
 
 	spans := testTracer.FinishedSpans()
-	require.Equal(t, 2, len(spans))
-	assert.Equal(t, strconv.Itoa(int(span.Context().TraceID())), server.ddTraceID)
+	require.Equal(t, 4, len(spans))
 	for _, finishedSpan := range spans {
 		assert.Equal(t, strconv.Itoa(int(finishedSpan.TraceID())), server.ddTraceID)
-		assert.Equal(t, strconv.Itoa(int(finishedSpan.ParentID())), server.ddParentID)
+		if finishedSpan.OperationName() == "grpc.request" {
+			assert.Equal(t, strconv.Itoa(int(finishedSpan.ParentID())), "0")
+		} else if finishedSpan.OperationName() == "grpc.client" {
+			assert.Equal(t, strconv.Itoa(int(finishedSpan.ParentID())), strconv.Itoa(int(finishedSpan.TraceID())))
+			assert.Equal(t, strconv.Itoa(int(finishedSpan.ParentID())), server.ddTraceID)
+		} else {
+			assert.Equal(t, "grpc.message", finishedSpan.OperationName())
+			assert.Equal(t, strconv.Itoa(int(finishedSpan.ParentID())), server.ddParentID)
+		}
 	}
 }

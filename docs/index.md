@@ -40,6 +40,7 @@ resource as well.
 
 Environmental variables:
 
+- `DD_AGENT_HOST`
 - `DD_DOGSTATSD_URL`
 - `DD_TRACE_AGENT_URL`
 - `DD_SERVICE`
@@ -79,6 +80,10 @@ spec:
       serviceAccountName: my-app
       containers:
           env:
+            - name: DD_AGENT_HOST
+              valueFrom:
+                fieldRef:
+                  fieldPath: status.hostIP
             - name: DD_DOGSTATSD_URL
               value: "unix:///var/run/datadog/dsd.socket"
             - name: DD_TRACE_AGENT_URL

@@ -16,6 +16,7 @@ func ConfigureDatadog(t *testing.T) {
 	t.Setenv(internal.DatadogVersion, "v0.0.0")
 	t.Setenv(internal.DatadogAPMEndpoint, "/dev/null")
 	t.Setenv(internal.DatadogDSDEndpoint, "unix:///dev/null")
+	t.Setenv(internal.DatadogAgentHost, "127.0.0.1")
 
 	// Called to ensure backwards compatibility
 	cfg := config.LoadDatadogConfigFromEnvVars()

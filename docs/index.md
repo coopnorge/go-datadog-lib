@@ -65,7 +65,9 @@ spec:
       containers:
           env:
             - name: DD_AGENT_HOST
-              value: "localhost:????????"
+              valueFrom:
+                fieldRef:
+                  fieldPath: status.hostIP
             - name: DD_DOGSTATSD_URL
               value: "unix:///var/run/datadog/dsd.socket"
             - name: DD_TRACE_AGENT_URL

@@ -53,6 +53,7 @@ func Start(ctx context.Context, opts ...Option) (StopFunc, error) {
 	}
 
 	err := internal.VerifyEnvVarsSet(
+		internal.DatadogAgentHost,
 		internal.DatadogAPMEndpoint,
 		internal.DatadogDSDEndpoint,
 		internal.DatadogService,

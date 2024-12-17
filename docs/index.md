@@ -5,6 +5,10 @@ Reduces the complexity of initializing and using Datadog functionality. See
 Started](https://docs.datadoghq.com/getting_started/?site=eu) for more
 information about how Datadog works.
 
+## Module documentation
+
+<https://pkg.go.dev/github.com/coopnorge/go-datadog-lib/v2>
+
 ## Setup
 
 In order for `go-datadog-lib` to send data to Datadog your service/application

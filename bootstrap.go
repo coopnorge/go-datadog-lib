@@ -15,35 +15,6 @@ import (
 // Start the Datadog integration, use the returned Cancel function to stop the
 // Datadog integration. When calling the StopFunc function traces will be
 // flushed and profiling will be stopped to Datadog.
-//
-// Usage:
-//
-//	package main
-//
-//	import (
-//		"github.com/coopnorge/go-datadog-lib/v2"
-//	)
-//
-//	func main() {
-//		err := run()
-//		if err != nil {
-//			panic(err)
-//		}
-//	}
-//
-//	func run() error {
-//		stop, err := coopdatadog.Start(context.Background())
-//		if err != nil {
-//			return err
-//		}
-//		defer func() {
-//			err := stop()
-//			if err != nil {
-//				panic(err)
-//			}
-//		}()
-//		return nil
-//	}
 func Start(ctx context.Context, opts ...Option) (StopFunc, error) {
 	if ctx == nil {
 		return noop, errors.New("ctx cannot be nil")

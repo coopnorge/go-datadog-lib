@@ -5,6 +5,7 @@ import (
 	"testing"
 
 	"github.com/coopnorge/go-datadog-lib/v2/internal"
+	"github.com/coopnorge/go-datadog-lib/v2/internal/testhelpers"
 	"github.com/stretchr/testify/assert"
 )
 
@@ -22,12 +23,7 @@ func TestBootstrapDatadogDisabled(t *testing.T) {
 }
 
 func TestBootstrap(t *testing.T) {
-	t.Setenv(internal.DatadogDisable, "false")
-	t.Setenv(internal.DatadogAPMEndpoint, "/tmp")
-	t.Setenv(internal.DatadogDSDEndpoint, "unix:///tmp/")
-	t.Setenv(internal.DatadogEnvironment, "unittest")
-	t.Setenv(internal.DatadogService, "go-datadog-lib-unit-test")
-	t.Setenv(internal.DatadogVersion, "42345kjh435")
+	testhelpers.ConfigureDatadog(t)
 
 	stop, err := Start(context.Background())
 	defer func() {

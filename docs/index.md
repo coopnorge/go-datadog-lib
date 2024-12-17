@@ -123,7 +123,9 @@ called before the application exits.
 package main
 
 import (
-	"github.com/coopnorge/go-datadog-lib/v2"
+	"context"
+
+	coopdatadog "github.com/coopnorge/go-datadog-lib/v2"
 )
 
 func main() {
@@ -177,7 +179,11 @@ both Unary and Stream gRPC endpoints.
 package main
 
 import (
-	"github.com/coopnorge/go-datadog-lib/v2"
+	"context"
+	"fmt"
+	"net"
+
+	coopdatadog "github.com/coopnorge/go-datadog-lib/v2"
 	datadogMiddleware "github.com/coopnorge/go-datadog-lib/v2/middleware/grpc"
 	"google.golang.org/grpc"
 )
@@ -190,12 +196,13 @@ func main() {
 }
 
 func run() error {
-	stop, err := coopdatadog.Start(context.Background())
+	ctx := context.Background()
+	stop, err := coopdatadog.Start(ctx)
 	if err != nil {
 		panic(err)
 	}
 	defer func() {
-		err := cancel()
+		err := stop()
 		if err != nil {
 			panic(err)
 		}
@@ -206,12 +213,23 @@ func run() error {
 	}
 	serverOpts := []grpc.ServerOption{
 		grpc.UnaryInterceptor(datadogMiddleware.UnaryServerInterceptor(ddOpts...)),
-		grpc.StreamInterceptor(datadogMiddleware.StreamServerInterceptor(ddOpts...))
+		grpc.StreamInterceptor(datadogMiddleware.StreamServerInterceptor(ddOpts...)),
 	}
 
 	grpcServer := grpc.NewServer(serverOpts...)
 
+	listener, err := (&net.ListenConfig{}).Listen(ctx, "tcp", "127.0.0.1")
+	if err != nil {
+		return fmt.Errorf("failed to start tcp listener: %w", err)
+	}
+
+	err = grpcServer.Serve(listener)
+	if err != nil {
+		return nil
+	}
+
 	return nil
+}
 }
 ```
 
@@ -224,8 +242,10 @@ request.
 package main
 
 import (
-	"github.com/coopnorge/go-datadog-lib/v2"
-	"github.com/coopnorge/go-datadog-lib/v2/middleware/echo"
+	"context"
+
+	coopdatadog "github.com/coopnorge/go-datadog-lib/v2"
+	coopEchoDatadog "github.com/coopnorge/go-datadog-lib/v2/middleware/echo"
 	"github.com/labstack/echo/v4"
 )
 
@@ -242,7 +262,7 @@ func run() error {
 		panic(err)
 	}
 	defer func() {
-		err := cancel()
+		err := stop()
 		if err != nil {
 			panic(err)
 		}
@@ -277,27 +297,72 @@ It is important that the context used in the RPC contains trace-information,
 preferably created from any server middleware from this module.
 
 ```go
+package main
+
 import (
+	"context"
+
 	datadogMiddleware "github.com/coopnorge/go-datadog-lib/v2/middleware/grpc"
+	"github.com/grpc-ecosystem/go-grpc-middleware/v2/testing/testpb"
 	"google.golang.org/grpc"
-	myprotov1 "some/import/path"
+	"gopkg.in/DataDog/dd-trace-go.v1/ddtrace/tracer"
 )
 
-func foo() {
-	cc, err := grpc.Dial(
-		url,
-		grpc.WithUnaryInterceptor(ddGrpc.UnaryClientInterceptor()),
+func main() {
+	unary()
+	stream()
+}
+
+func unary() {
+	ctx := context.Background()
+
+	cc, err := grpc.NewClient(
+		"https://example.com",
+		grpc.WithUnaryInterceptor(datadogMiddleware.UnaryClientInterceptor()),
 	)
 	if err != nil {
 		panic(err)
 	}
+	defer cc.Close()
 
-	client := myprotov1.NewFoobarAPIClient(cc)
+	client := testpb.NewTestServiceClient(cc)
 
-	_, err := client.SomeUnaryRPC(ctx, myprotov1.SomeUnaryRPCRequest{})
+	span, ctx := tracer.StartSpanFromContext(ctx, "grpc.request")
+	resp, err := client.Ping(ctx, &testpb.PingRequest{})
+	span.Finish(tracer.WithError(err))
 	if err != nil {
 		panic(err)
 	}
+	println(resp)
+}
+
+func stream() {
+	ctx := context.Background()
+
+	cc, err := grpc.NewClient(
+		"https://example.com",
+		grpc.WithStreamInterceptor(datadogMiddleware.StreamClientInterceptor()),
+	)
+	if err != nil {
+		panic(err)
+	}
+	defer cc.Close()
+
+	client := testpb.NewTestServiceClient(cc)
+
+	span, ctx := tracer.StartSpanFromContext(ctx, "grpc.stream")
+	stream, err := client.PingStream(ctx)
+	defer span.Finish()
+	if err != nil {
+		span.Finish(tracer.WithError(err))
+		panic(err)
+	}
+	resp, err := stream.Recv()
+	if err != nil {
+		span.Finish(tracer.WithError(err))
+		panic(err)
+	}
+	println(resp)
 }
 ```
 
@@ -314,26 +379,38 @@ trace-information, preferably created from any server middleware from this
 module.
 
 ```go
+package main
+
 import (
-	datadogMiddleware "github.com/coopnorge/go-datadog-lib/v2/middleware/grpc"
-	"google.golang.org/grpc"
+	"context"
+	"net/http"
+	"time"
+
+	datadogMiddleware "github.com/coopnorge/go-datadog-lib/v2/middleware/http"
+	"gopkg.in/DataDog/dd-trace-go.v1/ddtrace/tracer"
 )
 
-func foo() {
+func main() {
+	ctx := context.Background()
+
 	client := &http.Client{
-		Timeout: 10*time.Second,
+		Timeout: 10 * time.Second,
 	}
 	client = datadogMiddleware.AddTracingToClient(client)
 
-	req, err := http.NewRequestWithContext(ctx, "GET", url, nil)
+	span, ctx := tracer.StartSpanFromContext(ctx, "http.request")
+	defer span.Finish()
+	req, err := http.NewRequestWithContext(ctx, "GET", "https://example.com", nil)
 	if err != nil {
+		span.Finish(tracer.WithError(err))
 		panic(err)
 	}
-
-	_, err := client.Do(req)
+	resp, err := client.Do(req)
 	if err != nil {
+		span.Finish(tracer.WithError(err))
 		panic(err)
 	}
+	println(resp)
 }
 ```
 
@@ -347,19 +424,33 @@ trace-information, preferably created from any server middleware from this
 module.
 
 ```go
+package main
+
 import (
+	"context"
+
 	ddDatabase "github.com/coopnorge/go-datadog-lib/v2/middleware/database"
 	mysqlDriver "github.com/go-sql-driver/mysql"
+	"gopkg.in/DataDog/dd-trace-go.v1/ddtrace/tracer"
 )
 
-func foo() {
-	// Example using mysql driver
-	db, err := ddDatabase.RegisterDriverAndOpen("mysql", mysqlDriver.MySQLDriver{}, dsn, opts...)
-	if err != nil{
+func main() {
+	ctx := context.Background()
+
+	dsn := "example.com/users"
+	db, err := ddDatabase.RegisterDriverAndOpen("mysql", mysqlDriver.MySQLDriver{}, dsn)
+	if err != nil {
 		panic(err)
 	}
 
-	_, err := db.QueryContext(ctx, "SELECT * FROM users")
+	span, ctx := tracer.StartSpanFromContext(ctx, "http.request")
+	defer span.Finish()
+	rows, err := db.QueryContext(ctx, "SELECT * FROM users")
+	if err != nil {
+		span.Finish(tracer.WithError(err))
+		panic(err)
+	}
+	println(rows)
 }
 ```
 
@@ -373,35 +464,59 @@ trace-information, preferably created from any server middleware from this
 module.
 
 ```go
+package main
+
 import (
+	"context"
+
+	ddDatabase "github.com/coopnorge/go-datadog-lib/v2/middleware/database"
 	ddGorm "github.com/coopnorge/go-datadog-lib/v2/middleware/gorm"
 	mysqlDriver "github.com/go-sql-driver/mysql"
+	"gorm.io/driver/mysql"
+	"gorm.io/gorm"
 )
 
-func foo() {
-	// Example using mysql driver
-	gormDB, err := ddGorm.NewORM(mysql.New(mysql.Config{Conn: sqlDb}), &gorm.Config{})
+type User struct{}
+
+func main() {
+	ctx := context.Background()
+
+	dsn := "example.com/users"
+	gormDB, err := ddGorm.NewORM(mysql.Open(dsn), &gorm.Config{})
 	if err != nil {
 		panic(err)
 	}
 
-	user := &entity.User{}
-	_ := gormDB.WithContext(ctx).Select("*").First(user)
+	user := &User{}
+	tx := gormDB.WithContext(ctx).Select("*").First(user)
+
+	println(tx)
 }
 ```
 
 You can also combine this with the standard library tracer-middleware:
 
 ```go
+package main
+
 import (
+	"context"
+
 	ddDatabase "github.com/coopnorge/go-datadog-lib/v2/middleware/database"
+	ddGorm "github.com/coopnorge/go-datadog-lib/v2/middleware/gorm"
 	mysqlDriver "github.com/go-sql-driver/mysql"
+	"gorm.io/driver/mysql"
+	"gorm.io/gorm"
 )
 
-func foo() {
-	// Example using mysql driver
-	db, err := ddDatabase.RegisterDriverAndOpen("mysql", mysqlDriver.MySQLDriver{}, dsn, opts...)
-	if err != nil{
+type User struct{}
+
+func main() {
+	ctx := context.Background()
+
+	dsn := "example.com/users"
+	db, err := ddDatabase.RegisterDriverAndOpen("mysql", mysqlDriver.MySQLDriver{}, dsn)
+	if err != nil {
 		panic(err)
 	}
 
@@ -410,8 +525,10 @@ func foo() {
 		panic(err)
 	}
 
-	user := &entity.User{}
-	_ := gormDB.WithContext(ctx).Select("*").First(user)
+	user := &User{}
+	tx := gormDB.WithContext(ctx).Select("*").First(user)
+
+	println(tx)
 }
 ```
 
@@ -510,6 +627,8 @@ to capture the `trace_id` `span_id`.
 package main
 
 import (
+	"context"
+
 	"github.com/coopnorge/go-datadog-lib/v2/tracelogger"
 	"github.com/coopnorge/go-logger"
 
@@ -526,13 +645,15 @@ func main() {
 
 func a(ctx context.Context) {
 	span, ctx := tracer.StartSpanFromContext(ctx, "a")
-	err = b(ctx)
+	err := b(ctx)
 	span.Finish(tracer.WithError(err))
 }
 
-func b(ctx context.Context) {
+func b(ctx context.Context) error {
 	logger.WithContext(ctx).Info("Hello")
-  // Output:
-  // {"dd.span_id":8047616890857967865,"dd.trace_id":8160264448608745330,"file":"/srv/workspace/app/main.go:25","function":"github.com/coopnorge/app/main.b","level":"info","msg":"Hello","time":"2024-09-12T19:01:34+02:00"}
+	return nil
 }
+
+// Output:
+// {"dd.span_id":8047616890857967865,"dd.trace_id":8160264448608745330,"file":"/srv/workspace/app/main.go:25","function":"github.com/coopnorge/app/main.b","level":"info","msg":"Hello","time":"2024-09-12T19:01:34+02:00"}
 ```

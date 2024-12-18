@@ -27,9 +27,11 @@ type testServer struct {
 
 	traceparent string
 	tracestate  string
-	ddTraceID   string
-	ddParentID  string
+	ddTraceID   uint64
+	ddParentID  uint64
 }
+
+const ddService = "DD_SERVICE"
 
 func (s *testServer) hydrateTraceData(ctx context.Context) error {
 	md, ok := metadata.FromIncomingContext(ctx)
@@ -38,9 +40,10 @@ func (s *testServer) hydrateTraceData(ctx context.Context) error {
 	}
 	s.traceparent = strings.Join(md.Get("traceparent"), "")
 	s.tracestate = strings.Join(md.Get("tracestate"), "")
-	s.ddParentID = strings.Join(md.Get("x-datadog-parent-id"), "")
-	s.ddTraceID = strings.Join(md.Get("x-datadog-trace-id"), "")
-
+	ddParentID, _ := strconv.ParseUint(strings.Join(md.Get("x-datadog-parent-id"), ""), 10, 64)
+	s.ddParentID = ddParentID
+	ddTraceID, _ := strconv.ParseUint(strings.Join(md.Get("x-datadog-trace-id"), ""), 10, 64)
+	s.ddTraceID = ddTraceID
 	return nil
 }
 
@@ -84,7 +87,7 @@ func TestTraceUnaryClientInterceptor(t *testing.T) {
 	require.NoError(t, err)
 
 	client := testgrpc.NewTestServiceClient(conn)
-	span, spanCtx := tracer.StartSpanFromContext(context.Background(), "grpc.request", tracer.ResourceName("/helloworld"))
+	span, spanCtx := tracer.StartSpanFromContext(context.Background(), ddService, tracer.ResourceName("/helloworld"))
 	defer span.Finish()
 	_, err = client.EmptyCall(spanCtx, &testgrpc.Empty{})
 	require.NoError(t, err)
@@ -94,8 +97,8 @@ func TestTraceUnaryClientInterceptor(t *testing.T) {
 	spans := testTracer.FinishedSpans()
 	require.Equal(t, 1, len(spans))
 	finishedSpan := spans[0]
-	assert.Equal(t, strconv.Itoa(int(finishedSpan.TraceID())), server.ddTraceID)
-	assert.Equal(t, strconv.Itoa(int(finishedSpan.SpanID())), server.ddParentID)
+	assert.Equal(t, finishedSpan.TraceID(), server.ddTraceID)
+	assert.Equal(t, finishedSpan.SpanID(), server.ddParentID)
 
 	assert.Empty(t, server.traceparent, "Datadog's mocktracer does not propagate W3C-headers as of writing this test. If they start propagating it, we should remove the separate test below, and update this test to assert the correct W3C-header.")
 }
@@ -124,7 +127,7 @@ func TestTraceUnaryClientInterceptorW3C(t *testing.T) {
 	require.NoError(t, err)
 
 	client := testgrpc.NewTestServiceClient(conn)
-	span, spanCtx := tracer.StartSpanFromContext(context.Background(), "grpc.request", tracer.ResourceName("/helloworld"))
+	span, spanCtx := tracer.StartSpanFromContext(context.Background(), ddService, tracer.ResourceName("/helloworld"))
 	defer span.Finish()
 	_, err = client.EmptyCall(spanCtx, &testgrpc.Empty{})
 	require.NoError(t, err)
@@ -181,20 +184,27 @@ func TestStreamClientInterceptor(t *testing.T) {
 	require.NoError(t, err)
 
 	client := testgrpc.NewTestServiceClient(conn)
-	span, spanCtx := tracer.StartSpanFromContext(context.Background(), "grpc.request", tracer.ResourceName("/helloworld"))
-	defer span.Finish()
+	span, spanCtx := tracer.StartSpanFromContext(context.Background(), ddService, tracer.ResourceName("/helloworld"))
 	c, err := client.StreamingOutputCall(spanCtx, &testgrpc.StreamingOutputCallRequest{})
 	require.NoError(t, err)
+	span.Finish()
 
 	c.Recv()
 
 	testTracer.Stop()
 
 	spans := testTracer.FinishedSpans()
-	require.Equal(t, 2, len(spans))
-	assert.Equal(t, strconv.Itoa(int(span.Context().TraceID())), server.ddTraceID)
+	require.Equal(t, 4, len(spans))
 	for _, finishedSpan := range spans {
-		assert.Equal(t, strconv.Itoa(int(finishedSpan.TraceID())), server.ddTraceID)
-		assert.Equal(t, strconv.Itoa(int(finishedSpan.ParentID())), server.ddParentID)
+		assert.Equal(t, finishedSpan.TraceID(), server.ddTraceID)
+		if finishedSpan.OperationName() == ddService {
+			assert.Equal(t, finishedSpan.ParentID(), uint64(0))
+		} else if finishedSpan.OperationName() == "grpc.client" {
+			assert.Equal(t, finishedSpan.ParentID(), finishedSpan.TraceID())
+			assert.Equal(t, finishedSpan.ParentID(), server.ddTraceID)
+		} else {
+			assert.Equal(t, "grpc.message", finishedSpan.OperationName())
+			assert.Equal(t, finishedSpan.ParentID(), server.ddParentID)
+		}
 	}
 }

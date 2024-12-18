@@ -4,6 +4,8 @@ import (
 	"context"
 	"errors"
 	"fmt"
+	"os"
+	"strings"
 
 	"github.com/coopnorge/go-datadog-lib/v2/internal"
 	datadogLogger "github.com/coopnorge/go-logger/adapter/datadog"
@@ -63,6 +65,10 @@ func Start(ctx context.Context, opts ...Option) (StopFunc, error) {
 		return noop, err
 	}
 
+	if err := normalizeDatadogEnvVars(); err != nil {
+		return noop, fmt.Errorf("failed to normalize Datadog environment variables: %w", err)
+	}
+
 	options, err := resolveOptions(opts)
 	if err != nil {
 		return noop, err
@@ -80,6 +86,26 @@ func Start(ctx context.Context, opts ...Option) (StopFunc, error) {
 
 	err = start(options)
 	return cancel, err
+}
+
+// normalizeDatadogEnvVars ensures that the environment variables that the Datadog library is on the expected format.
+func normalizeDatadogEnvVars() error {
+	apmEndpoint := os.Getenv(internal.DatadogAPMEndpoint)
+	if normalizedAPMEndpoint, changed := normalizeAPMEndpoint(apmEndpoint); changed {
+		err := os.Setenv(internal.DatadogAPMEndpoint, normalizedAPMEndpoint)
+		if err != nil {
+			return err
+		}
+	}
+	return nil
+}
+
+func normalizeAPMEndpoint(apmEndpoint string) (string, bool) {
+	if strings.HasPrefix(apmEndpoint, "/") {
+		// apmEndpoint did not have a scheme set, but it looks like unix scheme, so we explicitly set it.
+		return fmt.Sprintf("unix://%s", apmEndpoint), true
+	}
+	return apmEndpoint, false
 }
 
 // StopFunc is a function signature for functions that stops the Datadog

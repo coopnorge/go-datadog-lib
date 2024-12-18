@@ -15,6 +15,8 @@ import (
 )
 
 // ConnectionType enum type
+//
+// Deprecated: Use coopdatadog.Start() instead.
 type ConnectionType byte
 
 const (
@@ -27,6 +29,8 @@ const (
 	// Deprecated: ConnectionTypeHTTP. ConnectionTypeAuto should be used.
 	ConnectionTypeHTTP
 	// ConnectionTypeAuto sets connection to HTTP or UNIX depending on supplied configuration of DD_TRACE_AGENT_URL
+	//
+	// Deprecated: Use coopdatadog.Start() instead.
 	ConnectionTypeAuto
 )
 
@@ -101,6 +105,8 @@ func compareConfigWithEnv(cfg config.DatadogParameters) {
 }
 
 // GracefulDatadogShutdown of executed parallel processes
+//
+// Deprecated: Use the StopFunc returned coopdatadog.Start() instead.
 func GracefulDatadogShutdown() {
 	defer tracer.Stop()
 	defer profiler.Stop()

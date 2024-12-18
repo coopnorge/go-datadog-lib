@@ -31,6 +31,8 @@ type testServer struct {
 	ddParentID  uint64
 }
 
+const ddService = "DD_SERVICE"
+
 func (s *testServer) hydrateTraceData(ctx context.Context) error {
 	md, ok := metadata.FromIncomingContext(ctx)
 	if !ok {
@@ -85,7 +87,7 @@ func TestTraceUnaryClientInterceptor(t *testing.T) {
 	require.NoError(t, err)
 
 	client := testgrpc.NewTestServiceClient(conn)
-	span, spanCtx := tracer.StartSpanFromContext(context.Background(), "grpc.request", tracer.ResourceName("/helloworld"))
+	span, spanCtx := tracer.StartSpanFromContext(context.Background(), ddService, tracer.ResourceName("/helloworld"))
 	defer span.Finish()
 	_, err = client.EmptyCall(spanCtx, &testgrpc.Empty{})
 	require.NoError(t, err)
@@ -125,7 +127,7 @@ func TestTraceUnaryClientInterceptorW3C(t *testing.T) {
 	require.NoError(t, err)
 
 	client := testgrpc.NewTestServiceClient(conn)
-	span, spanCtx := tracer.StartSpanFromContext(context.Background(), "grpc.request", tracer.ResourceName("/helloworld"))
+	span, spanCtx := tracer.StartSpanFromContext(context.Background(), ddService, tracer.ResourceName("/helloworld"))
 	defer span.Finish()
 	_, err = client.EmptyCall(spanCtx, &testgrpc.Empty{})
 	require.NoError(t, err)
@@ -182,7 +184,7 @@ func TestStreamClientInterceptor(t *testing.T) {
 	require.NoError(t, err)
 
 	client := testgrpc.NewTestServiceClient(conn)
-	span, spanCtx := tracer.StartSpanFromContext(context.Background(), "grpc.request", tracer.ResourceName("/helloworld"))
+	span, spanCtx := tracer.StartSpanFromContext(context.Background(), ddService, tracer.ResourceName("/helloworld"))
 	c, err := client.StreamingOutputCall(spanCtx, &testgrpc.StreamingOutputCallRequest{})
 	require.NoError(t, err)
 	span.Finish()
@@ -195,7 +197,7 @@ func TestStreamClientInterceptor(t *testing.T) {
 	require.Equal(t, 4, len(spans))
 	for _, finishedSpan := range spans {
 		assert.Equal(t, finishedSpan.TraceID(), server.ddTraceID)
-		if finishedSpan.OperationName() == "grpc.request" {
+		if finishedSpan.OperationName() == ddService {
 			assert.Equal(t, finishedSpan.ParentID(), uint64(0))
 		} else if finishedSpan.OperationName() == "grpc.client" {
 			assert.Equal(t, finishedSpan.ParentID(), finishedSpan.TraceID())

@@ -62,14 +62,12 @@ func (s *testPingService) PingList(_ *testpb.PingListRequest, stream testpb.Test
 
 func TestTraceStreamServerInterceptor(t *testing.T) {
 	s := &streamServerInterceptorTestSuite{
-		&testpb.InterceptorTestSuite{
-			TestService: &testPingService{
-				t: t,
+		InterceptorTestSuite: &testpb.InterceptorTestSuite{
+			TestService: &testPingService{&testpb.TestPingService{}, t},
+			ServerOpts: []grpc.ServerOption{
+				grpc.StreamInterceptor(TraceStreamServerInterceptor()),
 			},
 		},
-	}
-	s.InterceptorTestSuite.ServerOpts = []grpc.ServerOption{
-		grpc.StreamInterceptor(TraceStreamServerInterceptor()),
 	}
 	suite.Run(t, s)
 }

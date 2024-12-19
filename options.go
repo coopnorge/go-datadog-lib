@@ -3,6 +3,7 @@ package coopdatadog
 import (
 	"github.com/coopnorge/go-datadog-lib/v2/errors"
 	"github.com/coopnorge/go-datadog-lib/v2/internal"
+	"github.com/coopnorge/go-datadog-lib/v2/metrics"
 	"github.com/coopnorge/go-logger"
 )
 
@@ -14,6 +15,7 @@ const (
 type options struct {
 	enableExtraProfiling bool
 	errorHandler         errors.ErrorHandler
+	metricOptions        []metrics.Option
 }
 
 func resolveOptions(opts []Option) (*options, error) {
@@ -40,6 +42,14 @@ type Option func(*options) error
 func withConfigFromEnvVars() Option {
 	return func(options *options) error {
 		options.enableExtraProfiling = internal.GetBool(internal.DatadogEnableExtraProfiling, options.enableExtraProfiling)
+		return nil
+	}
+}
+
+// WithMetricsOptions allows for passing the options for setting up metrics
+func WithMetricsOptions(metricOptions ...metrics.Option) Option {
+	return func(options *options) error {
+		options.metricOptions = metricOptions
 		return nil
 	}
 }

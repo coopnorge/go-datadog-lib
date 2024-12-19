@@ -5,7 +5,7 @@ go 1.22.0
 require (
 	github.com/DataDog/datadog-go/v5 v5.6.0
 	github.com/coopnorge/go-logger v0.11.3
-	github.com/go-sql-driver/mysql v1.7.0
+	github.com/go-sql-driver/mysql v1.8.1
 	github.com/grpc-ecosystem/go-grpc-middleware/v2 v2.2.0
 	github.com/iancoleman/strcase v0.3.0
 	github.com/labstack/echo/v4 v4.13.2
@@ -19,6 +19,7 @@ require (
 )
 
 require (
+	filippo.io/edwards25519 v1.1.0 // indirect
 	github.com/DataDog/appsec-internal-go v1.9.0 // indirect
 	github.com/DataDog/datadog-agent/pkg/obfuscate v0.58.0 // indirect
 	github.com/DataDog/datadog-agent/pkg/proto v0.58.0 // indirect

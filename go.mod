@@ -5,7 +5,7 @@ go 1.22.0
 require (
 	github.com/DataDog/datadog-go/v5 v5.6.0
 	github.com/coopnorge/go-logger v0.11.3
-	github.com/go-sql-driver/mysql v1.6.0
+	github.com/go-sql-driver/mysql v1.7.0
 	github.com/grpc-ecosystem/go-grpc-middleware/v2 v2.2.0
 	github.com/iancoleman/strcase v0.3.0
 	github.com/labstack/echo/v4 v4.13.2
@@ -14,7 +14,7 @@ require (
 	golang.org/x/sync v0.10.0
 	google.golang.org/grpc v1.69.2
 	gopkg.in/DataDog/dd-trace-go.v1 v1.70.1
-	gorm.io/driver/mysql v1.0.1
+	gorm.io/driver/mysql v1.5.7
 	gorm.io/gorm v1.25.12
 )
 

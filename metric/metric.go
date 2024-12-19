@@ -1,3 +1,6 @@
+// Package metric implements custom metrics with Dogstatsd
+//
+// Deprecated: use metrics instead
 package metric
 
 import (
@@ -51,6 +54,8 @@ func NewBaseMetricCollector(dm *DatadogMetrics) *BaseMetricCollector {
 }
 
 // AddMetric related to name with given value
+//
+// Deprecated: Use functions from the metrics package
 func (m BaseMetricCollector) AddMetric(ctx context.Context, d Data) {
 	if m.DatadogMetrics == nil || m.DatadogMetrics.GetClient() == nil {
 		return

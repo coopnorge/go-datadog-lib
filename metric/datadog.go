@@ -30,6 +30,8 @@ type (
 )
 
 // NewDatadogMetrics instance required to have cfg config.DatadogParameters to get information about service and optional orgPrefix to append into for metric name
+//
+// Deprecated: Use coopdatadog.Start() instead.
 func NewDatadogMetrics(cfg config.DatadogParameters, orgPrefix string) (*DatadogMetrics, error) {
 	var ddClient *statsd.Client
 	var ddClientErr error

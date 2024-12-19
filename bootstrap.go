@@ -5,6 +5,8 @@ import (
 	"errors"
 	"fmt"
 
+	"golang.org/x/sync/errgroup"
+
 	"github.com/coopnorge/go-datadog-lib/v2/internal"
 	datadogLogger "github.com/coopnorge/go-logger/adapter/datadog"
 	"gopkg.in/DataDog/dd-trace-go.v1/ddtrace"
@@ -46,7 +48,7 @@ func Start(ctx context.Context, opts ...Option) (StopFunc, error) {
 	ddtrace.UseLogger(l)
 
 	cancel := func() error {
-		return stop()
+		return stop(options)
 	}
 
 	err = start(options)
@@ -96,8 +98,22 @@ func startProfiler(options *options) error {
 }
 
 // stop with a graceful shutdown that includes flushing signals.
-func stop() error {
-	tracer.Stop()
-	profiler.Stop()
-	return nil
+func stop(options *options) error {
+	ctx := context.Background()
+
+	if options.stopTimeout != nil {
+		var cancel context.CancelFunc
+		ctx, cancel = context.WithTimeout(ctx, *options.stopTimeout)
+		defer cancel()
+	}
+	var g *errgroup.Group
+	g, ctx = errgroup.WithContext(ctx)
+
+	g.Go(func() error {
+		tracer.Stop()
+		profiler.Stop()
+		return nil
+	})
+
+	return g.Wait()
 }

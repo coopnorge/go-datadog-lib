@@ -66,8 +66,14 @@ func WithTags(tags ...string) Option {
 	}
 }
 
-// WithMetricSampleRate sets the sampling rate for metrics
-func WithMetricSampleRate(rate float64) Option {
+// WithMetricSampling configures how many metrics are sent to Datadog by
+// setting a sampling rate.
+//
+//For high-volume metrics, sampling helps reduce network traffic while
+//maintaining statistical accuracy. Datadog automatically scales up the
+//received values to compensate for sampling. Rate must be between 0 and 1,
+//where 1.0 sends all metrics and 0.5 sends half.
+func WithMetricSampling(rate float64) Option {
 	return func(options *options) error {
 		options.metricSampleRate = rate
 		return nil

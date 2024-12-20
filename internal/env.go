@@ -21,9 +21,6 @@ const (
 	DatadogDSDEndpoint = "DD_DOGSTATSD_URL"
 	// DatadogAPMEndpoint is the environment variable key for the URL to APM.
 	DatadogAPMEndpoint = "DD_TRACE_AGENT_URL"
-	// DatadogAgentHost is the environment variable key for the host name to
-	// connect to Datadog.
-	DatadogAgentHost = "DD_AGENT_HOST"
 )
 
 // IsDatadogDisabled checks if the Datadog integration is disabled. The

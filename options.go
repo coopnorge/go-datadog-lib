@@ -10,19 +10,14 @@ import (
 
 const (
 	defaultEnableExtraProfiling = false
+	defaultStopTimeout          = 10 * time.Second
 )
-
-var defaultStopTimeout = timeout(10 * time.Second)
-
-func timeout(duration time.Duration) *time.Duration {
-	return &duration
-}
 
 // options is the internal configuration for the Datadog integration
 type options struct {
 	enableExtraProfiling bool
 	errorHandler         errors.ErrorHandler
-	stopTimeout          *time.Duration
+	stopTimeout          time.Duration
 }
 
 func resolveOptions(opts []Option) (*options, error) {
@@ -67,7 +62,7 @@ func WithErrorHandler(handler errors.ErrorHandler) Option {
 // seconds.
 func WithStopTimeout(timeout time.Duration) Option {
 	return func(options *options) error {
-		options.stopTimeout = &timeout
+		options.stopTimeout = timeout
 		return nil
 	}
 }
@@ -76,7 +71,7 @@ func WithStopTimeout(timeout time.Duration) Option {
 // long.
 func WithNoStopTimeout() Option {
 	return func(options *options) error {
-		options.stopTimeout = nil
+		options.stopTimeout = 0
 		return nil
 	}
 }

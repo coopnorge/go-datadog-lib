@@ -99,9 +99,9 @@ func startProfiler(options *options) error {
 func stop(options *options) error {
 	ctx := context.Background()
 
-	if options.stopTimeout != nil {
+	if options.stopTimeout > 0 {
 		var cancel context.CancelFunc
-		ctx, cancel = context.WithTimeout(ctx, *options.stopTimeout)
+		ctx, cancel = context.WithTimeout(ctx, options.stopTimeout)
 		defer cancel()
 	}
 

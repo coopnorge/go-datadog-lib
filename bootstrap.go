@@ -46,7 +46,7 @@ func Start(ctx context.Context, opts ...Option) (StopFunc, error) {
 	ddtrace.UseLogger(l)
 
 	cancel := func() error {
-		return stop()
+		return stop(options)
 	}
 
 	err = start(options)
@@ -96,8 +96,26 @@ func startProfiler(options *options) error {
 }
 
 // stop with a graceful shutdown that includes flushing signals.
-func stop() error {
-	tracer.Stop()
-	profiler.Stop()
-	return nil
+func stop(options *options) error {
+	ctx := context.Background()
+
+	if options.stopTimeout > 0 {
+		var cancel context.CancelFunc
+		ctx, cancel = context.WithTimeout(ctx, options.stopTimeout)
+		defer cancel()
+	}
+
+	errCh := make(chan error, 1)
+	go func() {
+		tracer.Stop()
+		profiler.Stop()
+		errCh <- nil
+	}()
+
+	select {
+	case <-ctx.Done():
+		return ctx.Err()
+	case err := <-errCh:
+		return err
+	}
 }

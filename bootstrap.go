@@ -6,6 +6,7 @@ import (
 	"fmt"
 
 	"github.com/coopnorge/go-datadog-lib/v2/internal"
+	"github.com/coopnorge/go-datadog-lib/v2/metrics"
 	datadogLogger "github.com/coopnorge/go-logger/adapter/datadog"
 	"gopkg.in/DataDog/dd-trace-go.v1/ddtrace"
 	"gopkg.in/DataDog/dd-trace-go.v1/ddtrace/tracer"
@@ -69,6 +70,11 @@ func start(options *options) error {
 	if err != nil {
 		return err
 	}
+	metricOptions := append([]metrics.Option{metrics.WithErrorHandler(options.errorHandler)}, options.metricOptions...)
+	err = metrics.GlobalSetup(metricOptions...)
+	if err != nil {
+		return err
+	}
 	return nil
 }
 
@@ -109,7 +115,8 @@ func stop(options *options) error {
 	go func() {
 		tracer.Stop()
 		profiler.Stop()
-		errCh <- nil
+		err := metrics.Flush()
+		errCh <- err
 	}()
 
 	select {

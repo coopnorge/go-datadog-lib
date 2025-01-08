@@ -527,51 +527,49 @@ func main() {
 }
 ```
 
-## Metric - Datadog StatsD
+## Metrics
 
-Datadog supports custom metrics that you can utilize depending on the
-application.
+The package `github.com/coopnorge/go-datadog-lib/v2/metrics` contains function
+to send telemetry. Before sending metrics `go-datadog-lib` has to be
+[initialized](#application-setup).
 
-For example, you could use it to track value of cart in side e-commerce shop.
+Use cases:
 
-Or you could register events for auth attempts.
-
-All depends on the case and what you're looking forward to achieve.
-
-### How to use StatsD in Go - Datadog
-
-There is created an abstract client that simply connects to Datadog StatsD
-service.
-
-Also, you will already implement simple metric the collector that you can
-extend or just use it to send your events and measurements.
-
-### How to initialize Go - Datadog
-
-To prepare the configuration you need to look at the `Setup` section. After
-that you can create new instance of Datadog client for DD StatsD.
+- track value of carts in an e-commerce shop.
+- count failed authentication attempts.
 
 ```go
-package your_pkg
+package main
 
 import (
-	"github.com/coopnorge/go-datadog-lib/v2/config"
-	"github.com/coopnorge/go-datadog-lib/v2/metric"
+	"context"
+
+	coopdatadog "github.com/coopnorge/go-datadog-lib/v2"
+	"github.com/coopnorge/go-datadog-lib/v2/metrics"
 )
 
-func MyServiceContainer(ddCfg *config.DatadogConfig) error {
-	// After that you will have pure DD StatsD client
-	ddClient := metrics.NewDatadogMetrics(ddCfg)
+func main() {
+	err := run()
+	if err != nil {
+		panic(err)
+	}
+}
 
-	// If you need simple metric collector then create
-	ddMetricCollector, ddMetricCollectorErr := metrics.NewBaseMetricCollector(ddClient)
-	if ddMetricCollectorErr != nil {
-		// Handle error / log error
-  }
-	// ddMetricCollector -> *BaseMetricCollector allows you to send metrics to Datadog
-    
-	// ensure the metrics are sent before the program is terminated
-	defer ddMetricCollector.GracefulShutdown()
+func run() error {
+	stop, err := coopdatadog.Start(context.Background())
+	if err != nil {
+		return err
+	}
+	defer func() {
+		err := stop()
+		if err != nil {
+			panic(err)
+		}
+	}()
+
+	metrics.Incr("my-metric")
+
+	return nil
 }
 ```
 

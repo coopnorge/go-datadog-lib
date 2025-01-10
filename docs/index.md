@@ -82,7 +82,7 @@ spec:
             - name: DD_DOGSTATSD_URL
               value: "unix:///var/run/datadog/dsd.socket"
             - name: DD_TRACE_AGENT_URL
-              value: "/var/run/datadog/apm.socket"
+              value: "unix:///var/run/datadog/apm.socket"
             - name: DD_SERVICE
               valueFrom:
                 fieldRef:

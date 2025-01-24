@@ -19,7 +19,7 @@ Supported middleware to correlate/extend traceability and logs in Datadog.
 
 ## Documentation
 
-There is detailed documentation stored in [docs](docs/).
+<https://pkg.go.dev/github.com/coopnorge/go-datadog-lib/v2>
 
 ## Mocks
 

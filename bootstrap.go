@@ -8,6 +8,7 @@ import (
 	"strings"
 
 	"github.com/coopnorge/go-datadog-lib/v2/internal"
+	"github.com/coopnorge/go-datadog-lib/v2/metrics"
 	datadogLogger "github.com/coopnorge/go-logger/adapter/datadog"
 	"gopkg.in/DataDog/dd-trace-go.v1/ddtrace"
 	"gopkg.in/DataDog/dd-trace-go.v1/ddtrace/tracer"
@@ -17,35 +18,6 @@ import (
 // Start the Datadog integration, use the returned Cancel function to stop the
 // Datadog integration. When calling the StopFunc function traces will be
 // flushed and profiling will be stopped to Datadog.
-//
-// Usage:
-//
-//	package main
-//
-//	import (
-//		"github.com/coopnorge/go-datadog-lib/v2"
-//	)
-//
-//	func main() {
-//		err := run()
-//		if err != nil {
-//			panic(err)
-//		}
-//	}
-//
-//	func run() error {
-//		stop, err := coopdatadog.Start(context.Background())
-//		if err != nil {
-//			return err
-//		}
-//		defer func() {
-//			err := stop()
-//			if err != nil {
-//				panic(err)
-//			}
-//		}()
-//		return nil
-//	}
 func Start(ctx context.Context, opts ...Option) (StopFunc, error) {
 	if ctx == nil {
 		return noop, errors.New("ctx cannot be nil")
@@ -81,7 +53,7 @@ func Start(ctx context.Context, opts ...Option) (StopFunc, error) {
 	ddtrace.UseLogger(l)
 
 	cancel := func() error {
-		return stop()
+		return stop(options)
 	}
 
 	err = start(options)
@@ -124,6 +96,11 @@ func start(options *options) error {
 	if err != nil {
 		return err
 	}
+	metricOptions := append([]metrics.Option{metrics.WithErrorHandler(options.errorHandler)}, options.metricOptions...)
+	err = metrics.GlobalSetup(metricOptions...)
+	if err != nil {
+		return err
+	}
 	return nil
 }
 
@@ -151,8 +128,27 @@ func startProfiler(options *options) error {
 }
 
 // stop with a graceful shutdown that includes flushing signals.
-func stop() error {
-	tracer.Stop()
-	profiler.Stop()
-	return nil
+func stop(options *options) error {
+	ctx := context.Background()
+
+	if options.stopTimeout > 0 {
+		var cancel context.CancelFunc
+		ctx, cancel = context.WithTimeout(ctx, options.stopTimeout)
+		defer cancel()
+	}
+
+	errCh := make(chan error, 1)
+	go func() {
+		tracer.Stop()
+		profiler.Stop()
+		err := metrics.Flush()
+		errCh <- err
+	}()
+
+	select {
+	case <-ctx.Done():
+		return ctx.Err()
+	case err := <-errCh:
+		return err
+	}
 }

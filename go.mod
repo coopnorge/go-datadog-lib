@@ -5,18 +5,21 @@ go 1.22.0
 require (
 	github.com/DataDog/datadog-go/v5 v5.6.0
 	github.com/coopnorge/go-logger v0.11.3
-	github.com/grpc-ecosystem/go-grpc-middleware/v2 v2.1.0
+	github.com/go-sql-driver/mysql v1.8.1
+	github.com/grpc-ecosystem/go-grpc-middleware/v2 v2.2.0
 	github.com/iancoleman/strcase v0.3.0
-	github.com/labstack/echo/v4 v4.13.2
+	github.com/labstack/echo/v4 v4.13.3
 	github.com/stretchr/testify v1.10.0
 	go.uber.org/mock v0.5.0
 	golang.org/x/sync v0.10.0
-	google.golang.org/grpc v1.69.0
-	gopkg.in/DataDog/dd-trace-go.v1 v1.70.1
+	google.golang.org/grpc v1.69.4
+	gopkg.in/DataDog/dd-trace-go.v1 v1.71.0
+	gorm.io/driver/mysql v1.5.7
 	gorm.io/gorm v1.25.12
 )
 
 require (
+	filippo.io/edwards25519 v1.1.0 // indirect
 	github.com/DataDog/appsec-internal-go v1.9.0 // indirect
 	github.com/DataDog/datadog-agent/pkg/obfuscate v0.58.0 // indirect
 	github.com/DataDog/datadog-agent/pkg/proto v0.58.0 // indirect
@@ -25,7 +28,7 @@ require (
 	github.com/DataDog/datadog-agent/pkg/util/log v0.58.0 // indirect
 	github.com/DataDog/datadog-agent/pkg/util/scrubber v0.58.0 // indirect
 	github.com/DataDog/go-libddwaf/v3 v3.5.1 // indirect
-	github.com/DataDog/go-runtime-metrics-internal v0.0.0-20241106155157-194426bbbd59 // indirect
+	github.com/DataDog/go-runtime-metrics-internal v0.0.4-0.20241206090539-a14610dc22b6 // indirect
 	github.com/DataDog/go-sqllexer v0.0.14 // indirect
 	github.com/DataDog/go-tuf v1.1.0-0.5.2 // indirect
 	github.com/DataDog/gostackparse v0.7.0 // indirect
@@ -77,6 +80,7 @@ require (
 	go.opentelemetry.io/collector/component v0.104.0 // indirect
 	go.opentelemetry.io/collector/config/configtelemetry v0.104.0 // indirect
 	go.opentelemetry.io/collector/pdata v1.11.0 // indirect
+	go.opentelemetry.io/collector/pdata/pprofile v0.104.0 // indirect
 	go.opentelemetry.io/collector/semconv v0.104.0 // indirect
 	go.opentelemetry.io/otel v1.31.0 // indirect
 	go.opentelemetry.io/otel/metric v1.31.0 // indirect
@@ -86,7 +90,7 @@ require (
 	go.uber.org/zap v1.27.0 // indirect
 	golang.org/x/crypto v0.31.0 // indirect
 	golang.org/x/mod v0.20.0 // indirect
-	golang.org/x/net v0.32.0 // indirect
+	golang.org/x/net v0.33.0 // indirect
 	golang.org/x/sys v0.28.0 // indirect
 	golang.org/x/text v0.21.0 // indirect
 	golang.org/x/time v0.8.0 // indirect

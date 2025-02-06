@@ -11,7 +11,7 @@ require (
 	github.com/labstack/echo/v4 v4.13.3
 	github.com/stretchr/testify v1.10.0
 	go.uber.org/mock v0.5.0
-	golang.org/x/sync v0.10.0
+	golang.org/x/sync v0.11.0
 	google.golang.org/grpc v1.70.0
 	gopkg.in/DataDog/dd-trace-go.v1 v1.71.1
 	gorm.io/driver/mysql v1.5.7

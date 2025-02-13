@@ -62,7 +62,10 @@ func Start(ctx context.Context, opts ...Option) (StopFunc, error) {
 	// Clean up if the context is cancelled
 	go func() {
 		<-ctx.Done()
-		cancel()
+		err = cancel()
+		if err != nil {
+			panic(err)
+		}
 	}()
 
 	return cancel, err

@@ -49,12 +49,12 @@ func Start(ctx context.Context, opts ...Option) (StopFunc, error) {
 
 	// Make sure stop() only runs once
 	var once sync.Once
+	var cancelErr error
 	cancel := func() error {
-		var err error
 		once.Do(func() {
-			err = stop(options)
+			cancelErr = stop(options)
 		})
-		return err
+		return cancelErr
 	}
 
 	err = start(options)
@@ -66,10 +66,7 @@ func Start(ctx context.Context, opts ...Option) (StopFunc, error) {
 	// Clean up if the context is cancelled
 	go func() {
 		<-ctx.Done()
-		err = cancel()
-		if err != nil {
-			panic(err)
-		}
+		cancelErr = cancel()
 	}()
 
 	return cancel, err

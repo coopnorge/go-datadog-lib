@@ -59,6 +59,10 @@ func Start(ctx context.Context, opts ...Option) (StopFunc, error) {
 
 	err = start(options)
 
+	if err != nil {
+		return noop, err
+	}
+
 	// Clean up if the context is cancelled
 	go func() {
 		<-ctx.Done()

@@ -4,6 +4,7 @@ import (
 	"context"
 	"errors"
 	"fmt"
+	"sync"
 
 	"github.com/coopnorge/go-datadog-lib/v2/internal"
 	"github.com/coopnorge/go-datadog-lib/v2/metrics"
@@ -42,15 +43,28 @@ func Start(ctx context.Context, opts ...Option) (StopFunc, error) {
 
 	l, err := datadogLogger.NewLogger(datadogLogger.WithGlobalLogger())
 	if err != nil {
-		return noop, fmt.Errorf("Failed to initialize the Datadog logger: %w", err)
+		return noop, fmt.Errorf("failed to initialize the Datadog logger: %w", err)
 	}
 	ddtrace.UseLogger(l)
 
+	// Make sure stop() only runs once
+	var once sync.Once
 	cancel := func() error {
-		return stop(options)
+		var err error
+		once.Do(func() {
+			err = stop(options)
+		})
+		return err
 	}
 
 	err = start(options)
+
+	// Clean up if the context is cancelled
+	go func() {
+		<-ctx.Done()
+		cancel()
+	}()
+
 	return cancel, err
 }
 

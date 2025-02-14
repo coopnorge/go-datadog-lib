@@ -63,10 +63,12 @@ func Start(ctx context.Context, opts ...Option) (StopFunc, error) {
 		return noop, err
 	}
 
-	// Clean up if the context is cancelled
+	// Start cleaning up as soon as possible if the context is cancelled.
+	// Note: Any error from this cancel() call will also be returned on later invocations
+	// by any dependent program or system.
 	go func() {
 		<-ctx.Done()
-		cancelErr = cancel()
+		_ = cancel() // nolint:errcheck // Error is intentionally ignored; it will be reported on subsequent cancel calls.
 	}()
 
 	return cancel, err

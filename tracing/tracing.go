@@ -27,6 +27,8 @@ func CreateNestedTrace(sourceCtx context.Context, operation, resource string) (d
 // CreateChildSpan will create a child-span of the span embedded in sourceCtx.
 // If there is no trace-information in sourceCtx, a noop-span will be returned.
 // The caller is responsible for calling span.Finish().
+//
+// Deprecated: Use gopkg.in/DataDog/dd-trace-go.v1/ddtrace/tracer.StartSpanFromContext instead.
 func CreateChildSpan(sourceCtx context.Context, operation, resource string) ddtrace.Span {
 	existingSpan := getSpanFromContext(sourceCtx)
 	if existingSpan == nil {

@@ -4,6 +4,7 @@ import (
 	"context"
 	"errors"
 	"fmt"
+	"sync"
 
 	"github.com/coopnorge/go-datadog-lib/v2/internal"
 	"github.com/coopnorge/go-datadog-lib/v2/metrics"
@@ -42,15 +43,34 @@ func Start(ctx context.Context, opts ...Option) (StopFunc, error) {
 
 	l, err := datadogLogger.NewLogger(datadogLogger.WithGlobalLogger())
 	if err != nil {
-		return noop, fmt.Errorf("Failed to initialize the Datadog logger: %w", err)
+		return noop, fmt.Errorf("failed to initialize the Datadog logger: %w", err)
 	}
 	ddtrace.UseLogger(l)
 
+	// Make sure stop() only runs once
+	var once sync.Once
+	var cancelErr error
 	cancel := func() error {
-		return stop(options)
+		once.Do(func() {
+			cancelErr = stop(options)
+		})
+		return cancelErr
 	}
 
 	err = start(options)
+
+	if err != nil {
+		return noop, err
+	}
+
+	// Start cleaning up as soon as possible if the context is cancelled.
+	// Note: Any error from this cancel() call will also be returned on later invocations
+	// by any dependent program or system.
+	go func() {
+		<-ctx.Done()
+		_ = cancel() // nolint:errcheck // Error is intentionally ignored; it will be reported on subsequent cancel calls.
+	}()
+
 	return cancel, err
 }
 

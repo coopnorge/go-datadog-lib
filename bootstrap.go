@@ -13,9 +13,12 @@ import (
 	"gopkg.in/DataDog/dd-trace-go.v1/profiler"
 )
 
-// Start the Datadog integration, use the returned Cancel function to stop the
-// Datadog integration. When calling the StopFunc function traces will be
-// flushed and profiling will be stopped to Datadog.
+// Start the Datadog integration. It is the caller's responsibility to call the
+// returned StopFunc to stop the Datadog integration. When calling the StopFunc
+// function traces and metrics will be flushed, and profiling will be stopped.
+//
+// Canceling the supplied context.Context will not trigger the returned
+// StopFunc, since that could lead to loss of important traces or metrics.
 func Start(ctx context.Context, opts ...Option) (StopFunc, error) {
 	if ctx == nil {
 		return noop, errors.New("ctx cannot be nil")

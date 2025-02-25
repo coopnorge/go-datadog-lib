@@ -6,15 +6,20 @@ import (
 	"testing"
 
 	"github.com/coopnorge/go-datadog-lib/v2/internal/testhelpers"
+
+	"github.com/grpc-ecosystem/go-grpc-middleware/v2/testing/testpb"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/suite"
 	"google.golang.org/grpc"
+	"gopkg.in/DataDog/dd-trace-go.v1/ddtrace/mocktracer"
 	"gopkg.in/DataDog/dd-trace-go.v1/ddtrace/tracer"
-
-	"github.com/grpc-ecosystem/go-grpc-middleware/v2/testing/testpb"
 )
 
 func TestTraceUnaryServerInterceptor(t *testing.T) {
+	// Start Datadog tracer, so that we don't create NoopSpans.
+	testTracer := mocktracer.Start()
+	t.Cleanup(testTracer.Stop)
+
 	testhelpers.ConfigureDatadog(t)
 
 	grpcUnaryMW := TraceUnaryServerInterceptor()
@@ -61,6 +66,10 @@ func (s *testPingService) PingList(_ *testpb.PingListRequest, stream testpb.Test
 }
 
 func TestTraceStreamServerInterceptor(t *testing.T) {
+	// Start Datadog tracer, so that we don't create NoopSpans.
+	testTracer := mocktracer.Start()
+	t.Cleanup(testTracer.Stop)
+
 	s := &streamServerInterceptorTestSuite{
 		InterceptorTestSuite: &testpb.InterceptorTestSuite{
 			TestService: &testPingService{&testpb.TestPingService{}, t},

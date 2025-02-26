@@ -44,12 +44,12 @@ func StartDatadog(cfg config.DatadogParameters, connectionType ConnectionType) e
 	}
 
 	if err := cfg.Validate(); err != nil {
-		return fmt.Errorf("Datadog configuration not valid, cannot initialize Datadog services: %w", err)
+		return fmt.Errorf("the Datadog configuration not valid, cannot initialize Datadog services: %w", err)
 	}
 
 	l, err := datadogLogger.NewLogger(datadogLogger.WithGlobalLogger())
 	if err != nil {
-		return fmt.Errorf("Failed to initialize the Datadog logger: %w", err)
+		return fmt.Errorf("failed to initialize the Datadog logger: %w", err)
 	}
 	ddtrace.UseLogger(l)
 
@@ -61,7 +61,7 @@ func StartDatadog(cfg config.DatadogParameters, connectionType ConnectionType) e
 
 	initTracer(cfg, connectionType)
 	if initProfilerErr := initProfiler(cfg, connectionType); initProfilerErr != nil {
-		return fmt.Errorf("Failed to start Datadog profiler: %w", initProfilerErr)
+		return fmt.Errorf("failed to start Datadog profiler: %w", initProfilerErr)
 	}
 
 	return nil

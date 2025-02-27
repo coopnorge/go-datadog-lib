@@ -5,6 +5,7 @@ import (
 	"os"
 
 	httptrace "gopkg.in/DataDog/dd-trace-go.v1/contrib/net/http"
+	"gopkg.in/DataDog/dd-trace-go.v1/ddtrace/ext"
 	"gopkg.in/DataDog/dd-trace-go.v1/ddtrace/tracer"
 )
 
@@ -21,6 +22,7 @@ type config struct {
 	resourceNamer  ResourceNamer
 	requestIgnorer RequestIgnorer
 	tags           map[string]any
+	removeHTTPURL  bool
 }
 
 func defaults() *config {
@@ -30,6 +32,7 @@ func defaults() *config {
 		resourceNamer:  FullURLResourceNamer(),
 		requestIgnorer: nil,
 		tags:           nil,
+		removeHTTPURL:  true,
 	}
 }
 
@@ -40,6 +43,12 @@ func convertClientOptions(options ...Option) []httptrace.RoundTripperOption {
 	cfg := defaults()
 	for _, opt := range options {
 		opt(cfg)
+	}
+	if cfg.removeHTTPURL {
+		if cfg.tags == nil {
+			cfg.tags = make(map[string]any)
+		}
+		cfg.tags[ext.HTTPURL] = "" // dd-trace-go adds the full URL into this tag, but the URL might contain PII in path-parameters or query-parameters, so we simply remove it. See: https://github.com/coopnorge/go-datadog-lib/issues/495
 	}
 	opts := make([]httptrace.RoundTripperOption, 0, 3+len(cfg.tags))
 	if cfg.serviceName != "" {

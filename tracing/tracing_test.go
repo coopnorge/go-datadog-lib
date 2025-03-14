@@ -57,6 +57,10 @@ func TestAppendUserToTrace(t *testing.T) {
 }
 
 func TestOverrideTraceResourceName(t *testing.T) {
+	// Start Datadog tracer, so that we don't create NoopSpans.
+	testTracer := mocktracer.Start()
+	t.Cleanup(testTracer.Stop)
+
 	newRes := "unit_test"
 	ctx := context.Background()
 

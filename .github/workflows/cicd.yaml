@@ -1,4 +1,3 @@
----
 name: CI/CD
 on:
   pull_request: {}
@@ -16,9 +15,9 @@ jobs:
     steps:
       - uses: actions/checkout@v4
       - name: Set up QEMU
-        uses: docker/setup-qemu-action@v3
+        uses: docker/setup-qemu-action@29109295f81e9208d7d86ff1c6c12d2833863392 # pin@v3
       - name: Set up Docker Buildx
-        uses: docker/setup-buildx-action@v3
+        uses: docker/setup-buildx-action@b5ca514318bd6ebac0fb2aedd5d36ec1b5c232a2 # pin@v3
       - id: xdg_cache_hash
         run: echo "xdg_cache_hash=${{hashFiles('./docker-compose.yml', './docker-compose/Dockerfile', './go.sum')}}" >> $GITHUB_OUTPUT
       - name: Cache xdg
@@ -30,7 +29,7 @@ jobs:
             xdg-${{ github.repository }}-${{ github.job }}-${{ steps.xdg_cache_hash.outputs.xdg_cache_hash }}
             xdg-${{ github.repository }}-${{ github.job }}-
       - name: Login to GitHub Container Registry
-        uses: docker/login-action@v3
+        uses: docker/login-action@9780b0c442fbb1117ed29e0efdff1e18412f7567 # pin@v3
         with:
           registry: ghcr.io
           username: ${{ github.actor }}
@@ -63,3 +62,4 @@ jobs:
         if: |
           needs.golang-ci.result == 'failure' ||
           needs.techdocs.result == 'failure'
+    permissions: {}

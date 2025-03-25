@@ -13,7 +13,7 @@ require (
 	go.uber.org/mock v0.5.0
 	golang.org/x/sync v0.12.0
 	google.golang.org/grpc v1.71.0
-	gopkg.in/DataDog/dd-trace-go.v1 v1.72.1
+	gopkg.in/DataDog/dd-trace-go.v1 v1.72.2
 	gorm.io/driver/mysql v1.5.7
 	gorm.io/gorm v1.25.12
 )
@@ -65,6 +65,7 @@ require (
 	github.com/pmezard/go-difflib v1.0.1-0.20181226105442-5d4384ee4fb2 // indirect
 	github.com/power-devops/perfstat v0.0.0-20220216144756-c35f1ee13d7c // indirect
 	github.com/richardartoul/molecule v1.0.1-0.20240531184615-7ca0df43c0b3 // indirect
+	github.com/rogpeppe/go-internal v1.13.1 // indirect
 	github.com/ryanuber/go-glob v1.0.0 // indirect
 	github.com/secure-systems-lab/go-securesystemslib v0.7.0 // indirect
 	github.com/shirou/gopsutil/v3 v3.24.4 // indirect

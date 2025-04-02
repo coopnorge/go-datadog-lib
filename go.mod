@@ -2,6 +2,8 @@ module github.com/coopnorge/go-datadog-lib/v2
 
 go 1.23.0
 
+toolchain go1.24.1
+
 require (
 	github.com/DataDog/datadog-go/v5 v5.6.0
 	github.com/coopnorge/go-logger v0.11.5
@@ -12,7 +14,7 @@ require (
 	github.com/stretchr/testify v1.10.0
 	go.uber.org/mock v0.5.0
 	golang.org/x/sync v0.12.0
-	google.golang.org/grpc v1.71.0
+	google.golang.org/grpc v1.71.1
 	gopkg.in/DataDog/dd-trace-go.v1 v1.72.2
 	gorm.io/driver/mysql v1.5.7
 	gorm.io/gorm v1.25.12

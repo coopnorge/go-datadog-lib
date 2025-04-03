@@ -24,7 +24,7 @@ var (
 func GlobalSetup(options ...Option) error {
 	setupOnce.Do(func() {
 		if internal.IsDatadogDisabled() {
-			statsdClient = &noopClient{}
+			statsdClient = &statsd.NoOpClient{}
 			return
 		}
 

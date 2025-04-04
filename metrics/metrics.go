@@ -14,7 +14,7 @@ import (
 var (
 	setupOnce    sync.Once
 	setupErr     error
-	statsdClient statsd.ClientInterface
+	statsdClient statsd.ClientInterface = &statsd.NoOpClient{}
 	errorHandler errors.ErrorHandler
 	opts         *options
 )

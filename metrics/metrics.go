@@ -14,9 +14,11 @@ import (
 var (
 	setupOnce    sync.Once
 	setupErr     error
-	statsdClient statsd.ClientInterface = &statsd.NoOpClient{}
+	statsdClient statsd.ClientInterface
 	errorHandler errors.ErrorHandler
-	opts         *options
+	opts         = &options{
+		metricSampleRate: float64(0),
+	}
 )
 
 // GlobalSetup configures the Dogstatsd Client. GlobalSetup is intended to be

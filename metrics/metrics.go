@@ -14,53 +14,33 @@ var (
 	setupOnce sync.Once
 	setupErr  error
 
-	clientMu     sync.Mutex
-	statsdClient statsd.ClientInterface
-	opts         *options
-)
-
-func init() {
 	// init should initialize the global variables with instances that does not cause panic.
-	// These values should only be used when unit-testing code that does not want to call `GlobalSetup`, and not set environment-variables.
+	// These values should only be used when called from unit-testing code that does not want to set environment-variables and call `GlobalSetup`.
 	// Any calls to `GlobalSetup` will override this no-op client.
-	setNoOpClient()
-}
+	statsdClient statsd.ClientInterface = &statsd.NoOpClient{}
+	opts                                = defaultOptions()
+)
 
 // GlobalSetup configures the Dogstatsd Client. GlobalSetup is intended to be
 // called from coopdatadog.Start(), but can be called directly.
 func GlobalSetup(options ...Option) error {
 	setupOnce.Do(func() {
 		if internal.IsDatadogDisabled() {
-			setNoOpClient()
+			// Use no-op client initialized by default.
 			return
 		}
 
-		localOpts, err := resolveOptions(options)
-		if err != nil {
-			setupErr = err
-			return
-		}
-
-		localClient, err := statsd.New(localOpts.dsdEndpoint, statsd.WithTags(localOpts.tags))
+		opts, setupErr = resolveOptions(options)
 		if setupErr != nil {
-			setupErr = err
 			return
 		}
 
-		setClientInternal(localClient, localOpts)
+		statsdClient, setupErr = statsd.New(opts.dsdEndpoint, statsd.WithTags(opts.tags))
+		if setupErr != nil {
+			return
+		}
 	})
 	return setupErr
-}
-
-func setNoOpClient() {
-	setClientInternal(&statsd.NoOpClient{}, defaultOptions())
-}
-
-func setClientInternal(client statsd.ClientInterface, options *options) {
-	clientMu.Lock()
-	defer clientMu.Unlock()
-	statsdClient = client
-	opts = options
 }
 
 // Flush forces a flush of all the queued dogstatsd payloads.

@@ -10,7 +10,6 @@ import (
 )
 
 const (
-	defaultEnableMetrics    = true
 	defaultMetricSampleRate = 1
 )
 
@@ -34,17 +33,14 @@ func resolveOptions(opts []Option) (*options, error) {
 	if err != nil {
 		return nil, err
 	}
-	options := &options{
-		errorHandler: func(err error) {
-			logger.WithError(err).Error(err.Error())
-		},
-		dsdEndpoint:      os.Getenv(internal.DatadogDSDEndpoint),
-		metricSampleRate: defaultMetricSampleRate,
-		tags: []string{
-			fmt.Sprintf("environment:%s", os.Getenv(internal.DatadogEnvironment)),
-			fmt.Sprintf("service:%s", os.Getenv(internal.DatadogService)),
-			fmt.Sprintf("version:%s", os.Getenv(internal.DatadogVersion)),
-		},
+
+	options := defaultOptions()
+	// Apply default options when resolving real options
+	options.dsdEndpoint = os.Getenv(internal.DatadogDSDEndpoint)
+	options.tags = []string{
+		fmt.Sprintf("environment:%s", os.Getenv(internal.DatadogEnvironment)),
+		fmt.Sprintf("service:%s", os.Getenv(internal.DatadogService)),
+		fmt.Sprintf("version:%s", os.Getenv(internal.DatadogVersion)),
 	}
 
 	for _, option := range opts {
@@ -55,6 +51,15 @@ func resolveOptions(opts []Option) (*options, error) {
 	}
 
 	return options, nil
+}
+
+func defaultOptions() *options {
+	return &options{
+		errorHandler: func(err error) {
+			logger.WithError(err).Error(err.Error())
+		},
+		metricSampleRate: defaultMetricSampleRate,
+	}
 }
 
 // WithTags sets the tags that are sent with every metric, shorthand for

@@ -1,4 +1,4 @@
-package database
+package database_test
 
 import (
 	"context"
@@ -10,6 +10,7 @@ import (
 	"testing"
 
 	"github.com/coopnorge/go-datadog-lib/v2/internal/testhelpers"
+	"github.com/coopnorge/go-datadog-lib/v2/middleware/database"
 
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
@@ -23,7 +24,7 @@ func TestRegisterAndOpen(t *testing.T) {
 	// Start Datadog tracer, so that we don't create NoopSpans.
 	testTracer := mocktracer.Start()
 
-	db, err := RegisterDriverAndOpen("mysql", &fakeDriver{}, "")
+	db, err := database.RegisterDriverAndOpen("mysql", &fakeDriver{}, "")
 	require.NoError(t, err)
 
 	span, ctx := tracer.StartSpanFromContext(context.Background(), "http.request", tracer.ResourceName("/helloworld"))
@@ -69,7 +70,7 @@ func TestRegisterAndOpenNoTrace(t *testing.T) {
 	// Start Datadog tracer, so that we don't create NoopSpans.
 	testTracer := mocktracer.Start()
 
-	db, err := RegisterDriverAndOpen("mysql", &fakeDriver{}, "")
+	db, err := database.RegisterDriverAndOpen("mysql", &fakeDriver{}, "")
 	require.NoError(t, err)
 
 	ctx := context.Background() // Note: We are not creating a span in the context.

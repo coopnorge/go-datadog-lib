@@ -1,9 +1,10 @@
-package coopdatadog
+package coopdatadog_test
 
 import (
 	"context"
 	"testing"
 
+	coopdatadog "github.com/coopnorge/go-datadog-lib/v2"
 	"github.com/coopnorge/go-datadog-lib/v2/internal"
 	"github.com/coopnorge/go-datadog-lib/v2/internal/testhelpers"
 	"github.com/stretchr/testify/assert"
@@ -12,7 +13,7 @@ import (
 func TestBootstrapDatadogDisabled(t *testing.T) {
 	t.Setenv(internal.DatadogDisable, "true")
 
-	stop, err := Start(context.Background())
+	stop, err := coopdatadog.Start(context.Background())
 	defer func() {
 		err := stop()
 		assert.NoError(t, err)
@@ -25,7 +26,7 @@ func TestBootstrapDatadogDisabled(t *testing.T) {
 func TestBootstrap(t *testing.T) {
 	testhelpers.ConfigureDatadog(t)
 
-	stop, err := Start(context.Background())
+	stop, err := coopdatadog.Start(context.Background())
 	defer func() {
 		err := stop()
 		assert.NoError(t, err)
@@ -38,7 +39,7 @@ func TestBootstrap(t *testing.T) {
 func TestBootstrapMissingEnvVar(t *testing.T) {
 	t.Setenv(internal.DatadogDisable, "false")
 
-	stop, err := Start(context.Background())
+	stop, err := coopdatadog.Start(context.Background())
 	defer func() {
 		err := stop()
 		assert.NoError(t, err)

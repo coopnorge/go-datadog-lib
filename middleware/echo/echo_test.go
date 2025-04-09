@@ -1,4 +1,4 @@
-package echo
+package echo_test
 
 import (
 	"net/http"
@@ -7,6 +7,7 @@ import (
 	mock_echo "github.com/coopnorge/go-datadog-lib/v2/internal/generated/mocks/labstack/echo/v4"
 	"github.com/coopnorge/go-datadog-lib/v2/internal/testhelpers"
 
+	coopEchoDatadog "github.com/coopnorge/go-datadog-lib/v2/middleware/echo"
 	"github.com/labstack/echo/v4"
 	"github.com/stretchr/testify/assert"
 	gomock "go.uber.org/mock/gomock"
@@ -15,7 +16,7 @@ import (
 func TestTraceServerMiddleware(t *testing.T) {
 	testhelpers.ConfigureDatadog(t)
 
-	echoMiddlewareHandler := TraceServerMiddleware()
+	echoMiddlewareHandler := coopEchoDatadog.TraceServerMiddleware()
 	echoRequestHandler := func(reqCtx echo.Context) (err error) {
 		assert.NotNil(t, reqCtx.Request())
 		// Since there is mock you cannot fetch TraceDetails to verify it

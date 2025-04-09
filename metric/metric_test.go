@@ -1,4 +1,4 @@
-package metric
+package metric_test
 
 import (
 	"context"
@@ -7,6 +7,7 @@ import (
 
 	mock_statsd "github.com/coopnorge/go-datadog-lib/v2/internal/generated/mocks/DataDog/datadog-go/v5/statsd"
 	mock_metrics "github.com/coopnorge/go-datadog-lib/v2/internal/generated/mocks/metric"
+	"github.com/coopnorge/go-datadog-lib/v2/metric"
 
 	gomock "go.uber.org/mock/gomock"
 )
@@ -14,24 +15,24 @@ import (
 func TestAddMetric(t *testing.T) {
 	testCases := []struct {
 		name        string
-		metricType  Type
+		metricType  metric.Type
 		isWithError bool
 	}{
 		{
 			name:       "MetricTypeEvent",
-			metricType: MetricTypeEvent,
+			metricType: metric.MetricTypeEvent,
 		},
 		{
 			name:       "MetricTypeMeasurement",
-			metricType: MetricTypeMeasurement,
+			metricType: metric.MetricTypeMeasurement,
 		},
 		{
 			name:       "MetricTypeCountEvents",
-			metricType: MetricTypeCountEvents,
+			metricType: metric.MetricTypeCountEvents,
 		},
 		{
 			name:        "metricCollectionErr",
-			metricType:  MetricTypeEvent,
+			metricType:  metric.MetricTypeEvent,
 			isWithError: true,
 		},
 	}
@@ -42,11 +43,11 @@ func TestAddMetric(t *testing.T) {
 			mockDatadogClient := mock_metrics.NewMockDatadogMetricsClient(ctrl)
 			mockDatadogStatsd := mock_statsd.NewMockClientInterface(ctrl)
 			ctrl.Finish()
-			tMetricData := Data{
+			tMetricData := metric.Data{
 				Name:  "RuntimeTest",
 				Type:  tc.metricType,
 				Value: float64(42),
-				MetricTags: []Tag{
+				MetricTags: []metric.Tag{
 					{Name: "Unit", Value: "Test"},
 				},
 			}
@@ -69,7 +70,7 @@ func TestAddMetric(t *testing.T) {
 					Incr(gomock.Any(), gomock.Any(), gomock.Any()).
 					Return(fmt.Errorf("datadog statsd have error here")).
 					MaxTimes(1)
-			} else if tc.metricType == MetricTypeEvent {
+			} else if tc.metricType == metric.MetricTypeEvent {
 				mockDatadogStatsd.
 					EXPECT().
 					Incr(
@@ -79,7 +80,7 @@ func TestAddMetric(t *testing.T) {
 					).
 					Return(nil).
 					MaxTimes(1)
-			} else if tc.metricType == MetricTypeMeasurement {
+			} else if tc.metricType == metric.MetricTypeMeasurement {
 				mockDatadogStatsd.
 					EXPECT().
 					Gauge(
@@ -90,7 +91,7 @@ func TestAddMetric(t *testing.T) {
 					).
 					Return(nil).
 					MaxTimes(1)
-			} else if tc.metricType == MetricTypeCountEvents {
+			} else if tc.metricType == metric.MetricTypeCountEvents {
 				mockDatadogStatsd.
 					EXPECT().
 					Count(
@@ -103,7 +104,7 @@ func TestAddMetric(t *testing.T) {
 					MaxTimes(1)
 			}
 
-			bmc := &BaseMetricCollector{DatadogMetrics: mockDatadogClient}
+			bmc := &metric.BaseMetricCollector{DatadogMetrics: mockDatadogClient}
 			bmc.AddMetric(context.Background(), tMetricData)
 		})
 	}
@@ -116,8 +117,8 @@ func TestAddMetricNoClient(t *testing.T) {
 
 	mockDatadogClient.EXPECT().GetClient().Return(nil).MaxTimes(1)
 
-	bmc := &BaseMetricCollector{DatadogMetrics: mockDatadogClient}
-	bmc.AddMetric(context.Background(), Data{})
+	bmc := &metric.BaseMetricCollector{DatadogMetrics: mockDatadogClient}
+	bmc.AddMetric(context.Background(), metric.Data{})
 }
 
 func TestGracefulShutdown(t *testing.T) {
@@ -128,6 +129,6 @@ func TestGracefulShutdown(t *testing.T) {
 	mockDatadogClient := mock_metrics.NewMockDatadogMetricsClient(ctrl)
 	mockDatadogClient.EXPECT().GetClient().Return(mockDatadogStatsd).AnyTimes()
 
-	collector := &BaseMetricCollector{DatadogMetrics: mockDatadogClient}
+	collector := &metric.BaseMetricCollector{DatadogMetrics: mockDatadogClient}
 	collector.GracefulShutdown()
 }

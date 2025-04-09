@@ -1,4 +1,4 @@
-package grpc
+package grpc_test
 
 import (
 	"context"
@@ -6,6 +6,7 @@ import (
 	"testing"
 
 	"github.com/coopnorge/go-datadog-lib/v2/internal/testhelpers"
+	datadogMiddleware "github.com/coopnorge/go-datadog-lib/v2/middleware/grpc"
 
 	"github.com/grpc-ecosystem/go-grpc-middleware/v2/testing/testpb"
 	"github.com/stretchr/testify/assert"
@@ -22,7 +23,7 @@ func TestTraceUnaryServerInterceptor(t *testing.T) {
 
 	testhelpers.ConfigureDatadog(t)
 
-	grpcUnaryMW := TraceUnaryServerInterceptor()
+	grpcUnaryMW := datadogMiddleware.TraceUnaryServerInterceptor()
 	grpcUnaryHandler := func(ctx context.Context, _ interface{}) (interface{}, error) {
 		span, exists := tracer.SpanFromContext(ctx)
 		assert.True(t, exists)
@@ -74,7 +75,7 @@ func TestTraceStreamServerInterceptor(t *testing.T) {
 		InterceptorTestSuite: &testpb.InterceptorTestSuite{
 			TestService: &testPingService{&testpb.TestPingService{}, t},
 			ServerOpts: []grpc.ServerOption{
-				grpc.StreamInterceptor(TraceStreamServerInterceptor()),
+				grpc.StreamInterceptor(datadogMiddleware.TraceStreamServerInterceptor()),
 			},
 		},
 	}

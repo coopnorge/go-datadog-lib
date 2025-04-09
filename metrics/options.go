@@ -23,6 +23,15 @@ type options struct {
 	tags             []string
 }
 
+// MetricOpts represents a configuration option for metrics.
+type MetricOpts func(*metricOpts)
+
+// metricOpts tags and sample rate opts.
+type metricOpts struct {
+	tags       []string
+	sampleRate float64
+}
+
 func resolveOptions(opts []Option) (*options, error) {
 	err := internal.VerifyEnvVarsSet(
 		internal.DatadogDSDEndpoint,
@@ -62,9 +71,23 @@ func defaultOptions() *options {
 	}
 }
 
-// WithTags sets the tags that are sent with every metric, shorthand for
+// parseMetricOptions parses metricOpts
+func parseMetricOpts(options ...MetricOpts) metricOpts {
+	result := metricOpts{
+		tags:       make([]string, 0),
+		sampleRate: opts.metricSampleRate,
+	}
+
+	for _, opt := range options {
+		opt(&result)
+	}
+
+	return result
+}
+
+// WithGlobalTags sets the tags that are sent with every metric, shorthand for
 // statsd.WithTags()
-func WithTags(tags ...string) Option {
+func WithGlobalTags(tags ...string) Option {
 	return func(options *options) error {
 		options.tags = append(options.tags, tags...)
 		return nil
@@ -77,5 +100,28 @@ func WithErrorHandler(handler errors.ErrorHandler) Option {
 	return func(options *options) error {
 		options.errorHandler = handler
 		return nil
+	}
+}
+
+// WithTags sets the tags that are sent with specific metric
+func WithTags(tags ...string) MetricOpts {
+	return func(o *metricOpts) {
+		for _, tag := range tags {
+			if tag != "" { // ignoring empty tags
+				o.tags = append(o.tags, tag)
+			}
+		}
+	}
+}
+
+// WithSampleRate sets the sample rate
+func WithSampleRate(rate float64) MetricOpts {
+	return func(o *metricOpts) {
+		if rate < 0 {
+			rate = 0
+		} else if rate > 1 {
+			rate = 1
+		}
+		o.sampleRate = rate
 	}
 }

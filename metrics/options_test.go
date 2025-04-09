@@ -11,12 +11,12 @@ func TestWithTags(t *testing.T) {
 		tags: []string{"a", "b"},
 	}
 
-	err := WithTags("c")(options)
+	err := WithGlobalTags("c")(options)
 	assert.NoError(t, err)
 
 	assert.Equal(t, []string{"a", "b", "c"}, options.tags)
 
-	err = WithTags("d")(options)
+	err = WithGlobalTags("d")(options)
 	assert.NoError(t, err)
 	assert.Equal(t, []string{"a", "b", "c", "d"}, options.tags)
 }

@@ -53,63 +53,69 @@ func Flush() error {
 }
 
 // Gauge measures the value of a metric at a particular time.
-func Gauge(name string, value float64, tags ...string) {
-	err := statsdClient.Gauge(name, value, tags, opts.metricSampleRate)
+func Gauge(name string, value float64, options ...MetricOpts) {
+	metricOpts := parseMetricOpts(options...)
+	err := statsdClient.Gauge(name, value, metricOpts.tags, metricOpts.sampleRate)
 	if err != nil {
 		opts.errorHandler(fmt.Errorf("failed to send Gauge: %w", err))
 	}
 }
 
 // Count tracks how many times something happened per second.
-func Count(name string, value int64, tags ...string) {
-	err := statsdClient.Count(name, value, tags, opts.metricSampleRate)
+func Count(name string, value int64, options ...MetricOpts) {
+	metricOpts := parseMetricOpts(options...)
+	err := statsdClient.Count(name, value, metricOpts.tags, opts.metricSampleRate)
 	if err != nil {
 		opts.errorHandler(fmt.Errorf("failed to to send Count: %w", err))
 	}
 }
 
 // Histogram tracks the statistical distribution of a set of values on each host.
-func Histogram(name string, value float64, tags ...string) {
-	err := statsdClient.Histogram(name, value, tags, opts.metricSampleRate)
+func Histogram(name string, value float64, options ...MetricOpts) {
+	metricOpts := parseMetricOpts(options...)
+	err := statsdClient.Histogram(name, value, metricOpts.tags, opts.metricSampleRate)
 	if err != nil {
 		opts.errorHandler(fmt.Errorf("failed to to send Histogram: %w", err))
 	}
 }
 
 // Distribution tracks the statistical distribution of a set of values across your infrastructure.
-func Distribution(name string, value float64, tags ...string) {
-	err := statsdClient.Distribution(name, value, tags, opts.metricSampleRate)
+func Distribution(name string, value float64, options ...MetricOpts) {
+	metricOpts := parseMetricOpts(options...)
+	err := statsdClient.Distribution(name, value, metricOpts.tags, opts.metricSampleRate)
 	if err != nil {
 		opts.errorHandler(fmt.Errorf("failed to to send Distribution: %w", err))
 	}
 }
 
 // Decr is just Count of -1
-func Decr(name string, tags ...string) {
-	Count(name, -1, tags...)
+func Decr(name string, options ...MetricOpts) {
+	Count(name, -1, options...)
 }
 
 // Incr is just Count of 1
-func Incr(name string, tags ...string) {
-	Count(name, 1, tags...)
+func Incr(name string, options ...MetricOpts) {
+	Count(name, 1, options...)
 }
 
 // Set counts the number of unique elements in a group.
-func Set(name string, value string, tags ...string) {
-	err := statsdClient.Set(name, value, tags, opts.metricSampleRate)
+func Set(name string, value string, options ...MetricOpts) {
+	metricOpts := parseMetricOpts(options...)
+	err := statsdClient.Set(name, value, metricOpts.tags, opts.metricSampleRate)
 	if err != nil {
 		opts.errorHandler(fmt.Errorf("failed to to send Set: %w", err))
 	}
 }
 
 // Timing sends timing information, it is an alias for TimeInMilliseconds
-func Timing(name string, value time.Duration, tags ...string) {
-	TimeInMilliseconds(name, value.Seconds()*1000, tags...)
+func Timing(name string, value time.Duration, options ...MetricOpts) {
+	TimeInMilliseconds(name, value.Seconds()*1000, options...)
 }
 
 // TimeInMilliseconds sends timing information in milliseconds.
-func TimeInMilliseconds(name string, value float64, tags ...string) {
-	err := statsdClient.TimeInMilliseconds(name, value, tags, opts.metricSampleRate)
+func TimeInMilliseconds(name string, value float64, options ...MetricOpts) {
+	metricOpts := parseMetricOpts(options...)
+	err := statsdClient.TimeInMilliseconds(name, value, metricOpts.tags, opts.metricSampleRate)
 	if err != nil {
 		opts.errorHandler(fmt.Errorf("failed to to send TimeInMilliseconds: %w", err))
 	}

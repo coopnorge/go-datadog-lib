@@ -15,6 +15,6 @@ func TestUninitlizedMetrics(t *testing.T) {
 	Distribution("my.distribution", 100)
 	Set("my.set", "value")
 	SimpleEvent("title", "text")
-	Count("metric.with.options", 1, WithTags("tag1:value1"))
-	Gauge("gauge.with.options", 42.0, WithTags("service", "test"), WithSampleRate(0.5))
+	Count("metric.with.options", 1, WithTag("tag1", "value1"))
+	Gauge("gauge.with.options", 42.0, WithTag("service", "test"), WithSampleRate(0.5))
 }

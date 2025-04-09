@@ -85,9 +85,9 @@ func parseMetricOpts(options ...MetricOpts) metricOpts {
 	return result
 }
 
-// WithGlobalTags sets the tags that are sent with every metric, shorthand for
+// WithTags sets the tags that are sent with every metric, shorthand for
 // statsd.WithTags()
-func WithGlobalTags(tags ...string) Option {
+func WithTags(tags ...string) Option {
 	return func(options *options) error {
 		options.tags = append(options.tags, tags...)
 		return nil
@@ -103,14 +103,13 @@ func WithErrorHandler(handler errors.ErrorHandler) Option {
 	}
 }
 
-// WithTags sets the tags that are sent with specific metric
-func WithTags(tags ...string) MetricOpts {
+// WithTag sets the tag that are sent with specific metric
+func WithTag(k, v string) MetricOpts {
 	return func(o *metricOpts) {
-		for _, tag := range tags {
-			if tag != "" { // ignoring empty tags
-				o.tags = append(o.tags, tag)
-			}
+		if k == "" {
+			return
 		}
+		o.tags = append(o.tags, k+":"+v)
 	}
 }
 

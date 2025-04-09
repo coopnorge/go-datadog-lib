@@ -1,13 +1,14 @@
-package config
+package config_test
 
 import (
 	"testing"
 
+	"github.com/coopnorge/go-datadog-lib/v2/config"
 	"github.com/stretchr/testify/assert"
 )
 
 func TestIsDataDogConfigValid(t *testing.T) {
-	cfg := DatadogConfig{}
+	cfg := config.DatadogConfig{}
 
 	assert.False(t, cfg.IsDataDogConfigValid())
 
@@ -38,7 +39,7 @@ func TestIsDataDogConfigValid(t *testing.T) {
 }
 
 func TestValidate(t *testing.T) {
-	cfg := DatadogConfig{}
+	cfg := config.DatadogConfig{}
 
 	assert.Error(t, cfg.Validate())
 
@@ -69,7 +70,7 @@ func TestValidate(t *testing.T) {
 }
 
 func TestConfigGetters(t *testing.T) {
-	expectedCfg := DatadogConfig{
+	expectedCfg := config.DatadogConfig{
 		Env:            "unit",
 		Service:        "Service",
 		ServiceVersion: "ServiceVersion",

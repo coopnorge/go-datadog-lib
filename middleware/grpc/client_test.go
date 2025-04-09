@@ -1,4 +1,4 @@
-package grpc
+package grpc_test
 
 import (
 	"context"
@@ -6,6 +6,8 @@ import (
 	"strconv"
 	"strings"
 	"testing"
+
+	datadogMiddleware "github.com/coopnorge/go-datadog-lib/v2/middleware/grpc"
 
 	"github.com/coopnorge/go-datadog-lib/v2/internal/testhelpers"
 
@@ -82,7 +84,7 @@ func TestTraceUnaryClientInterceptor(t *testing.T) {
 	conn, err := grpc.NewClient("dns:///localhost",
 		grpc.WithContextDialer(func(_ context.Context, _ string) (net.Conn, error) { return listener.Dial() }),
 		grpc.WithTransportCredentials(insecure.NewCredentials()),
-		grpc.WithUnaryInterceptor(TraceUnaryClientInterceptor()),
+		grpc.WithUnaryInterceptor(datadogMiddleware.TraceUnaryClientInterceptor()),
 	)
 	require.NoError(t, err)
 
@@ -122,7 +124,7 @@ func TestTraceUnaryClientInterceptorW3C(t *testing.T) {
 	conn, err := grpc.NewClient("dns:///localhost",
 		grpc.WithContextDialer(func(_ context.Context, _ string) (net.Conn, error) { return listener.Dial() }),
 		grpc.WithTransportCredentials(insecure.NewCredentials()),
-		grpc.WithUnaryInterceptor(TraceUnaryClientInterceptor()),
+		grpc.WithUnaryInterceptor(datadogMiddleware.TraceUnaryClientInterceptor()),
 	)
 	require.NoError(t, err)
 
@@ -179,7 +181,7 @@ func TestStreamClientInterceptor(t *testing.T) {
 	conn, err := grpc.NewClient("dns:///localhost",
 		grpc.WithContextDialer(func(_ context.Context, _ string) (net.Conn, error) { return listener.Dial() }),
 		grpc.WithTransportCredentials(insecure.NewCredentials()),
-		grpc.WithStreamInterceptor(StreamClientInterceptor()),
+		grpc.WithStreamInterceptor(datadogMiddleware.StreamClientInterceptor()),
 	)
 	require.NoError(t, err)
 

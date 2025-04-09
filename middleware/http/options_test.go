@@ -1,4 +1,4 @@
-package http
+package http_test
 
 import (
 	"net/http"
@@ -6,41 +6,42 @@ import (
 	"strings"
 	"testing"
 
+	datadogMiddleware "github.com/coopnorge/go-datadog-lib/v2/middleware/http"
 	"github.com/stretchr/testify/require"
 )
 
 func TestResourceNamers(t *testing.T) {
 	testCases := []struct {
 		name                         string
-		rn                           ResourceNamer
+		rn                           datadogMiddleware.ResourceNamer
 		expectedFullPath             string
 		expectedFullWithQuery        string
 		expectedFullWithQueryAndUser string
 	}{
 		{
 			name:                         "StaticResourceNamer",
-			rn:                           StaticResourceNamer("foobar"),
+			rn:                           datadogMiddleware.StaticResourceNamer("foobar"),
 			expectedFullPath:             "foobar",
 			expectedFullWithQuery:        "foobar",
 			expectedFullWithQueryAndUser: "foobar",
 		},
 		{
 			name:                         "FullURLWithParamsResourceNamer",
-			rn:                           FullURLWithParamsResourceNamer(),
+			rn:                           datadogMiddleware.FullURLWithParamsResourceNamer(),
 			expectedFullPath:             "GET https://www.coop.no/api/some-service/some-endpoint",
 			expectedFullWithQuery:        "GET https://www.coop.no/api/some-service/some-endpoint?foo=bar",
 			expectedFullWithQueryAndUser: "GET https://bax:xxxxx@www.coop.no/api/some-service/some-endpoint?foo=bar",
 		},
 		{
 			name:                         "FullURLResourceNamer",
-			rn:                           FullURLResourceNamer(),
+			rn:                           datadogMiddleware.FullURLResourceNamer(),
 			expectedFullPath:             "GET https://www.coop.no/api/some-service/some-endpoint",
 			expectedFullWithQuery:        "GET https://www.coop.no/api/some-service/some-endpoint",
 			expectedFullWithQueryAndUser: "GET https://www.coop.no/api/some-service/some-endpoint",
 		},
 		{
 			name:                         "HostResourceNamer",
-			rn:                           HostResourceNamer(),
+			rn:                           datadogMiddleware.HostResourceNamer(),
 			expectedFullPath:             "www.coop.no",
 			expectedFullWithQuery:        "www.coop.no",
 			expectedFullWithQueryAndUser: "www.coop.no",

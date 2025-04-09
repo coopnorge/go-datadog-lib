@@ -1,4 +1,4 @@
-package http
+package http_test
 
 import (
 	"context"
@@ -11,6 +11,7 @@ import (
 	"time"
 
 	"github.com/coopnorge/go-datadog-lib/v2/internal/testhelpers"
+	datadogMiddleware "github.com/coopnorge/go-datadog-lib/v2/middleware/http"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
 	"gopkg.in/DataDog/dd-trace-go.v1/ddtrace/ext"
@@ -39,7 +40,7 @@ func TestWrapClient(t *testing.T) {
 
 	t.Cleanup(s.Close)
 
-	client := WrapClient(&http.Client{Timeout: 500 * time.Millisecond})
+	client := datadogMiddleware.WrapClient(&http.Client{Timeout: 500 * time.Millisecond})
 	req, err := http.NewRequestWithContext(ctx, "GET", s.URL, nil)
 	require.NoError(t, err)
 
@@ -77,7 +78,7 @@ func TestWrapClientW3C(t *testing.T) {
 
 	t.Cleanup(s.Close)
 
-	client := WrapClient(&http.Client{Timeout: 500 * time.Millisecond})
+	client := datadogMiddleware.WrapClient(&http.Client{Timeout: 500 * time.Millisecond})
 	req, err := http.NewRequestWithContext(ctx, "GET", s.URL, nil)
 	require.NoError(t, err)
 
@@ -131,7 +132,7 @@ func TestURLIsNotInTags(t *testing.T) {
 	url := fmt.Sprintf("%s/some-path-with-pii?some-query-with-pii=true", s.URL)
 
 	// Adding tracing to client, with a static resource-name, as we want to make sure that no tags automatically add the full URL, which might contain PII (Personally Identifiable Information).
-	client := AddTracingToClient(&http.Client{Timeout: 500 * time.Millisecond}, WithResourceNamer(StaticResourceNamer("my-resource-name")))
+	client := datadogMiddleware.AddTracingToClient(&http.Client{Timeout: 500 * time.Millisecond}, datadogMiddleware.WithResourceNamer(datadogMiddleware.StaticResourceNamer("my-resource-name")))
 	req, err := http.NewRequestWithContext(ctx, "GET", url, nil)
 	require.NoError(t, err)
 

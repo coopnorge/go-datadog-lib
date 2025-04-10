@@ -17,10 +17,10 @@ const (
 type Option func(*options) error
 
 type options struct {
-	errorHandler     errors.ErrorHandler
-	dsdEndpoint      string
-	metricSampleRate float64
-	tags             []string
+	errorHandler errors.ErrorHandler
+	dsdEndpoint  string
+	SampleRate   float64
+	tags         []string
 }
 
 // MetricOpts represents a configuration option for metrics.
@@ -67,7 +67,7 @@ func defaultOptions() *options {
 		errorHandler: func(err error) {
 			logger.WithError(err).Error(err.Error())
 		},
-		metricSampleRate: defaultMetricSampleRate,
+		SampleRate: defaultMetricSampleRate,
 	}
 }
 
@@ -75,7 +75,7 @@ func defaultOptions() *options {
 func parseMetricOpts(options ...MetricOpts) metricOpts {
 	result := metricOpts{
 		tags:       make([]string, 0),
-		sampleRate: opts.metricSampleRate,
+		sampleRate: opts.SampleRate,
 	}
 
 	for _, opt := range options {

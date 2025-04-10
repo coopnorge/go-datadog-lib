@@ -110,7 +110,7 @@ func WithTag(k, v string) MetricOpts {
 		if k == "" {
 			return
 		}
-		o.tags = append(o.tags, k+":"+v)
+		o.tags = append(o.tags, fmt.Sprintf(k+":"+v))
 	}
 }
 

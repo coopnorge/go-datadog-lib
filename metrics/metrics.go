@@ -64,7 +64,7 @@ func Gauge(name string, value float64, options ...MetricOpts) {
 // Count tracks how many times something happened per second.
 func Count(name string, value int64, options ...MetricOpts) {
 	metricOpts := parseMetricOpts(options...)
-	err := statsdClient.Count(name, value, metricOpts.tags, opts.SampleRate)
+	err := statsdClient.Count(name, value, metricOpts.tags, metricOpts.sampleRate)
 	if err != nil {
 		opts.errorHandler(fmt.Errorf("failed to to send Count: %w", err))
 	}
@@ -73,7 +73,7 @@ func Count(name string, value int64, options ...MetricOpts) {
 // Histogram tracks the statistical distribution of a set of values on each host.
 func Histogram(name string, value float64, options ...MetricOpts) {
 	metricOpts := parseMetricOpts(options...)
-	err := statsdClient.Histogram(name, value, metricOpts.tags, opts.SampleRate)
+	err := statsdClient.Histogram(name, value, metricOpts.tags, metricOpts.sampleRate)
 	if err != nil {
 		opts.errorHandler(fmt.Errorf("failed to to send Histogram: %w", err))
 	}
@@ -82,7 +82,7 @@ func Histogram(name string, value float64, options ...MetricOpts) {
 // Distribution tracks the statistical distribution of a set of values across your infrastructure.
 func Distribution(name string, value float64, options ...MetricOpts) {
 	metricOpts := parseMetricOpts(options...)
-	err := statsdClient.Distribution(name, value, metricOpts.tags, opts.SampleRate)
+	err := statsdClient.Distribution(name, value, metricOpts.tags, metricOpts.sampleRate)
 	if err != nil {
 		opts.errorHandler(fmt.Errorf("failed to to send Distribution: %w", err))
 	}
@@ -101,7 +101,7 @@ func Incr(name string, options ...MetricOpts) {
 // Set counts the number of unique elements in a group.
 func Set(name string, value string, options ...MetricOpts) {
 	metricOpts := parseMetricOpts(options...)
-	err := statsdClient.Set(name, value, metricOpts.tags, opts.SampleRate)
+	err := statsdClient.Set(name, value, metricOpts.tags, metricOpts.sampleRate)
 	if err != nil {
 		opts.errorHandler(fmt.Errorf("failed to to send Set: %w", err))
 	}
@@ -115,7 +115,7 @@ func Timing(name string, value time.Duration, options ...MetricOpts) {
 // TimeInMilliseconds sends timing information in milliseconds.
 func TimeInMilliseconds(name string, value float64, options ...MetricOpts) {
 	metricOpts := parseMetricOpts(options...)
-	err := statsdClient.TimeInMilliseconds(name, value, metricOpts.tags, opts.SampleRate)
+	err := statsdClient.TimeInMilliseconds(name, value, metricOpts.tags, metricOpts.sampleRate)
 	if err != nil {
 		opts.errorHandler(fmt.Errorf("failed to to send TimeInMilliseconds: %w", err))
 	}

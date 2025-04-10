@@ -74,10 +74,11 @@ func defaultOptions() *options {
 // parseMetricOptions parses metricOpts
 func parseMetricOpts(options ...MetricOpts) metricOpts {
 	result := metricOpts{
-		tags:       make([]string, 0),
-		sampleRate: opts.SampleRate,
+		tags:       append([]string{}, opts.tags...), // Copy global tags as default
+		sampleRate: opts.SampleRate,                  // Use global sample as default
 	}
 
+	// Set specific options if apply
 	for _, opt := range options {
 		opt(&result)
 	}

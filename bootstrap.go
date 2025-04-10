@@ -45,7 +45,7 @@ func Start(ctx context.Context, opts ...Option) (StopFunc, error) {
 
 	l, err := datadogLogger.NewLogger(datadogLogger.WithGlobalLogger())
 	if err != nil {
-		return noop, fmt.Errorf("Failed to initialize the Datadog logger: %w", err)
+		return noop, fmt.Errorf("failed to initialize the Datadog logger: %w", err)
 	}
 	ddtrace.UseLogger(l)
 

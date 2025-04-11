@@ -71,14 +71,19 @@ func defaultOptions() *options {
 	}
 }
 
-// parseMetricOptions parses metricOpts
+// parseMetricOpts processes the provided metric options and returns a configured metricOpts object.
+// This function combines globally defined defaults with any user-provided option overrides.
+// Notes:
+//   - If no options are provided, the returned metricOpts will use:
+//   - Global tags (opts.tags) as the default tags
+//   - Global sample rate (opts.SampleRate) as the default sampling rate
+//   - Any provided options will override these defaults for the specific metric
 func parseMetricOpts(options ...MetricOpts) metricOpts {
 	result := metricOpts{
 		tags:       append([]string{}, opts.tags...), // Copy global tags as default
 		sampleRate: opts.SampleRate,                  // Use global sample as default
 	}
 
-	// Set specific options if apply
 	for _, opt := range options {
 		opt(&result)
 	}
@@ -104,7 +109,10 @@ func WithErrorHandler(handler errors.ErrorHandler) Option {
 	}
 }
 
-// WithTag sets the tag that are sent with specific metric
+// WithTag sets a tag that will be sent with a specific metric.
+// Parameters:
+//   - k: The tag key (if empty, the tag will be ignored)
+//   - v: The tag value
 func WithTag(k, v string) MetricOpts {
 	return func(o *metricOpts) {
 		if k == "" {
@@ -114,7 +122,17 @@ func WithTag(k, v string) MetricOpts {
 	}
 }
 
-// WithSampleRate sets the sample rate
+// WithSampleRate sets the sample rate for metrics collection.
+// The sample rate controls what percentage of metrics are actually sent to the backend
+// Parameters:
+//   - rate: A float between 0 and 1 representing the sampling percentage:
+//   - 0: No metrics will be sent (0%)
+//   - 1: All metrics will be sent (100%)
+//   - between 0 and 1 means that % of metrics will be sent (0.25 = 25%)
+//
+// Notes:
+//   - Values below 0 will be treated as 0 (no metrics sent)
+//   - Values above 1 will be treated as 1 (all metrics sent)
 func WithSampleRate(rate float64) MetricOpts {
 	return func(o *metricOpts) {
 		if rate < 0 {

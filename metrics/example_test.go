@@ -26,7 +26,13 @@ func run() error {
 		}
 	}()
 
+	metricsWithSampleRate, err := metrics.NewClient(metrics.WithTags("a"))
+	if err != nil {
+		panic(err)
+	}
+
 	metrics.Incr("my-metric")
+	metricsWithSampleRate.Incr("my-sampled-metric")
 
 	return nil
 }

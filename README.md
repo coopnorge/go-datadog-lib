@@ -43,14 +43,14 @@ docker compose run --rm golang-devtools gomockhandler -config ./gomockhandler.js
 
 ### Validate
 
-```bash
-docker compose run --rm golang-devtools validate
+```console
+go tool mage validate
 ```
 
 ### Other targets
 
-```bash
-docker compose run --rm golang-devtools help
+```console
+go tool mage -l
 ```
 
 ## User documentation

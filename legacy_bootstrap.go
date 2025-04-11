@@ -3,6 +3,7 @@ package coopdatadog
 import (
 	"fmt"
 	"os"
+	"strings"
 
 	"github.com/coopnorge/go-datadog-lib/v2/config"
 	"github.com/coopnorge/go-datadog-lib/v2/internal"
@@ -44,12 +45,12 @@ func StartDatadog(cfg config.DatadogParameters, connectionType ConnectionType) e
 	}
 
 	if err := cfg.Validate(); err != nil {
-		return fmt.Errorf("Datadog configuration not valid, cannot initialize Datadog services: %w", err)
+		return fmt.Errorf("the Datadog configuration not valid, cannot initialize Datadog services: %w", err)
 	}
 
 	l, err := datadogLogger.NewLogger(datadogLogger.WithGlobalLogger())
 	if err != nil {
-		return fmt.Errorf("Failed to initialize the Datadog logger: %w", err)
+		return fmt.Errorf("failed to initialize the Datadog logger: %w", err)
 	}
 	ddtrace.UseLogger(l)
 
@@ -61,7 +62,7 @@ func StartDatadog(cfg config.DatadogParameters, connectionType ConnectionType) e
 
 	initTracer(cfg, connectionType)
 	if initProfilerErr := initProfiler(cfg, connectionType); initProfilerErr != nil {
-		return fmt.Errorf("Failed to start Datadog profiler: %w", initProfilerErr)
+		return fmt.Errorf("failed to start Datadog profiler: %w", initProfilerErr)
 	}
 
 	return nil
@@ -127,9 +128,11 @@ func initTracer(cfg config.DatadogParameters, connectionType ConnectionType) {
 	tracerOptions := make([]tracer.StartOption, 0, 5)
 	switch connectionType {
 	case ConnectionTypeSocket:
-		tracerOptions = append(tracerOptions, tracer.WithUDS(cfg.GetApmEndpoint()))
+		socketPath := normalizeLegacySocketPath(cfg.GetApmEndpoint())
+		tracerOptions = append(tracerOptions, tracer.WithUDS(socketPath))
 	case ConnectionTypeHTTP:
-		tracerOptions = append(tracerOptions, tracer.WithAgentAddr(cfg.GetApmEndpoint()))
+		httpAddr := normalizeLegacyHTTPAddr(cfg.GetApmEndpoint())
+		tracerOptions = append(tracerOptions, tracer.WithAgentAddr(httpAddr))
 	case ConnectionTypeAuto:
 		// Let the underlying library determine the URL from environment-variables
 	}
@@ -164,9 +167,11 @@ func initProfiler(cfg config.DatadogParameters, connectionType ConnectionType) e
 	profilerOptions := make([]profiler.Option, 0, 5)
 	switch connectionType {
 	case ConnectionTypeSocket:
-		profilerOptions = append(profilerOptions, profiler.WithUDS(cfg.GetApmEndpoint()))
+		socketPath := normalizeLegacySocketPath(cfg.GetApmEndpoint())
+		profilerOptions = append(profilerOptions, profiler.WithUDS(socketPath))
 	case ConnectionTypeHTTP:
-		profilerOptions = append(profilerOptions, profiler.WithAgentAddr(cfg.GetApmEndpoint()))
+		httpAddr := normalizeLegacyHTTPAddr(cfg.GetApmEndpoint())
+		profilerOptions = append(profilerOptions, profiler.WithAgentAddr(httpAddr))
 	case ConnectionTypeAuto:
 		// Let the underlying library determine the URL from environment-variables
 	}
@@ -182,4 +187,16 @@ func initProfiler(cfg config.DatadogParameters, connectionType ConnectionType) e
 	)
 
 	return profiler.Start(profilerOptions...)
+}
+
+// normalizeLegacySocketPath ensures that the socketpath is in the format the tracer.WithUDS and profiler.WithUDS expects.
+func normalizeLegacySocketPath(socketPath string) string {
+	// profiler.WithUDS and tracer.WithUDS expects a path without the scheme
+	return strings.TrimPrefix(socketPath, "unix://")
+}
+
+// normalizeLegacySocketPath ensures that the HTTP address is in the format the tracer.WithAgentAddr and profiler.WithAgentAddr expects.
+func normalizeLegacyHTTPAddr(addr string) string {
+	// profiler.WithAgentAddr and tracer.WithAgentAddr expects a path without the scheme
+	return strings.TrimPrefix(addr, "http://")
 }

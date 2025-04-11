@@ -42,7 +42,7 @@ type (
 		ServiceVersion string `mapstructure:"dd_version" json:"dd_service_version,omitempty"`
 		// DSD Socket path for DD StatsD, important to have unix prefix for that value, example: unix:///var/run/dd/dsd.socket
 		DSD string `mapstructure:"dd_dogstatsd_url" json:"dd_dsd,omitempty"`
-		// APM Socket path for apm and profiler, unix prefix not needed, example: /var/run/dd/apm.socket
+		// APM Socket path for apm and profiler, unix prefix recommended, but not required, example: unix:///var/run/dd/apm.socket
 		APM string `mapstructure:"dd_trace_agent_url" json:"dd_apm,omitempty"`
 		// EnableExtraProfiling flag enables more optional profilers not recommended for production.
 		EnableExtraProfiling bool `mapstructure:"dd_enable_extra_profiling" json:"dd_enable_extra_profiling,omitempty"`
@@ -96,13 +96,16 @@ func (d DatadogConfig) GetServiceVersion() string {
 }
 
 // GetDsdEndpoint Socket path or URL for DD StatsD
-// for socket important to have unix prefix for that value, example: unix:///var/run/dd/dsd.socket
+// For unix sockets, the unix-scheme prefix is required.
+// Example: unix:///var/run/dd/dsd.socket
 func (d DatadogConfig) GetDsdEndpoint() string {
 	return d.DSD
 }
 
 // GetApmEndpoint Socket path or URL for APM and profiler
-// unix prefix not needed, example: /var/run/dd/apm.socket
+// For unix sockets, the unix-scheme prefix is not needed, but it is recommended to include it.
+// Example: unix:///var/run/dd/apm.socket
+// Example: http://my-agent:1234
 func (d DatadogConfig) GetApmEndpoint() string {
 	return d.APM
 }

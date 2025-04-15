@@ -7,12 +7,13 @@ toolchain go1.24.1
 require (
 	github.com/DataDog/datadog-go/v5 v5.6.0
 	github.com/coopnorge/go-logger v0.11.5
-	github.com/go-sql-driver/mysql v1.9.1
+	github.com/coopnorge/mage v0.4.2
+	github.com/go-sql-driver/mysql v1.9.2
 	github.com/grpc-ecosystem/go-grpc-middleware/v2 v2.3.1
 	github.com/iancoleman/strcase v0.3.0
 	github.com/labstack/echo/v4 v4.13.3
 	github.com/stretchr/testify v1.10.0
-	go.uber.org/mock v0.5.0
+	go.uber.org/mock v0.5.1
 	golang.org/x/sync v0.13.0
 	google.golang.org/grpc v1.71.1
 	gopkg.in/DataDog/dd-trace-go.v1 v1.72.2
@@ -56,6 +57,7 @@ require (
 	github.com/json-iterator/go v1.1.12 // indirect
 	github.com/labstack/gommon v0.4.2 // indirect
 	github.com/lufia/plan9stats v0.0.0-20220913051719-115f729f3c8c // indirect
+	github.com/magefile/mage v1.15.0 // indirect
 	github.com/mattn/go-colorable v0.1.13 // indirect
 	github.com/mattn/go-isatty v0.0.20 // indirect
 	github.com/mitchellh/mapstructure v1.5.1-0.20231216201459-8508981c8b6c // indirect
@@ -105,3 +107,5 @@ require (
 	gopkg.in/yaml.v2 v2.4.0 // indirect
 	gopkg.in/yaml.v3 v3.0.1 // indirect
 )
+
+tool github.com/magefile/mage

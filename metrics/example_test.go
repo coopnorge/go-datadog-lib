@@ -27,6 +27,8 @@ func run() error {
 	}()
 
 	metrics.Incr("my-metric")
+	metrics.Count("metric.with.options", 1, metrics.WithTag("tag1", "value1"))
+	metrics.Gauge("gauge.with.options", 42.0, metrics.WithTag("tag1", "test1"), metrics.WithSampleRate(0.5))
 
 	return nil
 }

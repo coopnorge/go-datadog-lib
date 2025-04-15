@@ -1,20 +1,21 @@
-package metrics
+package metrics_test
 
 import (
+	"github.com/coopnorge/go-datadog-lib/v2/metrics"
 	"testing"
 )
 
 func TestUninitlizedMetrics(t *testing.T) {
 	t.Parallel()
 	// Assert that we can unit-test some code that does not initialize the metrics-package.
-	Count("my.metric", 1)
-	Gauge("my.gauge", 42.0)
-	Incr("my.counter")
-	Decr("my.counter")
-	Histogram("my.histogram", 100)
-	Distribution("my.distribution", 100)
-	Set("my.set", "value")
-	SimpleEvent("title", "text")
-	Count("metric.with.options", 1, WithTag("tag1", "value1"))
-	Gauge("gauge.with.options", 42.0, WithTag("service", "test"), WithSampleRate(0.5))
+	metrics.Count("my.metric", 1)
+	metrics.Gauge("my.gauge", 42.0)
+	metrics.Incr("my.counter")
+	metrics.Decr("my.counter")
+	metrics.Histogram("my.histogram", 100)
+	metrics.Distribution("my.distribution", 100)
+	metrics.Set("my.set", "value")
+	metrics.SimpleEvent("title", "text")
+	metrics.Count("metric.with.options", 1, metrics.WithTag("tag1", "value1"))
+	metrics.Gauge("gauge.with.options", 42.0, metrics.WithTag("service", "test"), metrics.WithSampleRate(0.5))
 }

@@ -1,8 +1,9 @@
 package metrics_test
 
 import (
-	"github.com/coopnorge/go-datadog-lib/v2/metrics"
 	"testing"
+
+	"github.com/coopnorge/go-datadog-lib/v2/metrics"
 )
 
 func TestUninitlizedMetrics(t *testing.T) {

@@ -8,7 +8,6 @@ import (
 
 func TestUninitlizedMetrics(t *testing.T) {
 	t.Parallel()
-	// Assert that we can unit-test some code that does not initialize the metrics-package.
 	metrics.Count("my.metric", 1)
 	metrics.Gauge("my.gauge", 42.0)
 	metrics.Incr("my.counter")

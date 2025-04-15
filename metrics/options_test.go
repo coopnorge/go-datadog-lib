@@ -134,9 +134,10 @@ func TestMetricOptions(t *testing.T) {
 			} else {
 				require.Nil(t, opts.errorHandler, "Expected no error handler for valid options")
 
-				if tc.name == "Valid tag" {
+				switch tc.name {
+				case "Valid tag":
 					require.Contains(t, opts.tags, "tag1:value1", "Tag should be added")
-				} else if tc.name == "Valid sample rate" {
+				case "Valid sample rate":
 					require.Equal(t, 0.5, opts.sampleRate, "Sample rate should be 0.5")
 				}
 			}

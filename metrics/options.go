@@ -1,11 +1,13 @@
 package metrics
 
 import (
+	"errors"
 	"fmt"
 	"os"
+	"slices"
 	"strings"
 
-	"github.com/coopnorge/go-datadog-lib/v2/errors"
+	ddErrors "github.com/coopnorge/go-datadog-lib/v2/errors"
 	"github.com/coopnorge/go-datadog-lib/v2/internal"
 	"github.com/coopnorge/go-logger"
 )
@@ -18,20 +20,10 @@ const (
 type Option func(*options) error
 
 type options struct {
-	errorHandler errors.ErrorHandler
 	dsdEndpoint  string
+	errorHandler ddErrors.ErrorHandler
 	sampleRate   float64
 	tags         []string
-}
-
-// MetricOptions represents a configuration option for metrics.
-type MetricOptions func(*metricOptions) error
-
-// metricOptions tags and sample rate opts.
-type metricOptions struct {
-	errorHandler errors.ErrorHandler
-	tags         []string
-	sampleRate   float64
 }
 
 func resolveOptions(opts []Option) (*options, error) {
@@ -46,19 +38,16 @@ func resolveOptions(opts []Option) (*options, error) {
 	}
 
 	options := defaultOptions()
-	// Apply default options when resolving real options
 	options.dsdEndpoint = os.Getenv(internal.DatadogDSDEndpoint)
+	// Apply default options when resolving real options
 	options.tags = []string{
 		fmt.Sprintf("environment:%s", os.Getenv(internal.DatadogEnvironment)),
 		fmt.Sprintf("service:%s", os.Getenv(internal.DatadogService)),
 		fmt.Sprintf("version:%s", os.Getenv(internal.DatadogVersion)),
 	}
 
-	for _, option := range opts {
-		err = option(options)
-		if err != nil {
-			return nil, err
-		}
+	if err := options.applyOptions(opts); err != nil {
+		return nil, err
 	}
 
 	return options, nil
@@ -73,45 +62,21 @@ func defaultOptions() *options {
 	}
 }
 
-// parseMetricOptions processes the provided metric options and returns a configured metricOptions object.
-// This function combines globally defined defaults with any user-provided option overrides.
-// Notes:
-//   - If no options are provided, the returned metricOptions will use:
-//   - No tag
-//   - Global sample rate (opts.sampleRate) as the default sampling rate
-//   - Any provided options will override these defaults for the specific metric
-func parseMetricOptions(options ...MetricOptions) metricOptions {
-	result := metricOptions{
-		tags:       []string{},
-		sampleRate: opts.sampleRate, // Use global sample as default
-	}
-
-	for _, opt := range options {
-		err := opt(&result)
+// applyOptions applies every option, and returns a combined error of all (if any) errors.
+func (opts *options) applyOptions(options []Option) error {
+	errs := make([]error, 0, len(options))
+	for _, option := range options {
+		err := option(opts)
 		if err != nil {
-			return metricOptions{
-				errorHandler: func(err error) {
-					logger.WithError(err).Error(err.Error())
-				},
-			}
+			errs = append(errs, err)
 		}
 	}
-
-	return result
-}
-
-// WithTags sets the tags that are sent with every metric, shorthand for
-// statsd.WithTags()
-func WithTags(tags ...string) Option {
-	return func(options *options) error {
-		options.tags = append(options.tags, tags...)
-		return nil
-	}
+	return errors.Join(errs...)
 }
 
 // WithErrorHandler allows for setting a custom ErrorHandler to be called on
 // function that may error but does not return an error
-func WithErrorHandler(handler errors.ErrorHandler) Option {
+func WithErrorHandler(handler ddErrors.ErrorHandler) Option {
 	return func(options *options) error {
 		options.errorHandler = handler
 		return nil
@@ -122,30 +87,25 @@ func WithErrorHandler(handler errors.ErrorHandler) Option {
 // Parameters:
 //   - k: The tag key
 //   - v: The tag value
-func WithTag(k, v string) MetricOptions {
-	return func(o *metricOptions) error {
+func WithTag(k, v string) Option {
+	return func(options *options) error {
 		if k == "" {
 			return fmt.Errorf("tag key cannot be empty")
 		}
-
+		if v == "" {
+			return fmt.Errorf("tag value cannot be empty")
+		}
 		if strings.ContainsAny(k, ":,|=") {
 			return fmt.Errorf("tag key contains invalid characters: %s", k)
 		}
-
-		if strings.ContainsAny(v, ":,|=") {
-			return fmt.Errorf("tag value contains invalid characters: %s", v)
-		}
-
 		if len(k)+len(v)+1 > 200 {
 			return fmt.Errorf("tag %s:%s exceeds maximum length", k, v)
 		}
-
-		for _, reservedTag := range []string{"environment", "service", "version"} {
-			if strings.ToLower(k) == reservedTag {
-				return fmt.Errorf("tag key '%s' is reserved", k)
-			}
+		if slices.Contains([]string{"environment", "service", "version"}, strings.ToLower(k)) {
+			return fmt.Errorf("tag key '%s' is reserved", k)
 		}
-		o.tags = append(o.tags, fmt.Sprintf(k+":"+v))
+
+		options.tags = append(options.tags, fmt.Sprintf(k+":"+v))
 		return nil
 	}
 }
@@ -159,8 +119,8 @@ func WithTag(k, v string) MetricOptions {
 //   - between 0 and 1 means that % of metrics will be sent (0.25 = 25%)
 //
 // Returns an error if the rate is invalid (negative)
-func WithSampleRate(rate float64) MetricOptions {
-	return func(o *metricOptions) error {
+func WithSampleRate(rate float64) Option {
+	return func(o *options) error {
 		if rate < 0 {
 			return fmt.Errorf("sample rate cannot be negative: %f", rate)
 		}

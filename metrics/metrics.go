@@ -62,7 +62,7 @@ func Gauge(name string, value float64, options ...Option) {
 	}
 	err = statsdClient.Gauge(name, value, localOpts.tags, localOpts.sampleRate)
 	if err != nil {
-		globalOpts.errorHandler(fmt.Errorf("failed to send Gauge: %w", err))
+		localOpts.errorHandler(fmt.Errorf("failed to send Gauge: %w", err))
 	}
 }
 
@@ -76,7 +76,7 @@ func Count(name string, value int64, options ...Option) {
 	}
 	err = statsdClient.Count(name, value, localOpts.tags, localOpts.sampleRate)
 	if err != nil {
-		globalOpts.errorHandler(fmt.Errorf("failed to to send Count: %w", err))
+		localOpts.errorHandler(fmt.Errorf("failed to to send Count: %w", err))
 	}
 }
 
@@ -104,7 +104,7 @@ func Distribution(name string, value float64, options ...Option) {
 	}
 	err = statsdClient.Distribution(name, value, localOpts.tags, localOpts.sampleRate)
 	if err != nil {
-		globalOpts.errorHandler(fmt.Errorf("failed to to send Distribution: %w", err))
+		localOpts.errorHandler(fmt.Errorf("failed to to send Distribution: %w", err))
 	}
 }
 
@@ -128,7 +128,7 @@ func Set(name string, value string, options ...Option) {
 	}
 	err = statsdClient.Set(name, value, localOpts.tags, localOpts.sampleRate)
 	if err != nil {
-		globalOpts.errorHandler(fmt.Errorf("failed to to send Set: %w", err))
+		localOpts.errorHandler(fmt.Errorf("failed to to send Set: %w", err))
 	}
 }
 
@@ -147,7 +147,7 @@ func TimeInMilliseconds(name string, value float64, options ...Option) {
 	}
 	err = statsdClient.TimeInMilliseconds(name, value, localOpts.tags, localOpts.sampleRate)
 	if err != nil {
-		globalOpts.errorHandler(fmt.Errorf("failed to to send TimeInMilliseconds: %w", err))
+		localOpts.errorHandler(fmt.Errorf("failed to to send TimeInMilliseconds: %w", err))
 	}
 }
 

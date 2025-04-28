@@ -10,21 +10,6 @@ import (
 	"github.com/stretchr/testify/assert"
 )
 
-func TestWithTags(t *testing.T) {
-	options := &options{
-		tags: []string{"a", "b"},
-	}
-
-	err := WithTags("c")(options)
-	assert.NoError(t, err)
-
-	assert.Equal(t, []string{"a", "b", "c"}, options.tags)
-
-	err = WithTags("d")(options)
-	assert.NoError(t, err)
-	assert.Equal(t, []string{"a", "b", "c", "d"}, options.tags)
-}
-
 // TestWithTagValidation tests the WithTag.
 func TestWithTagValidation(t *testing.T) {
 	t.Parallel()
@@ -38,7 +23,7 @@ func TestWithTagValidation(t *testing.T) {
 		{"Empty key", "", "value", true},
 		{"Valid tag", "key", "value", false},
 		{"Invalid key chars", "key:with:colons", "value", true},
-		{"Invalid value chars", "key", "value:with:colons", true},
+		{"URL in value", "key", "https://www.coop.no/some?url=with&different=characters#foobar", false},
 		{"Long key", strings.Repeat("a", 250), "value", true},
 	}
 
@@ -48,7 +33,7 @@ func TestWithTagValidation(t *testing.T) {
 			t.Parallel()
 
 			opt := WithTag(tc.key, tc.value)
-			options := &metricOptions{tags: []string{}}
+			options := &options{}
 			err := opt(options)
 
 			if tc.wantErr {
@@ -83,7 +68,7 @@ func TestWithSampleRateValidation(t *testing.T) {
 			t.Parallel()
 
 			opt := WithSampleRate(tc.rate)
-			options := &metricOptions{sampleRate: 1.0}
+			options := &options{sampleRate: 1.0}
 			err := opt(options)
 
 			if tc.wantErr {
@@ -103,17 +88,17 @@ func TestMetricOptions(t *testing.T) {
 
 	tests := []struct {
 		name      string
-		options   []MetricOptions
+		options   []Option
 		expectErr bool
 	}{
 		{
 			name:      "Valid tag",
-			options:   []MetricOptions{WithTag("tag1", "value1")},
+			options:   []Option{WithTag("tag1", "value1")},
 			expectErr: false,
 		},
 		{
 			name:      "Empty tag key",
-			options:   []MetricOptions{WithTag("", "value1")},
+			options:   []Option{WithTag("", "value1")},
 			expectErr: true,
 		},
 	}
@@ -123,16 +108,13 @@ func TestMetricOptions(t *testing.T) {
 		t.Run(tc.name, func(t *testing.T) {
 			t.Parallel()
 
-			opts := parseMetricOptions(tc.options...)
+			opts := options{}
+			err := opts.applyOptions(tc.options)
 
 			if tc.expectErr {
-				require.NotNil(t, opts.errorHandler, "Expected error handler to be set for invalid options")
-
-				if opts.errorHandler == nil {
-					assert.False(t, true, "Expected error handler to not be set for invalid options")
-				}
+				assert.Error(t, err)
 			} else {
-				require.Nil(t, opts.errorHandler, "Expected no error handler for valid options")
+				assert.NoError(t, err)
 
 				switch tc.name {
 				case "Valid tag":

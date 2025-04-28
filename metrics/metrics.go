@@ -54,7 +54,7 @@ func Flush() error {
 
 // Gauge measures the value of a metric at a particular time.
 func Gauge(name string, value float64, options ...Option) {
-	localOpts := (*globalOpts) // Make copy of global opts to avoid mutating the global state
+	localOpts := getLocalOpts()
 	err := localOpts.applyOptions(options)
 	if err != nil {
 		localOpts.errorHandler(fmt.Errorf("failed to apply metric options: %w", err))
@@ -68,7 +68,7 @@ func Gauge(name string, value float64, options ...Option) {
 
 // Count tracks how many times something happened per second.
 func Count(name string, value int64, options ...Option) {
-	localOpts := (*globalOpts) // Make copy of global opts to avoid mutating the global state
+	localOpts := getLocalOpts()
 	err := localOpts.applyOptions(options)
 	if err != nil {
 		localOpts.errorHandler(fmt.Errorf("failed to apply metric options: %w", err))
@@ -82,7 +82,7 @@ func Count(name string, value int64, options ...Option) {
 
 // Histogram tracks the statistical distribution of a set of values on each host.
 func Histogram(name string, value float64, options ...Option) {
-	localOpts := (*globalOpts) // Make copy of global opts to avoid mutating the global state
+	localOpts := getLocalOpts()
 	err := localOpts.applyOptions(options)
 	if err != nil {
 		localOpts.errorHandler(fmt.Errorf("failed to apply metric options: %w", err))
@@ -96,7 +96,7 @@ func Histogram(name string, value float64, options ...Option) {
 
 // Distribution tracks the statistical distribution of a set of values across your infrastructure.
 func Distribution(name string, value float64, options ...Option) {
-	localOpts := (*globalOpts) // Make copy of global opts to avoid mutating the global state
+	localOpts := getLocalOpts()
 	err := localOpts.applyOptions(options)
 	if err != nil {
 		localOpts.errorHandler(fmt.Errorf("failed to apply metric options: %w", err))
@@ -120,7 +120,7 @@ func Incr(name string, options ...Option) {
 
 // Set counts the number of unique elements in a group.
 func Set(name string, value string, options ...Option) {
-	localOpts := (*globalOpts) // Make copy of global opts to avoid mutating the global state
+	localOpts := getLocalOpts()
 	err := localOpts.applyOptions(options)
 	if err != nil {
 		localOpts.errorHandler(fmt.Errorf("failed to apply metric options: %w", err))
@@ -139,7 +139,7 @@ func Timing(name string, value time.Duration, options ...Option) {
 
 // TimeInMilliseconds sends timing information in milliseconds.
 func TimeInMilliseconds(name string, value float64, options ...Option) {
-	localOpts := (*globalOpts) // Make copy of global opts to avoid mutating the global state
+	localOpts := getLocalOpts()
 	err := localOpts.applyOptions(options)
 	if err != nil {
 		localOpts.errorHandler(fmt.Errorf("failed to apply metric options: %w", err))
@@ -156,5 +156,14 @@ func SimpleEvent(title, text string) {
 	err := statsdClient.SimpleEvent(title, text)
 	if err != nil {
 		globalOpts.errorHandler(fmt.Errorf("failed to send Event: %w", err))
+	}
+}
+
+// getLocalOpts will return a copy of the global options, with a few modifications. New "Option"'s can be applied without mutating the global options.
+func getLocalOpts() *options {
+	return &options{
+		errorHandler: globalOpts.errorHandler,
+		sampleRate:   globalOpts.sampleRate,
+		tags:         nil, // Note: We are not copying the global tags, since they have already been passed to the StatsD-client.
 	}
 }

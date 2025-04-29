@@ -13,7 +13,7 @@ require (
 	github.com/iancoleman/strcase v0.3.0
 	github.com/labstack/echo/v4 v4.13.3
 	github.com/stretchr/testify v1.10.0
-	go.uber.org/mock v0.5.1
+	go.uber.org/mock v0.5.2
 	golang.org/x/sync v0.13.0
 	google.golang.org/grpc v1.72.0
 	gopkg.in/DataDog/dd-trace-go.v1 v1.72.2

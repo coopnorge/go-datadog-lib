@@ -8,8 +8,8 @@ import (
 	"strings"
 
 	"github.com/coopnorge/go-datadog-lib/v2/internal"
+	"github.com/coopnorge/go-datadog-lib/v2/internal/log"
 	"github.com/coopnorge/go-datadog-lib/v2/metrics"
-	datadogLogger "github.com/coopnorge/go-logger/adapter/datadog"
 	"gopkg.in/DataDog/dd-trace-go.v1/ddtrace"
 	"gopkg.in/DataDog/dd-trace-go.v1/ddtrace/tracer"
 	"gopkg.in/DataDog/dd-trace-go.v1/profiler"
@@ -49,7 +49,7 @@ func Start(ctx context.Context, opts ...Option) (StopFunc, error) {
 		return noop, err
 	}
 
-	l, err := datadogLogger.NewLogger(datadogLogger.WithGlobalLogger())
+	l, err := log.NewLogger(log.WithGlobalLogger())
 	if err != nil {
 		return noop, fmt.Errorf("failed to initialize the Datadog logger: %w", err)
 	}

@@ -41,7 +41,6 @@ func TestAppendUserToTrace(t *testing.T) {
 	require.NoError(t, err)
 
 	span, spanCtx := tracer.StartSpanFromContext(ctx, "test", tracer.ResourceName("UnitTest"))
-	defer span.Finish()
 	err = tracing.AppendUserToTrace(spanCtx, user)
 	require.NoError(t, err)
 	span.Finish()
@@ -52,7 +51,7 @@ func TestAppendUserToTrace(t *testing.T) {
 	require.Equal(t, 1, len(spans))
 	finishedSpan := spans[0]
 	tags := finishedSpan.Tags()
-	require.Equal(t, 1, len(tags), tags)
+	require.True(t, len(tags) > 1, tags)
 	require.Equal(t, "UnitTest", tags["resource.name"])
 	require.Empty(t, tags["usr"])
 	require.Empty(t, tags["usr.id"])

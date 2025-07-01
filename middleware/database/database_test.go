@@ -47,20 +47,20 @@ func TestRegisterAndOpen(t *testing.T) {
 	require.Equal(t, 2, len(spans))
 	sort.Slice(spans, func(i, j int) bool { return spans[i].FinishTime().Before(spans[j].FinishTime()) })
 	{
-		// SQL span
-		finishedSpan := spans[0]
-		assert.Equal(t, "mysql.query", finishedSpan.OperationName())
-		assert.Equal(t, "client", finishedSpan.Tag("span.kind"))
-		assert.Equal(t, "Query", finishedSpan.Tag("sql.query_type"))
-		assert.Equal(t, "unittest-service", finishedSpan.Tag("service.name"))
-	}
-	{
 		// HTTP span
-		finishedSpan := spans[1]
+		finishedSpan := spans[0]
 		assert.Equal(t, "http.request", finishedSpan.OperationName())
 		assert.Equal(t, "/helloworld", finishedSpan.Tag("resource.name"))
 		assert.Equal(t, strconv.Itoa(int(finishedSpan.TraceID())), strconv.Itoa(int(span.Context().TraceID())))
 		assert.Equal(t, strconv.Itoa(int(finishedSpan.SpanID())), strconv.Itoa(int(span.Context().SpanID())))
+	}
+	{
+		// SQL span
+		finishedSpan := spans[1]
+		assert.Equal(t, "mysql.query", finishedSpan.OperationName())
+		assert.Equal(t, "client", finishedSpan.Tag("span.kind"))
+		assert.Equal(t, "Query", finishedSpan.Tag("sql.query_type"))
+		assert.Equal(t, "unittest-service", finishedSpan.Tag("service.name"))
 	}
 }
 

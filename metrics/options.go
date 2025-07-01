@@ -105,7 +105,7 @@ func WithTag(k, v string) Option {
 			return fmt.Errorf("tag key '%s' is reserved", k)
 		}
 
-		options.tags = append(options.tags, fmt.Sprintf(k+":"+v))
+		options.tags = append(options.tags, fmt.Sprintf("%s:%s", k, v))
 		return nil
 	}
 }

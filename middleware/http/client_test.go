@@ -25,14 +25,13 @@ func TestWrapClient(t *testing.T) {
 	// Start Datadog tracer, so that we don't create NoopSpans.
 	testTracer := mocktracer.Start()
 
-	span, ctx := tracer.StartSpanFromContext(context.Background(), "http.request", tracer.ResourceName("/helloworld"))
-	defer span.Finish()
-
 	var traceparent string
 	var ddParentID string
 	var ddTraceID string
+	var tracestate string
 	s := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		traceparent = r.Header.Get("Traceparent")
+		tracestate = r.Header.Get("Tracestate")
 		ddTraceID = r.Header.Get("X-Datadog-Trace-Id")
 		ddParentID = r.Header.Get("X-Datadog-Parent-Id")
 		_, _ = w.Write([]byte("OK"))
@@ -41,49 +40,23 @@ func TestWrapClient(t *testing.T) {
 	t.Cleanup(s.Close)
 
 	client := datadogMiddleware.WrapClient(&http.Client{Timeout: 500 * time.Millisecond})
+
+	span, ctx := tracer.StartSpanFromContext(context.Background(), "http.request", tracer.ResourceName("/helloworld"))
 	req, err := http.NewRequestWithContext(ctx, "GET", s.URL, nil)
 	require.NoError(t, err)
 
 	_, err = client.Do(req)
 	require.NoError(t, err)
+
+	span.Finish()
 
 	testTracer.Stop()
 
 	spans := testTracer.FinishedSpans()
-	require.Equal(t, 1, len(spans))
+	require.Equal(t, 2, len(spans))
 	finishedSpan := spans[0]
 	assert.Equal(t, strconv.Itoa(int(finishedSpan.TraceID())), ddTraceID)
 	assert.Equal(t, strconv.Itoa(int(finishedSpan.SpanID())), ddParentID)
-
-	assert.Empty(t, traceparent, "Datadog's mocktracer does not propagate W3C-headers as of writing this test. If they start propagating it, we should remove the separate test below, and update this test to assert the correct W3C-header.")
-}
-
-func TestWrapClientW3C(t *testing.T) {
-	testhelpers.ConfigureDatadog(t)
-
-	// Start Datadog tracer, so that we don't create NoopSpans.
-	// Start real tracer (not mocktracer), to propagate Traceparent.
-	tracer.Start()
-
-	span, ctx := tracer.StartSpanFromContext(context.Background(), "http.request", tracer.ResourceName("/helloworld"))
-	defer span.Finish()
-
-	var traceparent string
-	var tracestate string
-	s := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-		traceparent = r.Header.Get("Traceparent")
-		tracestate = r.Header.Get("Tracestate")
-		_, _ = w.Write([]byte("OK"))
-	}))
-
-	t.Cleanup(s.Close)
-
-	client := datadogMiddleware.WrapClient(&http.Client{Timeout: 500 * time.Millisecond})
-	req, err := http.NewRequestWithContext(ctx, "GET", s.URL, nil)
-	require.NoError(t, err)
-
-	_, err = client.Do(req)
-	require.NoError(t, err)
 
 	// Assert TraceParent
 	require.NotEmpty(t, traceparent)
@@ -98,7 +71,7 @@ func TestWrapClientW3C(t *testing.T) {
 	assert.Equal(t, 16, len(parts[2]), "w3c parent-id has invalid length")
 	assert.NotEqual(t, "0000000000000000", parts[2], "w3c parent-id is zero")
 	// trace-flags
-	assert.Equal(t, "01", parts[3], "w3c trace-flags not is not correct")
+	assert.Equal(t, "00", parts[3], "w3c trace-flags not is not correct")
 
 	// Assert TraceState
 	parts = strings.Split(tracestate, ",")
@@ -121,7 +94,6 @@ func TestURLIsNotInTags(t *testing.T) {
 	testTracer := mocktracer.Start()
 
 	span, ctx := tracer.StartSpanFromContext(context.Background(), "http.request", tracer.ResourceName("/helloworld"))
-	defer span.Finish()
 
 	s := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, _ *http.Request) {
 		_, _ = w.Write([]byte("OK"))
@@ -139,10 +111,11 @@ func TestURLIsNotInTags(t *testing.T) {
 	_, err = client.Do(req)
 	require.NoError(t, err)
 
+	span.Finish()
 	testTracer.Stop()
 
 	spans := testTracer.FinishedSpans()
-	require.Equal(t, 1, len(spans))
+	require.Equal(t, 2, len(spans))
 	finishedSpan := spans[0]
 	assert.Empty(t, finishedSpan.Tag(ext.HTTPURL))
 	assert.NotContains(t, finishedSpan.OperationName(), "pii")

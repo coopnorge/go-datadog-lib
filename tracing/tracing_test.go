@@ -31,6 +31,8 @@ func TestCreateNestedTrace(t *testing.T) {
 }
 
 func TestAppendUserToTrace(t *testing.T) {
+	// This test ensures that the legacy (deprecated) "AppendUserToTrace" no longer adds any personally identifiable information (PII) to the trace.
+
 	// Start Datadog tracer, so that we don't create NoopSpans.
 	testTracer := mocktracer.Start()
 	t.Cleanup(testTracer.Stop)
@@ -40,8 +42,7 @@ func TestAppendUserToTrace(t *testing.T) {
 	err := tracing.AppendUserToTrace(ctx, user)
 	require.NoError(t, err)
 
-	span, spanCtx := tracer.StartSpanFromContext(ctx, "test", tracer.ResourceName("UnitTest"))
-	defer span.Finish()
+	span, spanCtx := tracer.StartSpanFromContext(ctx, "test")
 	err = tracing.AppendUserToTrace(spanCtx, user)
 	require.NoError(t, err)
 	span.Finish()
@@ -52,10 +53,26 @@ func TestAppendUserToTrace(t *testing.T) {
 	require.Equal(t, 1, len(spans))
 	finishedSpan := spans[0]
 	tags := finishedSpan.Tags()
-	require.Equal(t, 1, len(tags), tags)
-	require.Equal(t, "UnitTest", tags["resource.name"])
 	require.Empty(t, tags["usr"])
 	require.Empty(t, tags["usr.id"])
+}
+
+func TestResourceNameInTag(t *testing.T) {
+	// This test ensures that the resource name is correctly set in the span tags.
+	// Start Datadog tracer, so that we don't create NoopSpans.
+	testTracer := mocktracer.Start()
+	t.Cleanup(testTracer.Stop)
+
+	span, _ := tracer.StartSpanFromContext(context.Background(), "test", tracer.ResourceName("UnitTest"))
+	span.Finish()
+
+	testTracer.Stop()
+
+	spans := testTracer.FinishedSpans()
+	require.Equal(t, 1, len(spans))
+	finishedSpan := spans[0]
+	tags := finishedSpan.Tags()
+	require.Equal(t, "UnitTest", tags["resource.name"])
 }
 
 func TestOverrideTraceResourceName(t *testing.T) {

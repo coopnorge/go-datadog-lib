@@ -89,50 +89,18 @@ func TestTraceUnaryClientInterceptor(t *testing.T) {
 	require.NoError(t, err)
 
 	client := testgrpc.NewTestServiceClient(conn)
-	span, spanCtx := tracer.StartSpanFromContext(context.Background(), ddService, tracer.ResourceName("/helloworld"))
-	defer span.Finish()
+	span, spanCtx := tracer.StartSpanFromContext(context.Background(), ddService, tracer.ResourceName("/helloworld"), tracer.Measured())
 	_, err = client.EmptyCall(spanCtx, &testgrpc.Empty{})
 	require.NoError(t, err)
+	span.Finish()
 
 	testTracer.Stop()
 
 	spans := testTracer.FinishedSpans()
-	require.Equal(t, 1, len(spans))
+	require.Equal(t, 2, len(spans))
 	finishedSpan := spans[0]
 	assert.Equal(t, finishedSpan.TraceID(), server.ddTraceID)
 	assert.Equal(t, finishedSpan.SpanID(), server.ddParentID)
-
-	assert.Empty(t, server.traceparent, "Datadog's mocktracer does not propagate W3C-headers as of writing this test. If they start propagating it, we should remove the separate test below, and update this test to assert the correct W3C-header.")
-}
-
-func TestTraceUnaryClientInterceptorW3C(t *testing.T) {
-	testhelpers.ConfigureDatadog(t)
-
-	// Start Datadog tracer, so that we don't create NoopSpans.
-	// Start real tracer (not mocktracer), to propagate Traceparent.
-	tracer.Start()
-
-	server := &testServer{}
-	listener := bufconn.Listen(bufSize)
-	grpcServer := grpc.NewServer()
-	testgrpc.RegisterTestServiceServer(grpcServer, server)
-	errCh := make(chan error, 1)
-	go func() {
-		errCh <- grpcServer.Serve(listener)
-	}()
-
-	conn, err := grpc.NewClient("dns:///localhost",
-		grpc.WithContextDialer(func(_ context.Context, _ string) (net.Conn, error) { return listener.Dial() }),
-		grpc.WithTransportCredentials(insecure.NewCredentials()),
-		grpc.WithUnaryInterceptor(datadogMiddleware.TraceUnaryClientInterceptor()),
-	)
-	require.NoError(t, err)
-
-	client := testgrpc.NewTestServiceClient(conn)
-	span, spanCtx := tracer.StartSpanFromContext(context.Background(), ddService, tracer.ResourceName("/helloworld"))
-	defer span.Finish()
-	_, err = client.EmptyCall(spanCtx, &testgrpc.Empty{})
-	require.NoError(t, err)
 
 	// Assert TraceParent
 	require.NotEmpty(t, server.traceparent)
@@ -147,7 +115,7 @@ func TestTraceUnaryClientInterceptorW3C(t *testing.T) {
 	assert.Equal(t, 16, len(parts[2]), "w3c parent-id has invalid length")
 	assert.NotEqual(t, "0000000000000000", parts[2], "w3c parent-id is zero")
 	// trace-flags
-	assert.Equal(t, "01", parts[3], "w3c trace-flags not is not correct")
+	assert.Equal(t, "00", parts[3], "w3c trace-flags not is not correct")
 
 	// Assert TraceState
 	parts = strings.Split(server.tracestate, ",")
@@ -189,13 +157,18 @@ func TestStreamClientInterceptor(t *testing.T) {
 	span, spanCtx := tracer.StartSpanFromContext(context.Background(), ddService, tracer.ResourceName("/helloworld"))
 	c, err := client.StreamingOutputCall(spanCtx, &testgrpc.StreamingOutputCallRequest{})
 	require.NoError(t, err)
-	span.Finish()
 
 	c.Recv()
+	err = c.CloseSend()
+	require.NoError(t, err)
+	span.Finish()
 
 	testTracer.Stop()
 
-	spans := testTracer.FinishedSpans()
+	// Due to timing of the streaming call, the "grpc.client" span may not be finished yet, but we can still assert all of the spans.
+	spans := []mocktracer.Span{}
+	spans = append(spans, testTracer.FinishedSpans()...)
+	spans = append(spans, testTracer.OpenSpans()...)
 	require.Equal(t, 4, len(spans))
 	for _, finishedSpan := range spans {
 		assert.Equal(t, finishedSpan.TraceID(), server.ddTraceID)

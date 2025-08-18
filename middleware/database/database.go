@@ -5,11 +5,17 @@ import (
 	"database/sql/driver"
 	"os"
 
+	"github.com/coopnorge/go-datadog-lib/v2/internal"
 	sqltrace "gopkg.in/DataDog/dd-trace-go.v1/contrib/database/sql"
 )
 
 // RegisterDriverAndOpen registers the selected driver with the datadog-lib, and opens a connection to the database using the dsn.
 func RegisterDriverAndOpen(driverName string, driver driver.Driver, dsn string, options ...Option) (*sql.DB, error) {
+	if internal.IsDatadogDisabled() {
+		sql.Register(driverName, driver)
+		return sql.Open(driverName, dsn)
+	}
+
 	cfg := defaults()
 	for _, opt := range options {
 		opt(cfg)

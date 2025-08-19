@@ -12,7 +12,7 @@ func Example() {
 	ctx := context.Background()
 
 	dsn := "example.com/users"
-	db, err := ddDatabase.RegisterDriverAndOpen("mysql", mysqlDriver.MySQLDriver{}, dsn)
+	db, err := ddDatabase.RegisterDriverAndOpen("mysql", &mysqlDriver.MySQLDriver{}, dsn)
 	if err != nil {
 		panic(err)
 	}

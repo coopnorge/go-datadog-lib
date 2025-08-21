@@ -5,7 +5,7 @@ go 1.24.0
 toolchain go1.24.1
 
 require (
-	github.com/DataDog/datadog-go/v5 v5.6.0
+	github.com/DataDog/datadog-go/v5 v5.7.0
 	github.com/coopnorge/go-logger v0.12.1
 	github.com/coopnorge/mage v0.7.0
 	github.com/go-sql-driver/mysql v1.9.3

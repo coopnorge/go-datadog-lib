@@ -1,8 +1,6 @@
 module github.com/coopnorge/go-datadog-lib/v2
 
-go 1.24.0
-
-toolchain go1.24.1
+go 1.25.0
 
 require (
 	github.com/DataDog/datadog-go/v5 v5.6.0

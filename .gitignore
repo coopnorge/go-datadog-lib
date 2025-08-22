@@ -24,3 +24,6 @@ mkdocs.yml
 
 .vale
 !./.vale/styles/config/vocabularies/General
+
+# Ignore output from github.com/coopnorge/mage targets
+/var/

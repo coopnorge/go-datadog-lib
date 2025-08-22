@@ -3,7 +3,9 @@ package database
 import (
 	"database/sql"
 	"database/sql/driver"
+	"fmt"
 	"os"
+	"reflect"
 
 	"github.com/coopnorge/go-datadog-lib/v2/internal"
 	sqltrace "gopkg.in/DataDog/dd-trace-go.v1/contrib/database/sql"
@@ -11,6 +13,10 @@ import (
 
 // RegisterDriverAndOpen registers the selected driver with the datadog-lib, and opens a connection to the database using the dsn.
 func RegisterDriverAndOpen(driverName string, driver driver.Driver, dsn string, options ...Option) (*sql.DB, error) {
+	if err := verifyDriver(driver); err != nil {
+		return nil, fmt.Errorf("failed to register driver %q: %w", driverName, err)
+	}
+
 	if internal.IsDatadogDisabled() {
 		sql.Register(driverName, driver)
 		return sql.Open(driverName, dsn)
@@ -98,4 +104,18 @@ func WithIgnoreQueryTypes(ignoredQueryTypes ...string) Option {
 	return func(cfg *config) {
 		cfg.ignoredQueryTypes = ignoredQueryTypes
 	}
+}
+
+// verifyDriver checks that the provided driver is a valid driver.Driver pointer.
+// It returns an error if the driver is nil or not a pointer to a driver.Driver.
+//
+// This is a programmer error check and should not happen in production code.
+func verifyDriver(driver driver.Driver) error {
+	if driver == nil {
+		return fmt.Errorf("driver cannot be nil")
+	}
+	if reflect.TypeOf(driver).Kind() != reflect.Ptr {
+		return fmt.Errorf("driver must be a pointer to a driver.Driver, got %T", driver)
+	}
+	return nil
 }

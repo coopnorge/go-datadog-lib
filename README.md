@@ -21,25 +21,22 @@ Supported middleware to correlate/extend traceability and logs in Datadog.
 
 <https://pkg.go.dev/github.com/coopnorge/go-datadog-lib/v2>
 
-## Mocks
-
-To generate or update mocks use
-[`gomockhandler`](github.com/sanposhiho/gomockhandler). `gomockhandler` is
-provided by `golang-devtools`.
-
-### Check mocks
-
-```bash
-docker compose run --rm golang-devtools gomockhandler -config ./gomockhandler.json check
-```
-
-### Generate / Update mocks
-
-```bash
-docker compose run --rm golang-devtools gomockhandler -config ./gomockhandler.json mockgen
-```
 
 ## Development workflow
+
+The source code is build using `mage`.
+
+### Prerequisites
+
+1. Install Go version 1.24 or later and
+   [Docker](https://docs.docker.com/get-docker/).
+
+2. Install Go tools:
+
+   ```console
+   go install tool
+   ```
+
 
 ### Validate
 
@@ -53,14 +50,32 @@ go tool mage validate
 go tool mage -l
 ```
 
+### Mocks
+
+To generate or update mocks use
+[`gomockhandler`](github.com/sanposhiho/gomockhandler). `gomockhandler` is
+provided by `golang-devtools`.
+
+#### Check mocks
+
+```console
+docker compose run --rm golang-devtools gomockhandler -config ./gomockhandler.json check
+```
+
+#### Generate / Update mocks
+
+```console
+docker compose run --rm golang-devtools gomockhandler -config ./gomockhandler.json mockgen
+```
+
 ## User documentation
 
-User documentation is build using TechDocs and published to
+User documentation is built using TechDocs and published to
 [Inventory](https://inventory.internal.coop/docs/default/component/go-datadog-lib).
 
 To list the commands available for the TechDocs image:
 
-```sh
+```console
 docker compose run --rm help
 ```
 

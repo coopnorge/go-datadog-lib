@@ -16,7 +16,7 @@ require (
 	google.golang.org/grpc v1.75.0
 	gopkg.in/DataDog/dd-trace-go.v1 v1.74.5
 	gorm.io/driver/mysql v1.6.0
-	gorm.io/gorm v1.30.1
+	gorm.io/gorm v1.30.2
 )
 
 require (

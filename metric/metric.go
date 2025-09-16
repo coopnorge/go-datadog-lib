@@ -1,6 +1,6 @@
 // Package metric implements custom metrics with Dogstatsd
 //
-// Deprecated: use metrics instead
+// Deprecated: use metrics package instead
 package metric
 
 import (
@@ -15,40 +15,64 @@ import (
 
 type (
 	// Name must be in specific format like cart.amount, request.my_request.x etc
+	//
+	// Deprecated: Use metrics package instead
 	Name string
 	// Type is an Enum type for metric types
+	//
+	// Deprecated: Use metrics package instead
 	Type byte
 	// Tag categories metric value with Name for Value to display category like PaymentID.
+	//
+	// Deprecated: Use metrics package instead
 	Tag struct {
 		Name  string
 		Value string
 	}
 
 	// BaseMetricCollector ...
+	//
+	// Deprecated: Use metrics package instead
 	BaseMetricCollector struct {
+		// Deprecated: Use metrics package instead
 		DatadogMetrics DatadogMetricsClient
 	}
 
 	// Data for metrics
+	//
+	// Deprecated: Use metrics package instead
 	Data struct {
-		Name  Name
-		Type  Type
+		// Deprecated: Use metrics package instead
+		Name Name
+		// Deprecated: Use metrics package instead
+		Type Type
+		// Deprecated: Use metrics package instead
 		Value float64
 		// MetricTags level empty if no categories required to relate metric
+		//
+		// Deprecated: Use metrics package instead
 		MetricTags []Tag
 	}
 )
 
 const (
 	// MetricTypeCountEvents Datadog will aggregate events to show how many events happened in second
+	//
+	// Deprecated: Use metrics package instead
 	MetricTypeCountEvents Type = iota
 	// MetricTypeEvent send single event to Datadog
+	//
+	// Deprecated: Use metrics package instead
 	MetricTypeEvent
 	// MetricTypeMeasurement aggregates value of metrics in Datadog for measuring it, like memory or cart value
+	//
+	// Deprecated: Use metrics package instead
 	MetricTypeMeasurement
 )
 
 // NewBaseMetricCollector instance
+//
+// Deprecated: Use coopdatadog.Start() instead.
 func NewBaseMetricCollector(dm *DatadogMetrics) *BaseMetricCollector {
 	return &BaseMetricCollector{DatadogMetrics: dm}
 }
@@ -86,6 +110,8 @@ func (m BaseMetricCollector) AddMetric(ctx context.Context, d Data) {
 
 // GracefulShutdown flushes and closes Datadog client
 // ensuring that all metrics are sent before the program exits
+//
+// Deprecated: Use the StopFunc returned coopdatadog.Start() instead.
 func (m BaseMetricCollector) GracefulShutdown() {
 	if m.DatadogMetrics == nil || m.DatadogMetrics.GetClient() == nil {
 		return

@@ -3,7 +3,7 @@ module github.com/coopnorge/go-datadog-lib/v2
 go 1.25.0
 
 require (
-	github.com/DataDog/datadog-go/v5 v5.7.1
+	github.com/DataDog/datadog-go/v5 v5.8.0
 	github.com/coopnorge/go-logger v0.13.0
 	github.com/coopnorge/mage v0.7.3
 	github.com/go-sql-driver/mysql v1.9.3

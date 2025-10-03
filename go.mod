@@ -5,7 +5,7 @@ go 1.25.0
 require (
 	github.com/DataDog/datadog-go/v5 v5.8.0
 	github.com/coopnorge/go-logger v0.13.0
-	github.com/coopnorge/mage v0.7.3
+	github.com/coopnorge/mage v0.8.0
 	github.com/go-sql-driver/mysql v1.9.3
 	github.com/grpc-ecosystem/go-grpc-middleware/v2 v2.3.2
 	github.com/iancoleman/strcase v0.3.0
@@ -46,6 +46,7 @@ require (
 	github.com/DataDog/sketches-go v1.4.7 // indirect
 	github.com/Masterminds/semver/v3 v3.3.1 // indirect
 	github.com/Microsoft/go-winio v0.6.2 // indirect
+	github.com/bmatcuk/doublestar/v4 v4.9.1 // indirect
 	github.com/cespare/xxhash/v2 v2.3.0 // indirect
 	github.com/cihub/seelog v0.0.0-20170130134532-f561c5e57575 // indirect
 	github.com/davecgh/go-spew v1.1.2-0.20180830191138-d8f796af33cc // indirect

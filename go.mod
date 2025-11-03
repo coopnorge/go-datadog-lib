@@ -14,7 +14,7 @@ require (
 	go.uber.org/mock v0.6.0
 	golang.org/x/sync v0.17.0
 	google.golang.org/grpc v1.76.0
-	gopkg.in/DataDog/dd-trace-go.v1 v1.74.7
+	gopkg.in/DataDog/dd-trace-go.v1 v1.74.8
 	gorm.io/driver/mysql v1.6.0
 	gorm.io/gorm v1.31.1
 )

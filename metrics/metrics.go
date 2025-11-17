@@ -167,3 +167,10 @@ func getLocalOpts() *options {
 		tags:         nil, // Note: We are not copying the global tags, since they have already been passed to the StatsD-client.
 	}
 }
+
+// GlobalClient is allows to grab the client so that the legacy codebases
+// using a statsd.Client can proceed to migrate and for those edge cases
+// where the package requires hand metric sending.
+func GlobalClient() statsd.ClientInterface {
+	return statsdClient
+}

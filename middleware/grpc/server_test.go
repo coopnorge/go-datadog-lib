@@ -8,12 +8,12 @@ import (
 	"github.com/coopnorge/go-datadog-lib/v2/internal/testhelpers"
 	datadogMiddleware "github.com/coopnorge/go-datadog-lib/v2/middleware/grpc"
 
+	"github.com/DataDog/dd-trace-go/v2/ddtrace/mocktracer"
+	"github.com/DataDog/dd-trace-go/v2/ddtrace/tracer"
 	"github.com/grpc-ecosystem/go-grpc-middleware/v2/testing/testpb"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/suite"
 	"google.golang.org/grpc"
-	"gopkg.in/DataDog/dd-trace-go.v1/ddtrace/mocktracer"
-	"gopkg.in/DataDog/dd-trace-go.v1/ddtrace/tracer"
 )
 
 func TestTraceUnaryServerInterceptor(t *testing.T) {

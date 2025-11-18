@@ -4,6 +4,12 @@ go 1.25.0
 
 require (
 	github.com/DataDog/datadog-go/v5 v5.8.1
+	github.com/DataDog/dd-trace-go/contrib/database/sql/v2 v2.3.0
+	github.com/DataDog/dd-trace-go/contrib/google.golang.org/grpc/v2 v2.3.0
+	github.com/DataDog/dd-trace-go/contrib/gorm.io/gorm.v1/v2 v2.3.0
+	github.com/DataDog/dd-trace-go/contrib/labstack/echo.v4/v2 v2.3.0
+	github.com/DataDog/dd-trace-go/contrib/net/http/v2 v2.3.0
+	github.com/DataDog/dd-trace-go/v2 v2.3.0
 	github.com/coopnorge/go-logger v0.14.1
 	github.com/coopnorge/mage v0.15.0
 	github.com/go-sql-driver/mysql v1.9.3
@@ -14,7 +20,6 @@ require (
 	go.uber.org/mock v0.6.0
 	golang.org/x/sync v0.18.0
 	google.golang.org/grpc v1.77.0
-	gopkg.in/DataDog/dd-trace-go.v1 v1.74.8
 	gorm.io/driver/mysql v1.6.0
 	gorm.io/gorm v1.31.1
 )
@@ -29,13 +34,6 @@ require (
 	github.com/DataDog/datadog-agent/pkg/util/log v0.67.0 // indirect
 	github.com/DataDog/datadog-agent/pkg/util/scrubber v0.67.0 // indirect
 	github.com/DataDog/datadog-agent/pkg/version v0.67.0 // indirect
-	github.com/DataDog/dd-trace-go/contrib/database/sql/v2 v2.3.0 // indirect
-	github.com/DataDog/dd-trace-go/contrib/google.golang.org/grpc/v2 v2.3.0 // indirect
-	github.com/DataDog/dd-trace-go/contrib/gorm.io/gorm.v1/v2 v2.3.0 // indirect
-	github.com/DataDog/dd-trace-go/contrib/labstack/echo.v4/v2 v2.3.0 // indirect
-	github.com/DataDog/dd-trace-go/contrib/net/http/v2 v2.3.0 // indirect
-	github.com/DataDog/dd-trace-go/instrumentation/testutils/grpc/v2 v2.3.0 // indirect
-	github.com/DataDog/dd-trace-go/v2 v2.3.0 // indirect
 	github.com/DataDog/go-libddwaf/v4 v4.3.2 // indirect
 	github.com/DataDog/go-runtime-metrics-internal v0.0.4-0.20250721125240-fdf1ef85b633 // indirect
 	github.com/DataDog/go-sqllexer v0.1.6 // indirect

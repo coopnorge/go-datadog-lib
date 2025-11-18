@@ -10,13 +10,13 @@ import (
 	"testing"
 	"time"
 
+	"github.com/DataDog/dd-trace-go/v2/ddtrace/ext"
+	"github.com/DataDog/dd-trace-go/v2/ddtrace/mocktracer"
+	"github.com/DataDog/dd-trace-go/v2/ddtrace/tracer"
 	"github.com/coopnorge/go-datadog-lib/v2/internal/testhelpers"
 	datadogMiddleware "github.com/coopnorge/go-datadog-lib/v2/middleware/http"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
-	"gopkg.in/DataDog/dd-trace-go.v1/ddtrace/ext"
-	"gopkg.in/DataDog/dd-trace-go.v1/ddtrace/mocktracer"
-	"gopkg.in/DataDog/dd-trace-go.v1/ddtrace/tracer"
 )
 
 func TestWrapClient(t *testing.T) {
@@ -55,7 +55,7 @@ func TestWrapClient(t *testing.T) {
 	spans := testTracer.FinishedSpans()
 	require.Equal(t, 2, len(spans))
 	finishedSpan := spans[0]
-	assert.Equal(t, strconv.Itoa(int(finishedSpan.TraceID())), ddTraceID)
+	assert.Equal(t, strconv.FormatUint(finishedSpan.TraceID(), 10), ddTraceID)
 	assert.Equal(t, strconv.Itoa(int(finishedSpan.SpanID())), ddParentID)
 
 	// Assert TraceParent

@@ -3,8 +3,8 @@ package grpc
 import (
 	"os"
 
+	ddGrpc "github.com/DataDog/dd-trace-go/contrib/google.golang.org/grpc/v2"
 	"google.golang.org/grpc/codes"
-	ddGrpc "gopkg.in/DataDog/dd-trace-go.v1/contrib/google.golang.org/grpc"
 )
 
 // These options, unless otherwise specified, will be valid for both client and server interceptors.
@@ -33,7 +33,7 @@ func convertOptions(options ...Option) []ddGrpc.Option {
 	}
 	opts := make([]ddGrpc.Option, 0, 3+len(cfg.tags))
 	if cfg.serviceName != "" {
-		opts = append(opts, ddGrpc.WithServiceName(cfg.serviceName))
+		opts = append(opts, ddGrpc.WithService(cfg.serviceName))
 	}
 	if len(cfg.nonErrorCodes) > 0 {
 		opts = append(opts, ddGrpc.NonErrorCodes(cfg.nonErrorCodes...))

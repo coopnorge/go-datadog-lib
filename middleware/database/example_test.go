@@ -3,9 +3,9 @@ package database_test
 import (
 	"context"
 
+	"github.com/DataDog/dd-trace-go/v2/ddtrace/tracer"
 	ddDatabase "github.com/coopnorge/go-datadog-lib/v2/middleware/database"
 	mysqlDriver "github.com/go-sql-driver/mysql"
-	"gopkg.in/DataDog/dd-trace-go.v1/ddtrace/tracer"
 )
 
 func Example() {

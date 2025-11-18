@@ -4,11 +4,11 @@ import (
 	"context"
 	"testing"
 
+	"github.com/DataDog/dd-trace-go/v2/ddtrace/mocktracer"
+	"github.com/DataDog/dd-trace-go/v2/ddtrace/tracer"
 	"github.com/coopnorge/go-datadog-lib/v2/tracing"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
-	"gopkg.in/DataDog/dd-trace-go.v1/ddtrace/mocktracer"
-	"gopkg.in/DataDog/dd-trace-go.v1/ddtrace/tracer"
 )
 
 func TestCreateNestedTrace(t *testing.T) {
@@ -16,11 +16,14 @@ func TestCreateNestedTrace(t *testing.T) {
 	res := "unit"
 	ctx := context.Background()
 
+	// Start Datadog tracer, so that we don't create NoopSpans.
+	testTracer := mocktracer.Start()
+	t.Cleanup(testTracer.Stop)
+
 	nestedTrace, nestedTraceErr := tracing.CreateNestedTrace(ctx, op, res)
 
 	assert.NoError(t, nestedTraceErr)
-	assert.NotNil(t, nestedTrace)
-	// assert.IsType(t, noopSpan{}, nestedTrace)
+	assert.Nil(t, nestedTrace) // since we are using a context without a span, we get a noop span
 
 	span, spanCtx := tracer.StartSpanFromContext(ctx, "test", tracer.ResourceName("UnitTest"))
 	defer span.Finish()
@@ -130,14 +133,18 @@ func TestStartChildSpan(t *testing.T) {
 
 			childSpan := tracing.CreateChildSpan(ctx, "my-operation", "my-resource")
 
-			require.NotNil(t, childSpan)
+			if tt.args.spanInCtx {
+				require.NotNil(t, childSpan)
+			} else {
+				require.Nil(t, childSpan) // since we are using a context without a span, we get a noop span
+			}
 			childSpan.Finish()
 			if tt.args.spanInCtx {
 				assert.NotEqual(t, uint64(0), childSpan.Context().SpanID())
-				assert.NotEqual(t, uint64(0), childSpan.Context().TraceID())
+				assert.NotEqual(t, uint64(0), childSpan.Context().TraceIDLower())
 			} else {
 				assert.Equal(t, uint64(0), childSpan.Context().SpanID())
-				assert.Equal(t, uint64(0), childSpan.Context().TraceID())
+				assert.Equal(t, uint64(0), childSpan.Context().TraceIDLower())
 			}
 		})
 	}

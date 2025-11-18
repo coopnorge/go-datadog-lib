@@ -3,9 +3,9 @@ package grpc
 import (
 	"context"
 
+	ddGrpc "github.com/DataDog/dd-trace-go/contrib/google.golang.org/grpc/v2"
 	"github.com/coopnorge/go-datadog-lib/v2/internal"
 	"google.golang.org/grpc"
-	ddGrpc "gopkg.in/DataDog/dd-trace-go.v1/contrib/google.golang.org/grpc"
 )
 
 // TraceUnaryServerInterceptor for Datadog Log Integration, middleware will create span that can be used from context

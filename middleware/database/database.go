@@ -5,8 +5,8 @@ import (
 	"database/sql/driver"
 	"os"
 
+	sqltrace "github.com/DataDog/dd-trace-go/contrib/database/sql/v2"
 	"github.com/coopnorge/go-datadog-lib/v2/internal"
-	sqltrace "gopkg.in/DataDog/dd-trace-go.v1/contrib/database/sql"
 )
 
 // RegisterDriverAndOpen registers the selected driver with the datadog-lib, and opens a connection to the database using the dsn.
@@ -22,7 +22,7 @@ func RegisterDriverAndOpen(driverName string, driver driver.Driver, dsn string, 
 	}
 	opts := make([]sqltrace.Option, 0, 3+len(cfg.tags))
 	if cfg.serviceName != "" {
-		opts = append(opts, sqltrace.WithServiceName(cfg.serviceName))
+		opts = append(opts, sqltrace.WithService(cfg.serviceName))
 	}
 	if cfg.childSpansOnly {
 		opts = append(opts, sqltrace.WithChildSpansOnly())
@@ -93,7 +93,7 @@ func WithChildSpansOnly(childSpansOnly bool) Option {
 
 // WithIgnoreQueryTypes specifies the query types for which spans should not be created.
 // Will replace any existing ignored query-types, so it must be an exhaustive list.
-// See available QueryTypes here: https://pkg.go.dev/gopkg.in/DataDog/dd-trace-go.v1/contrib/database/sql#pkg-constants
+// See available QueryTypes here: https://pkg.go.dev/github.com/DataDog/dd-trace-go/contrib/database/sql/v2#pkg-constants
 func WithIgnoreQueryTypes(ignoredQueryTypes ...string) Option {
 	return func(cfg *config) {
 		cfg.ignoredQueryTypes = ignoredQueryTypes

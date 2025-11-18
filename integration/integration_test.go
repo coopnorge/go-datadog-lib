@@ -16,6 +16,7 @@ import (
 	grpcMiddleware "github.com/coopnorge/go-datadog-lib/v2/middleware/grpc"
 	httpMiddleware "github.com/coopnorge/go-datadog-lib/v2/middleware/http"
 
+	"github.com/DataDog/dd-trace-go/v2/ddtrace/tracer"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
 	"golang.org/x/sync/errgroup"
@@ -25,7 +26,6 @@ import (
 	testgrpc "google.golang.org/grpc/interop/grpc_testing"
 	"google.golang.org/grpc/status"
 	"google.golang.org/grpc/test/bufconn"
-	"gopkg.in/DataDog/dd-trace-go.v1/ddtrace/tracer"
 )
 
 const bufSize = 1024 * 1024

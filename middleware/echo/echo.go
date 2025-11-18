@@ -1,9 +1,9 @@
 package echo
 
 import (
+	ddEcho "github.com/DataDog/dd-trace-go/contrib/labstack/echo.v4/v2"
 	"github.com/coopnorge/go-datadog-lib/v2/internal"
 	"github.com/labstack/echo/v4"
-	ddEcho "gopkg.in/DataDog/dd-trace-go.v1/contrib/labstack/echo.v4"
 )
 
 // TraceServerMiddleware for Datadog Log Integration, middleware will create span that can be used from context

@@ -7,12 +7,11 @@ import (
 	"os"
 	"strings"
 
+	"github.com/DataDog/dd-trace-go/v2/ddtrace/tracer"
+	"github.com/DataDog/dd-trace-go/v2/profiler"
 	"github.com/coopnorge/go-datadog-lib/v2/internal"
 	"github.com/coopnorge/go-datadog-lib/v2/internal/log"
 	"github.com/coopnorge/go-datadog-lib/v2/metrics"
-	"gopkg.in/DataDog/dd-trace-go.v1/ddtrace"
-	"gopkg.in/DataDog/dd-trace-go.v1/ddtrace/tracer"
-	"gopkg.in/DataDog/dd-trace-go.v1/profiler"
 )
 
 // Start the Datadog integration. It is the caller's responsibility to call the
@@ -53,7 +52,7 @@ func Start(ctx context.Context, opts ...Option) (StopFunc, error) {
 	if err != nil {
 		return noop, fmt.Errorf("failed to initialize the Datadog logger: %w", err)
 	}
-	ddtrace.UseLogger(l)
+	tracer.UseLogger(l)
 
 	cancel := func() error {
 		return stop(options)
@@ -94,8 +93,11 @@ func noop() error {
 var _ StopFunc = noop
 
 func start(options *options) error {
-	startTracer()
-	err := startProfiler(options)
+	err := startTracer()
+	if err != nil {
+		return err
+	}
+	err = startProfiler(options)
 	if err != nil {
 		return err
 	}
@@ -107,8 +109,8 @@ func start(options *options) error {
 	return nil
 }
 
-func startTracer() {
-	tracer.Start(
+func startTracer() error {
+	return tracer.Start(
 		tracer.WithRuntimeMetrics(),
 	)
 }

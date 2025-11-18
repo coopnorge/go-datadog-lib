@@ -4,9 +4,9 @@ import (
 	"net/http"
 	"os"
 
-	httptrace "gopkg.in/DataDog/dd-trace-go.v1/contrib/net/http"
-	"gopkg.in/DataDog/dd-trace-go.v1/ddtrace/ext"
-	"gopkg.in/DataDog/dd-trace-go.v1/ddtrace/tracer"
+	httptrace "github.com/DataDog/dd-trace-go/contrib/net/http/v2"
+	"github.com/DataDog/dd-trace-go/v2/ddtrace/ext"
+	"github.com/DataDog/dd-trace-go/v2/ddtrace/tracer"
 )
 
 // These options, unless otherwise specified, will be valid for both client and server interceptors.
@@ -52,16 +52,16 @@ func convertClientOptions(options ...Option) []httptrace.RoundTripperOption {
 	}
 	opts := make([]httptrace.RoundTripperOption, 0, 3+len(cfg.tags))
 	if cfg.serviceName != "" {
-		opts = append(opts, httptrace.RTWithServiceName(cfg.serviceName))
+		opts = append(opts, httptrace.WithService(cfg.serviceName)) // for server use
 	}
 	if cfg.resourceNamer != nil {
-		opts = append(opts, httptrace.RTWithResourceNamer(cfg.resourceNamer))
+		opts = append(opts, httptrace.WithResourceNamer(cfg.resourceNamer))
 	}
 	if cfg.requestIgnorer != nil {
-		opts = append(opts, httptrace.RTWithIgnoreRequest(cfg.requestIgnorer))
+		opts = append(opts, httptrace.WithIgnoreRequest(cfg.requestIgnorer))
 	}
 	for k, v := range cfg.tags {
-		opts = append(opts, httptrace.RTWithSpanOptions(tracer.Tag(k, v)))
+		opts = append(opts, httptrace.WithSpanOptions(tracer.Tag(k, v)))
 	}
 	return opts
 }

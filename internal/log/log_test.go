@@ -8,15 +8,15 @@ import (
 	"github.com/coopnorge/go-datadog-lib/v2/internal/log"
 	coopLogger "github.com/coopnorge/go-logger"
 
+	"github.com/DataDog/dd-trace-go/v2/ddtrace/tracer"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
-	"gopkg.in/DataDog/dd-trace-go.v1/ddtrace"
 )
 
 func TestSetup(t *testing.T) {
 	logger, err := log.NewLogger(log.WithGlobalLogger())
 	require.NoError(t, err)
-	ddtrace.UseLogger(logger)
+	tracer.UseLogger(logger)
 }
 
 func TestGlobalLogger(t *testing.T) {

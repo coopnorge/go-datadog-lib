@@ -1,9 +1,8 @@
 # Go Datadog Library
 
 Reduces the complexity of initializing and using Datadog functionality. See
-[Datadog - Getting
-Started](https://docs.datadoghq.com/getting_started/?site=eu) for more
-information about how Datadog works.
+[Datadog - Getting Started](https://docs.datadoghq.com/getting_started/?site=eu)
+for more information about how Datadog works.
 
 ## Module documentation
 
@@ -17,15 +16,14 @@ must be configured correctly.
 Setting the environment variable `DD_DISABLE` to `true` or any other value that
 [`strconv#ParseBool`](https://pkg.go.dev/strconv#ParseBool) can parse to `true`
 without returning an error. If `DD_DISABLE` is undefined or a value that
-[`strconv#ParseBool`](https://pkg.go.dev/strconv#ParseBool) can parse to
-`false` or returns an error the library will be enabled. This is done to ensure
-that the library is not disabled in production by accident.
+[`strconv#ParseBool`](https://pkg.go.dev/strconv#ParseBool) can parse to `false`
+or returns an error the library will be enabled. This is done to ensure that the
+library is not disabled in production by accident.
 
 ### Kubernetes setup
 
 To instrument an application running inside Kubernetes configure Datadog
-[Unified Service
-Tagging](https://docs.datadoghq.com/getting_started/tagging/unified_service_tagging/?tab=kubernetes)
+[Unified Service Tagging](https://docs.datadoghq.com/getting_started/tagging/unified_service_tagging/?tab=kubernetes)
 and set the required environmental variables. If you are using an official Coop
 Norge SA Helm chart skip to [application setup](#application-setup).
 
@@ -35,8 +33,8 @@ Kubernetes resource labels:
 - `tags.datadoghq.com/env`
 - `tags.datadoghq.com/version`
 
-For resources that defines a template, define the labels for the templated
-resource as well.
+For resources that defines a template, define the labels the resource template
+as well.
 
 Environmental variables:
 
@@ -46,10 +44,10 @@ Environmental variables:
 - `DD_VERSION`
 - `DD_ENV`
 
-!!! note
-    Don't forget to set `DD_ENV` for each environment, `production` or
-    `staging`, otherwise the application will be not visible in APM Service
-    Catalog.
+> [!NOTE]
+>
+> Don't forget to set `DD_ENV` for each environment, `production` or `staging`,
+> otherwise the application will be not visible in APM Service Catalog.
 
 ```yaml title="deployment.yaml"
 apiVersion: apps/v1
@@ -78,28 +76,28 @@ spec:
     spec:
       serviceAccountName: my-app
       containers:
-          env:
-            - name: DD_DOGSTATSD_URL
-              value: "unix:///var/run/datadog/dsd.socket"
-            - name: DD_TRACE_AGENT_URL
-              value: "unix:///var/run/datadog/apm.socket"
-            - name: DD_SERVICE
-              valueFrom:
-                fieldRef:
-                  fieldPath: metadata.labels['tags.datadoghq.com/service']
-            - name: DD_VERSION
-              valueFrom:
-                fieldRef:
-                  fieldPath: metadata.labels['tags.datadoghq.com/version']
-            - name: DD_ENV
-              valueFrom:
-                fieldRef:
-                  fieldPath: metadata.labels['tags.datadoghq.com/env']
-          volumeMounts:
-            - name: ddsocket
-              mountPath: /var/run/datadog
-              readOnly: true
-          imagePullPolicy: Always
+        env:
+          - name: DD_DOGSTATSD_URL
+            value: "unix:///var/run/datadog/dsd.socket"
+          - name: DD_TRACE_AGENT_URL
+            value: "unix:///var/run/datadog/apm.socket"
+          - name: DD_SERVICE
+            valueFrom:
+              fieldRef:
+                fieldPath: metadata.labels['tags.datadoghq.com/service']
+          - name: DD_VERSION
+            valueFrom:
+              fieldRef:
+                fieldPath: metadata.labels['tags.datadoghq.com/version']
+          - name: DD_ENV
+            valueFrom:
+              fieldRef:
+                fieldPath: metadata.labels['tags.datadoghq.com/env']
+        volumeMounts:
+          - name: ddsocket
+            mountPath: /var/run/datadog
+            readOnly: true
+        imagePullPolicy: Always
       volumes:
         - hostPath:
             path: /var/run/datadog/
@@ -148,14 +146,15 @@ func run() error {
 }
 ```
 
-!!! note
-    After that Datadog will try to connect to the socket and will start to send all
-    information in the background.
-
-    In different setup, you could have error logs that Datadog cannot connect to
-    the socket and tried to connect via HTTP. That could be related to issue when
-    your container starts faster and sockets were not ready to communicate with
-    Agent or Agent was started later.
+> [!NOTE]
+>
+> After that Datadog will try to connect to the socket and will start to send
+> all information in the background.
+>
+> In different setup, you could have error logs that Datadog cannot connect to
+> the socket and tried to connect via HTTP. That could be related to issue when
+> your container starts faster and sockets were not ready to communicate with
+> Agent or Agent was started later.
 
 ## Tracing
 
@@ -167,8 +166,8 @@ distributed tracing the traces will be linked.
 
 #### gRPC server interceptor
 
-`go-datadog-lib` provides gRPC interceptors for tracing inbound request for
-both Unary and Stream gRPC endpoints.
+`go-datadog-lib` provides gRPC interceptors for tracing inbound request for both
+Unary and Stream gRPC endpoints.
 
 ```go title="cmd/helloworld/main.go"
 package main
@@ -283,10 +282,10 @@ traces will be linked.
 #### gRPC client interceptor
 
 If your application is making gRPC calls, you can add the gRPC
-client-interceptor to automatically create child-spans for each gRPC-call.
-These spans will also be embedded in the outbound gRPC-metadata, so if you are
-calling another service that is also instrumented with Datadog-integration,
-then you will enable distributed tracing.
+client-interceptor to automatically create child-spans for each gRPC-call. These
+spans will also be embedded in the outbound gRPC-metadata, so if you are calling
+another service that is also instrumented with Datadog-integration, then you
+will enable distributed tracing.
 
 It is important that the context used in the RPC contains trace-information,
 preferably created from any server middleware from this module.
@@ -297,10 +296,10 @@ package main
 import (
 	"context"
 
+	"github.com/DataDog/dd-trace-go/v2/ddtrace/tracer"
 	datadogMiddleware "github.com/coopnorge/go-datadog-lib/v2/middleware/grpc"
 	"github.com/grpc-ecosystem/go-grpc-middleware/v2/testing/testpb"
 	"google.golang.org/grpc"
-	"gopkg.in/DataDog/dd-trace-go.v1/ddtrace/tracer"
 )
 
 func main() {
@@ -364,10 +363,10 @@ func stream() {
 #### HTTP client middleware
 
 If your application is making HTTP calls, you can add the HTTP
-client-interceptor to automatically create child-spans for each HTTP-call.
-These spans will also be embedded in the outbound HTTP Headers, so if you are
-calling another service that is also instrumented with Datadog-integration,
-then you will enable distributed tracing.
+client-interceptor to automatically create child-spans for each HTTP-call. These
+spans will also be embedded in the outbound HTTP Headers, so if you are calling
+another service that is also instrumented with Datadog-integration, then you
+will enable distributed tracing.
 
 It is important that the context used in the `http.Request` contains
 trace-information, preferably created from any server middleware from this
@@ -381,8 +380,8 @@ import (
 	"net/http"
 	"time"
 
+	"github.com/DataDog/dd-trace-go/v2/ddtrace/tracer"
 	datadogMiddleware "github.com/coopnorge/go-datadog-lib/v2/middleware/http"
-	"gopkg.in/DataDog/dd-trace-go.v1/ddtrace/tracer"
 )
 
 func main() {
@@ -424,9 +423,9 @@ package main
 import (
 	"context"
 
+	"github.com/DataDog/dd-trace-go/v2/ddtrace/tracer"
 	ddDatabase "github.com/coopnorge/go-datadog-lib/v2/middleware/database"
 	mysqlDriver "github.com/go-sql-driver/mysql"
-	"gopkg.in/DataDog/dd-trace-go.v1/ddtrace/tracer"
 )
 
 func main() {
@@ -575,8 +574,8 @@ func run() error {
 
 ### Example how to send metrics
 
-When you have `BaseMetricCollector` from pkg `metrics`
-you can call create records in Datadog.
+When you have `BaseMetricCollector` from pkg `metrics` you can call create
+records in Datadog.
 
 ```go
 package my_metric
@@ -625,7 +624,7 @@ import (
 	"github.com/coopnorge/go-datadog-lib/v2/tracelogger"
 	"github.com/coopnorge/go-logger"
 
-	"gopkg.in/DataDog/dd-trace-go.v1/ddtrace/tracer"
+	"github.com/DataDog/dd-trace-go/v2/ddtrace/tracer"
 )
 
 func main() {

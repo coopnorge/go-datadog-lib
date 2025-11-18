@@ -7,7 +7,7 @@ import (
 	"github.com/coopnorge/go-logger"
 )
 
-// Logger is a logging adapter between gopkg.in/DataDog/dd-trace-go.v1/ddtrace
+// Logger is a logging adapter between github.com/DataDog/dd-trace-go/v2
 // an go-logger, do not create this directly, use NewLogger()
 type Logger struct {
 	instance *logger.Logger
@@ -15,19 +15,19 @@ type Logger struct {
 
 // NewLogger creates a new Datadog logger that passes message to go-logger
 //
-// To inject the logger into ddtrace use
+// To inject the logger into tracer use
 //
 //	package main
 //
 //	import (
 //		"github.com/coopnorge/go-logger/adapter/datadog"
 //
-//		"gopkg.in/DataDog/dd-trace-go.v1/ddtrace"
+//		"github.com/DataDog/dd-trace-go/v2/ddtrace/tracer"
 //	)
 //
 //	func main() {
 //		l, err := datadog.NewLogger(datadog.WithGlobalLogger())
-//		ddtrace.UseLogger(l)
+//		tracer.UseLogger(l)
 //	}
 func NewLogger(opts ...LoggerOption) (*Logger, error) {
 	logger := &Logger{}
@@ -42,7 +42,7 @@ func NewLogger(opts ...LoggerOption) (*Logger, error) {
 
 // Log writes statements to the log
 func (l *Logger) Log(msg string) {
-	// Logs from gopkg.in/DataDog/dd-trace-go.v1/ddtrace will contain keywords
+	// Logs from github.com/DataDog/dd-trace-go/v2 will contain keywords
 	// specifying the level of the log.
 	if strings.Contains(msg, "ERROR") {
 		l.instance.Error(msg)

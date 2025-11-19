@@ -5,7 +5,7 @@ go 1.25.0
 require (
 	github.com/DataDog/datadog-go/v5 v5.8.1
 	github.com/coopnorge/go-logger v0.14.1
-	github.com/coopnorge/mage v0.14.2
+	github.com/coopnorge/mage v0.14.3
 	github.com/go-sql-driver/mysql v1.9.3
 	github.com/grpc-ecosystem/go-grpc-middleware/v2 v2.3.3
 	github.com/iancoleman/strcase v0.3.0

@@ -16,18 +16,18 @@ type (
 	}
 )
 
-// CreateNestedTrace will fork parent tracer to attach to parent one with new operation and resource from sourceCtx
+// CreateNestedTrace will fork parent tracer to attach to parent one with new operation and resource from the provided context.
 //
 // Deprecated: Use CreateChildSpan instead.
-func CreateNestedTrace(sourceCtx context.Context, operation, resource string) (*tracer.Span, error) {
-	return CreateChildSpan(sourceCtx, operation, resource), nil
+func CreateNestedTrace(ctx context.Context, operation, resource string) (*tracer.Span, error) {
+	return CreateChildSpan(ctx, operation, resource), nil
 }
 
-// CreateChildSpan will create a child-span of the span embedded in sourceCtx.
-// If there is no trace-information in sourceCtx, a noop-span will be returned.
+// CreateChildSpan will create a child-span of the span embedded in the provided context.
+// If there is no trace-information in the provided context, a noop-span (nil) will be returned.
 // The caller is responsible for calling span.Finish().
-func CreateChildSpan(sourceCtx context.Context, operation, resource string) *tracer.Span {
-	existingSpan, _ := tracer.SpanFromContext(sourceCtx)
+func CreateChildSpan(ctx context.Context, operation, resource string) *tracer.Span {
+	existingSpan, _ := tracer.SpanFromContext(ctx)
 	return existingSpan.StartChild(operation, tracer.ResourceName(resource))
 }
 
@@ -39,8 +39,8 @@ func AppendUserToTrace(_ context.Context, _ string) error {
 }
 
 // OverrideTraceResourceName set custom resource name for traced span aka SQL Query, Request, I/O etc
-func OverrideTraceResourceName(sourceCtx context.Context, newResourceName string) error {
-	span, exists := tracer.SpanFromContext(sourceCtx)
+func OverrideTraceResourceName(ctx context.Context, newResourceName string) error {
+	span, exists := tracer.SpanFromContext(ctx)
 	if !exists {
 		return fmt.Errorf("parent span tracer not found in context")
 	}

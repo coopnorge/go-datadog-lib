@@ -6,7 +6,7 @@ import (
 	"github.com/coopnorge/go-datadog-lib/v2/internal"
 	"google.golang.org/grpc"
 
-	ddGrpc "gopkg.in/DataDog/dd-trace-go.v1/contrib/google.golang.org/grpc"
+	ddGrpc "github.com/DataDog/dd-trace-go/contrib/google.golang.org/grpc/v2"
 )
 
 // TraceUnaryClientInterceptor create a client-interceptor to automatically create child-spans, and append to gRPC metadata.

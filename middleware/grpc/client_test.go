@@ -11,6 +11,8 @@ import (
 
 	"github.com/coopnorge/go-datadog-lib/v2/internal/testhelpers"
 
+	"github.com/DataDog/dd-trace-go/v2/ddtrace/mocktracer"
+	"github.com/DataDog/dd-trace-go/v2/ddtrace/tracer"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
 	"google.golang.org/grpc"
@@ -20,8 +22,6 @@ import (
 	"google.golang.org/grpc/metadata"
 	"google.golang.org/grpc/status"
 	"google.golang.org/grpc/test/bufconn"
-	"gopkg.in/DataDog/dd-trace-go.v1/ddtrace/mocktracer"
-	"gopkg.in/DataDog/dd-trace-go.v1/ddtrace/tracer"
 )
 
 type testServer struct {
@@ -166,7 +166,7 @@ func TestStreamClientInterceptor(t *testing.T) {
 	testTracer.Stop()
 
 	// Due to timing of the streaming call, the "grpc.client" span may not be finished yet, but we can still assert all of the spans.
-	spans := []mocktracer.Span{}
+	spans := []*mocktracer.Span{}
 	spans = append(spans, testTracer.FinishedSpans()...)
 	spans = append(spans, testTracer.OpenSpans()...)
 	require.Equal(t, 4, len(spans))

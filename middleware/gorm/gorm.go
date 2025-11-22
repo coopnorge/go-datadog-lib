@@ -3,8 +3,8 @@ package gorm
 import (
 	"os"
 
+	gormtrace "github.com/DataDog/dd-trace-go/contrib/gorm.io/gorm.v1/v2"
 	"github.com/coopnorge/go-datadog-lib/v2/internal"
-	gormtrace "gopkg.in/DataDog/dd-trace-go.v1/contrib/gorm.io/gorm.v1"
 	"gorm.io/gorm"
 )
 
@@ -21,7 +21,7 @@ func NewORM(dialector gorm.Dialector, gormCfg *gorm.Config, options ...Option) (
 	}
 	opts := make([]gormtrace.Option, 0, 2)
 	if cfg.serviceName != "" {
-		opts = append(opts, gormtrace.WithServiceName(cfg.serviceName))
+		opts = append(opts, gormtrace.WithService(cfg.serviceName))
 	}
 	for k, v := range cfg.tags {
 		v := v

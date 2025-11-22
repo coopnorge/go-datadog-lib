@@ -5,8 +5,8 @@ import (
 	"net/http"
 	"time"
 
+	"github.com/DataDog/dd-trace-go/v2/ddtrace/tracer"
 	datadogMiddleware "github.com/coopnorge/go-datadog-lib/v2/middleware/http"
-	"gopkg.in/DataDog/dd-trace-go.v1/ddtrace/tracer"
 )
 
 func ExampleAddTracingToClient() {

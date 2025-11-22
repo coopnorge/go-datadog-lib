@@ -3,10 +3,10 @@ package grpc_test
 import (
 	"context"
 
+	"github.com/DataDog/dd-trace-go/v2/ddtrace/tracer"
 	datadogMiddleware "github.com/coopnorge/go-datadog-lib/v2/middleware/grpc"
 	"github.com/grpc-ecosystem/go-grpc-middleware/v2/testing/testpb"
 	"google.golang.org/grpc"
-	"gopkg.in/DataDog/dd-trace-go.v1/ddtrace/tracer"
 )
 
 func ExampleUnaryClientInterceptor() {

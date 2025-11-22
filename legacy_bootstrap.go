@@ -10,9 +10,8 @@ import (
 	"github.com/coopnorge/go-datadog-lib/v2/internal/log"
 	"github.com/coopnorge/go-logger"
 
-	"gopkg.in/DataDog/dd-trace-go.v1/ddtrace"
-	"gopkg.in/DataDog/dd-trace-go.v1/ddtrace/tracer"
-	"gopkg.in/DataDog/dd-trace-go.v1/profiler"
+	"github.com/DataDog/dd-trace-go/v2/ddtrace/tracer"
+	"github.com/DataDog/dd-trace-go/v2/profiler"
 )
 
 // ConnectionType enum type
@@ -52,7 +51,7 @@ func StartDatadog(cfg config.DatadogParameters, connectionType ConnectionType) e
 	if err != nil {
 		return fmt.Errorf("failed to initialize the Datadog logger: %w", err)
 	}
-	ddtrace.UseLogger(l)
+	tracer.UseLogger(l)
 
 	compareConfigWithEnv(cfg)
 
@@ -60,9 +59,14 @@ func StartDatadog(cfg config.DatadogParameters, connectionType ConnectionType) e
 		return err
 	}
 
-	initTracer(cfg, connectionType)
-	if initProfilerErr := initProfiler(cfg, connectionType); initProfilerErr != nil {
-		return fmt.Errorf("failed to start Datadog profiler: %w", initProfilerErr)
+	err = initTracer(cfg, connectionType)
+	if err != nil {
+		return fmt.Errorf("failed to start Datadog tracer: %w", err)
+	}
+
+	err = initProfiler(cfg, connectionType)
+	if err != nil {
+		return fmt.Errorf("failed to start Datadog profiler: %w", err)
 	}
 
 	return nil
@@ -124,7 +128,7 @@ func validateConnectionType(connectionType ConnectionType) error {
 	return nil
 }
 
-func initTracer(cfg config.DatadogParameters, connectionType ConnectionType) {
+func initTracer(cfg config.DatadogParameters, connectionType ConnectionType) error {
 	tracerOptions := make([]tracer.StartOption, 0, 5)
 	switch connectionType {
 	case ConnectionTypeSocket:
@@ -147,7 +151,7 @@ func initTracer(cfg config.DatadogParameters, connectionType ConnectionType) {
 		}...,
 	)
 
-	tracer.Start(tracerOptions...)
+	return tracer.Start(tracerOptions...)
 }
 
 func initProfiler(cfg config.DatadogParameters, connectionType ConnectionType) error {

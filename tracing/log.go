@@ -11,8 +11,8 @@ import (
 // Deprecated: LogWithTrace will be removed in a future major version and
 // should not be used. Use logger.WithContext(ctx Context) from
 // github.com/coopnorge/go-logger
-func LogWithTrace(sourceCtx context.Context, severity logger.Level, message string) {
-	entry := logger.WithContext(sourceCtx)
+func LogWithTrace(ctx context.Context, severity logger.Level, message string) {
+	entry := logger.WithContext(ctx)
 	logWithSeverity(entry, severity, message)
 }
 
@@ -21,8 +21,8 @@ func LogWithTrace(sourceCtx context.Context, severity logger.Level, message stri
 // Deprecated: LogFieldsWithTrace will be removed in a future major version and
 // should not be used. Use logger.WithContext(ctx Context) from
 // github.com/coopnorge/go-logger
-func LogFieldsWithTrace(sourceCtx context.Context, severity logger.Level, message string, fields logger.Fields) {
-	entry := logger.WithContext(sourceCtx).WithFields(fields)
+func LogFieldsWithTrace(ctx context.Context, severity logger.Level, message string, fields logger.Fields) {
+	entry := logger.WithContext(ctx).WithFields(fields)
 	logWithSeverity(entry, severity, message)
 }
 

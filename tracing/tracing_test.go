@@ -11,19 +11,19 @@ import (
 	"github.com/stretchr/testify/require"
 )
 
+// TestCreateNestedTrace tests the CreateNestedTrace function with and without an existing span in the context.
 func TestCreateNestedTrace(t *testing.T) {
 	op := "test"
 	res := "unit"
 	ctx := context.Background()
 
-	// Start Datadog tracer, so that we don't create NoopSpans.
 	testTracer := mocktracer.Start()
 	t.Cleanup(testTracer.Stop)
 
 	nestedTrace, nestedTraceErr := tracing.CreateNestedTrace(ctx, op, res)
 
 	assert.NoError(t, nestedTraceErr)
-	assert.Nil(t, nestedTrace) // since we are using a context without a span, we get a noop span
+	assert.Nil(t, nestedTrace) // since we are using a context without a span, we get a nil span
 
 	span, spanCtx := tracer.StartSpanFromContext(ctx, "test", tracer.ResourceName("UnitTest"))
 	defer span.Finish()
@@ -33,10 +33,8 @@ func TestCreateNestedTrace(t *testing.T) {
 	assert.NotNil(t, nestedTrace)
 }
 
+// TestAppendUserToTrace ensures that the legacy (deprecated) "AppendUserToTrace" no longer adds any personally identifiable information (PII) to the trace.
 func TestAppendUserToTrace(t *testing.T) {
-	// This test ensures that the legacy (deprecated) "AppendUserToTrace" no longer adds any personally identifiable information (PII) to the trace.
-
-	// Start Datadog tracer, so that we don't create NoopSpans.
 	testTracer := mocktracer.Start()
 	t.Cleanup(testTracer.Stop)
 	user := "unit_tester"
@@ -60,9 +58,8 @@ func TestAppendUserToTrace(t *testing.T) {
 	require.Empty(t, tags["usr.id"])
 }
 
+// TestResourceNameInTag ensures that the resource name is correctly set in the span tags.
 func TestResourceNameInTag(t *testing.T) {
-	// This test ensures that the resource name is correctly set in the span tags.
-	// Start Datadog tracer, so that we don't create NoopSpans.
 	testTracer := mocktracer.Start()
 	t.Cleanup(testTracer.Stop)
 
@@ -78,8 +75,8 @@ func TestResourceNameInTag(t *testing.T) {
 	require.Equal(t, "UnitTest", tags["resource.name"])
 }
 
+// TestOverrideTraceResourceName tests the OverrideTraceResourceName function with and without an existing span in the context.
 func TestOverrideTraceResourceName(t *testing.T) {
-	// Start Datadog tracer, so that we don't create NoopSpans.
 	testTracer := mocktracer.Start()
 	t.Cleanup(testTracer.Stop)
 
@@ -97,9 +94,10 @@ func TestOverrideTraceResourceName(t *testing.T) {
 	assert.Nil(t, err)
 }
 
+// TestStartChildSpan tests the CreateChildSpan function with and without an existing span in the context.
 func TestStartChildSpan(t *testing.T) {
-	// Start Datadog tracer, so that we don't create NoopSpans.
-	_ = mocktracer.Start()
+	testTracer := mocktracer.Start()
+	t.Cleanup(testTracer.Stop)
 
 	type args struct {
 		spanInCtx bool
@@ -136,7 +134,7 @@ func TestStartChildSpan(t *testing.T) {
 			if tt.args.spanInCtx {
 				require.NotNil(t, childSpan)
 			} else {
-				require.Nil(t, childSpan) // since we are using a context without a span, we get a noop span
+				require.Nil(t, childSpan) // since we are using a context without a span, we get a nil span
 			}
 			childSpan.Finish()
 			if tt.args.spanInCtx {

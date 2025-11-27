@@ -6,7 +6,7 @@ import (
 	"github.com/coopnorge/go-datadog-lib/v2/tracelogger"
 	"github.com/coopnorge/go-logger"
 
-	"gopkg.in/DataDog/dd-trace-go.v1/ddtrace/tracer"
+	"github.com/DataDog/dd-trace-go/v2/ddtrace/tracer"
 )
 
 func ExampleHook() {

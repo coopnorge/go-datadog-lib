@@ -4,9 +4,9 @@ import (
 	"context"
 	"testing"
 
+	"github.com/DataDog/dd-trace-go/v2/ddtrace/tracer"
 	"github.com/coopnorge/go-datadog-lib/v2/tracing"
 	"github.com/coopnorge/go-logger"
-	"gopkg.in/DataDog/dd-trace-go.v1/ddtrace/tracer"
 )
 
 func TestLogWithTrace(_ *testing.T) {

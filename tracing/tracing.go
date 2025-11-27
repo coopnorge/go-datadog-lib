@@ -4,38 +4,31 @@ import (
 	"context"
 	"fmt"
 
-	"gopkg.in/DataDog/dd-trace-go.v1/ddtrace"
-	"gopkg.in/DataDog/dd-trace-go.v1/ddtrace/ext"
-	"gopkg.in/DataDog/dd-trace-go.v1/ddtrace/tracer"
+	"github.com/DataDog/dd-trace-go/v2/ddtrace/ext"
+	"github.com/DataDog/dd-trace-go/v2/ddtrace/tracer"
 )
 
 type (
 	// TraceDetails that must be included in context
 	TraceDetails struct {
 		// DatadogSpan represents a chunk of computation time for Datadog system
-		DatadogSpan ddtrace.Span
+		DatadogSpan *tracer.Span
 	}
 )
 
-// CreateNestedTrace will fork parent tracer to attach to parent one with new operation and resource from sourceCtx
+// CreateNestedTrace will fork parent tracer to attach to parent one with new operation and resource from the provided context.
 //
 // Deprecated: Use CreateChildSpan instead.
-func CreateNestedTrace(sourceCtx context.Context, operation, resource string) (ddtrace.Span, error) {
-	return CreateChildSpan(sourceCtx, operation, resource), nil
+func CreateNestedTrace(ctx context.Context, operation, resource string) (*tracer.Span, error) {
+	return CreateChildSpan(ctx, operation, resource), nil
 }
 
-// CreateChildSpan will create a child-span of the span embedded in sourceCtx.
-// If there is no trace-information in sourceCtx, a noop-span will be returned.
+// CreateChildSpan will create a child-span of the span embedded in the provided context.
+// If there is no trace-information in the provided context, a noop-span (nil) will be returned.
 // The caller is responsible for calling span.Finish().
-func CreateChildSpan(sourceCtx context.Context, operation, resource string) ddtrace.Span {
-	existingSpan := getSpanFromContext(sourceCtx)
-	if existingSpan == nil {
-		return noopSpan{}
-	}
-
-	span := tracer.StartSpan(operation, tracer.ResourceName(resource), tracer.ChildOf(existingSpan.Context()))
-
-	return span
+func CreateChildSpan(ctx context.Context, operation, resource string) *tracer.Span {
+	existingSpan, _ := tracer.SpanFromContext(ctx)
+	return existingSpan.StartChild(operation, tracer.ResourceName(resource))
 }
 
 // AppendUserToTrace includes identifier of user that would be attached to span in datadog
@@ -46,20 +39,13 @@ func AppendUserToTrace(_ context.Context, _ string) error {
 }
 
 // OverrideTraceResourceName set custom resource name for traced span aka SQL Query, Request, I/O etc
-func OverrideTraceResourceName(sourceCtx context.Context, newResourceName string) error {
-	span := getSpanFromContext(sourceCtx)
-	if span == nil {
+func OverrideTraceResourceName(ctx context.Context, newResourceName string) error {
+	span, exists := tracer.SpanFromContext(ctx)
+	if !exists {
 		return fmt.Errorf("parent span tracer not found in context")
 	}
 
 	span.SetTag(ext.ResourceName, newResourceName)
 
-	return nil
-}
-
-func getSpanFromContext(ctx context.Context) tracer.Span {
-	if span, exists := tracer.SpanFromContext(ctx); exists {
-		return span
-	}
 	return nil
 }

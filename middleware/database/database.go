@@ -12,7 +12,6 @@ import (
 // RegisterDriverAndOpen registers the selected driver with the datadog-lib, and opens a connection to the database using the dsn.
 func RegisterDriverAndOpen(driverName string, driver driver.Driver, dsn string, options ...Option) (*sql.DB, error) {
 	if internal.IsDatadogDisabled() {
-		sql.Register(driverName, driver)
 		return sql.Open(driverName, dsn)
 	}
 

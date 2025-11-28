@@ -9,7 +9,10 @@ import (
 	"github.com/coopnorge/go-datadog-lib/v2/internal"
 )
 
-// RegisterDriverAndOpen registers the selected driver with the datadog-lib, and opens a connection to the database using the dsn.
+// RegisterDriverAndOpen registers the selected driver with dd-trace-go's
+// sqltrace, and opens a connection to the database using the dsn. The
+// implementation assumes that the consumer call sql.Register before
+// calling this function.
 func RegisterDriverAndOpen(driverName string, driver driver.Driver, dsn string, options ...Option) (*sql.DB, error) {
 	if internal.IsDatadogDisabled() {
 		return sql.Open(driverName, dsn)

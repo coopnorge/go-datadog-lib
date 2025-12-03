@@ -10,7 +10,7 @@ require (
 	github.com/DataDog/dd-trace-go/contrib/labstack/echo.v4/v2 v2.4.0
 	github.com/DataDog/dd-trace-go/contrib/net/http/v2 v2.4.0
 	github.com/DataDog/dd-trace-go/v2 v2.4.0
-	github.com/coopnorge/go-logger v0.14.1
+	github.com/coopnorge/go-logger v0.15.0
 	github.com/coopnorge/mage v0.16.4
 	github.com/go-sql-driver/mysql v1.9.3
 	github.com/grpc-ecosystem/go-grpc-middleware/v2 v2.3.3

@@ -4,12 +4,12 @@ go 1.25.0
 
 require (
 	github.com/DataDog/datadog-go/v5 v5.8.2
-	github.com/DataDog/dd-trace-go/contrib/database/sql/v2 v2.4.0
+	github.com/DataDog/dd-trace-go/contrib/database/sql/v2 v2.4.1
 	github.com/DataDog/dd-trace-go/contrib/google.golang.org/grpc/v2 v2.4.0
 	github.com/DataDog/dd-trace-go/contrib/gorm.io/gorm.v1/v2 v2.4.0
 	github.com/DataDog/dd-trace-go/contrib/labstack/echo.v4/v2 v2.4.0
 	github.com/DataDog/dd-trace-go/contrib/net/http/v2 v2.4.0
-	github.com/DataDog/dd-trace-go/v2 v2.4.0
+	github.com/DataDog/dd-trace-go/v2 v2.4.1
 	github.com/coopnorge/go-logger v0.15.0
 	github.com/coopnorge/mage v0.16.4
 	github.com/go-sql-driver/mysql v1.9.3

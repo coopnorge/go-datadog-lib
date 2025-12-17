@@ -24,8 +24,8 @@ github.com/DataDog/dd-trace-go/contrib/database/sql/v2 v2.4.1 h1:60+eYtAWtAlqG4G
 github.com/DataDog/dd-trace-go/contrib/database/sql/v2 v2.4.1/go.mod h1:U3jS31q1JCfiCdGZcf9NxMwNpQkMQzINJrrXm4jEDrA=
 github.com/DataDog/dd-trace-go/contrib/google.golang.org/grpc/v2 v2.4.1 h1:Fj0T4jwyhXYFcjn/WobViBobmaU3ZvN8BXriStTpGM0=
 github.com/DataDog/dd-trace-go/contrib/google.golang.org/grpc/v2 v2.4.1/go.mod h1:XSHftpQga51ss7f+IuyUefatVna5h3UDMYfeJlcr0kY=
-github.com/DataDog/dd-trace-go/contrib/gorm.io/gorm.v1/v2 v2.4.0 h1:YTIXyz+RLqwUh3TwvpLe+3VbC4OEDZpI2OcSngNFIug=
-github.com/DataDog/dd-trace-go/contrib/gorm.io/gorm.v1/v2 v2.4.0/go.mod h1:9IGicyeqFNggwuvVTKq2tASlDUFJbO+Cn53i1HV7SGE=
+github.com/DataDog/dd-trace-go/contrib/gorm.io/gorm.v1/v2 v2.4.1 h1:mR9QR9J46+oxwKtoUUg5+I1fv+bmnGicR/mdPQgG8gk=
+github.com/DataDog/dd-trace-go/contrib/gorm.io/gorm.v1/v2 v2.4.1/go.mod h1:8F5tJMjnRTbrYrcSxw9YLQBY81ueSNgWgZl2qks2tTs=
 github.com/DataDog/dd-trace-go/contrib/labstack/echo.v4/v2 v2.4.0 h1:W3/KT3NtXgbDITlValXtiBMtNrFMgrW4tXWX7YZdKpg=
 github.com/DataDog/dd-trace-go/contrib/labstack/echo.v4/v2 v2.4.0/go.mod h1:WmM9p13ZaEhWOjPfa9N9dNXVo3FfrhG4MktIRvpeMfY=
 github.com/DataDog/dd-trace-go/contrib/net/http/v2 v2.4.0 h1:CB9rJ9KqKU7xN9mTFH2+jYhQq07XzfjJwees5p05VbM=

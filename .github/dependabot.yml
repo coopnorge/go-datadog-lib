@@ -17,6 +17,11 @@ updates:
     directory: "/"
     schedule:
       interval: "daily"
+    groups:
+      dd-trace-go-modules:
+        patterns:
+          - github.com/DataDog/dd-trace-go
+          - github.com/DataDog/dd-trace-go/*
   - package-ecosystem: "docker"
     directory: "/docker-compose"
     registries:

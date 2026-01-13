@@ -4,12 +4,12 @@ go 1.25.0
 
 require (
 	github.com/DataDog/datadog-go/v5 v5.8.2
-	github.com/DataDog/dd-trace-go/contrib/database/sql/v2 v2.4.1
-	github.com/DataDog/dd-trace-go/contrib/google.golang.org/grpc/v2 v2.4.1
-	github.com/DataDog/dd-trace-go/contrib/gorm.io/gorm.v1/v2 v2.4.1
-	github.com/DataDog/dd-trace-go/contrib/labstack/echo.v4/v2 v2.4.1
-	github.com/DataDog/dd-trace-go/contrib/net/http/v2 v2.4.1
-	github.com/DataDog/dd-trace-go/v2 v2.4.1
+	github.com/DataDog/dd-trace-go/contrib/database/sql/v2 v2.5.0
+	github.com/DataDog/dd-trace-go/contrib/google.golang.org/grpc/v2 v2.5.0
+	github.com/DataDog/dd-trace-go/contrib/gorm.io/gorm.v1/v2 v2.5.0
+	github.com/DataDog/dd-trace-go/contrib/labstack/echo.v4/v2 v2.5.0
+	github.com/DataDog/dd-trace-go/contrib/net/http/v2 v2.5.0
+	github.com/DataDog/dd-trace-go/v2 v2.5.0
 	github.com/coopnorge/go-logger v0.15.0
 	github.com/coopnorge/mage v0.16.4
 	github.com/go-sql-driver/mysql v1.9.3
@@ -35,13 +35,12 @@ require (
 	github.com/DataDog/datadog-agent/pkg/util/log v0.72.2 // indirect
 	github.com/DataDog/datadog-agent/pkg/util/scrubber v0.72.2 // indirect
 	github.com/DataDog/datadog-agent/pkg/version v0.72.2 // indirect
-	github.com/DataDog/go-libddwaf/v4 v4.7.0 // indirect
+	github.com/DataDog/go-libddwaf/v4 v4.8.0 // indirect
 	github.com/DataDog/go-runtime-metrics-internal v0.0.4-0.20250721125240-fdf1ef85b633 // indirect
 	github.com/DataDog/go-sqllexer v0.1.10 // indirect
 	github.com/DataDog/go-tuf v1.1.1-0.5.2 // indirect
 	github.com/DataDog/gostackparse v0.7.0 // indirect
 	github.com/DataDog/sketches-go v1.4.7 // indirect
-	github.com/Masterminds/semver/v3 v3.4.0 // indirect
 	github.com/Microsoft/go-winio v0.6.2 // indirect
 	github.com/bmatcuk/doublestar/v4 v4.9.1 // indirect
 	github.com/cenkalti/backoff/v5 v5.0.3 // indirect
@@ -53,8 +52,6 @@ require (
 	github.com/go-logr/logr v1.4.3 // indirect
 	github.com/go-logr/stdr v1.2.2 // indirect
 	github.com/go-ole/go-ole v1.3.0 // indirect
-	github.com/go-viper/mapstructure/v2 v2.4.0 // indirect
-	github.com/gogo/protobuf v1.3.2 // indirect
 	github.com/golang/protobuf v1.5.4 // indirect
 	github.com/google/pprof v0.0.0-20250403155104-27863c87afa6 // indirect
 	github.com/google/uuid v1.6.0 // indirect
@@ -95,7 +92,8 @@ require (
 	go.opentelemetry.io/collector/component v1.44.0 // indirect
 	go.opentelemetry.io/collector/featuregate v1.46.0 // indirect
 	go.opentelemetry.io/collector/internal/telemetry v0.138.0 // indirect
-	go.opentelemetry.io/collector/pdata v1.44.0 // indirect
+	go.opentelemetry.io/collector/pdata v1.46.0 // indirect
+	go.opentelemetry.io/collector/pdata/pprofile v0.140.0 // indirect
 	go.opentelemetry.io/contrib/bridges/otelzap v0.13.0 // indirect
 	go.opentelemetry.io/otel v1.38.0 // indirect
 	go.opentelemetry.io/otel/log v0.14.0 // indirect

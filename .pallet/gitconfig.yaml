@@ -4,12 +4,14 @@ metadata:
   name: go-datadog-lib
 spec:
   description: "Light library package to wrap DataDog functionality"
+  visibility: "public"
+
 
   branches:
-    default: main
+    default: "main"
     protection:
-      - id: main
-        pattern: main
+      - id: "main"
+        pattern: "main"
         requireSignedCommits: false
         requiredStatusChecks:
           checks:
@@ -18,3 +20,4 @@ spec:
             - "Supply Chain / Validate"
         requiredPullRequestReviews:
           requireCodeOwnerReviews: false
+

@@ -18,8 +18,8 @@ github.com/DataDog/datadog-agent/pkg/util/scrubber v0.72.2 h1:KsQ1g0tdXtBBiV2Zww
 github.com/DataDog/datadog-agent/pkg/util/scrubber v0.72.2/go.mod h1:O8h2B/0JYdAEjHw20gbBcL+rAYWHanUbYFDiCH2m7Jk=
 github.com/DataDog/datadog-agent/pkg/version v0.72.2 h1:+xyUOMKlt+AwSVGn9kN/bYEUIbc/7v+phYnYCqWGhpc=
 github.com/DataDog/datadog-agent/pkg/version v0.72.2/go.mod h1:MgBQaeV9WBYPRePAccfBtBexhqOIQiRl4VJYpgfV+go=
-github.com/DataDog/datadog-go/v5 v5.8.2 h1:9IEfH1Mw9AjWwhAMqCAkhbxjuJeMxm2ARX2VdgL+ols=
-github.com/DataDog/datadog-go/v5 v5.8.2/go.mod h1:K9kcYBlxkcPP8tvvjZZKs/m1edNAUFzBbdpTUKfCsuw=
+github.com/DataDog/datadog-go/v5 v5.8.3 h1:s58CUJ9s8lezjhTNJO/SxkPBv2qZjS3ktpRSqGF5n0s=
+github.com/DataDog/datadog-go/v5 v5.8.3/go.mod h1:K9kcYBlxkcPP8tvvjZZKs/m1edNAUFzBbdpTUKfCsuw=
 github.com/DataDog/dd-trace-go/contrib/database/sql/v2 v2.5.0 h1:MRRv7q6ymr4yCjBVPLWnL/RMswipI+70P1hOpf1Iu0Y=
 github.com/DataDog/dd-trace-go/contrib/database/sql/v2 v2.5.0/go.mod h1:jPhy+uoFgX6CpTIUWdA/RpF4LeyluG98NcoWqQ60i00=
 github.com/DataDog/dd-trace-go/contrib/google.golang.org/grpc/v2 v2.5.0 h1:YyjfTr2O03HshkF6jyH9IujWpRnz6lzS6YyEfaS3aqU=

@@ -4,12 +4,12 @@ go 1.25.0
 
 require (
 	github.com/DataDog/datadog-go/v5 v5.8.3
-	github.com/DataDog/dd-trace-go/contrib/database/sql/v2 v2.5.0
-	github.com/DataDog/dd-trace-go/contrib/google.golang.org/grpc/v2 v2.5.0
-	github.com/DataDog/dd-trace-go/contrib/gorm.io/gorm.v1/v2 v2.5.0
-	github.com/DataDog/dd-trace-go/contrib/labstack/echo.v4/v2 v2.5.0
-	github.com/DataDog/dd-trace-go/contrib/net/http/v2 v2.5.0
-	github.com/DataDog/dd-trace-go/v2 v2.5.0
+	github.com/DataDog/dd-trace-go/contrib/database/sql/v2 v2.6.0
+	github.com/DataDog/dd-trace-go/contrib/google.golang.org/grpc/v2 v2.6.0
+	github.com/DataDog/dd-trace-go/contrib/gorm.io/gorm.v1/v2 v2.6.0
+	github.com/DataDog/dd-trace-go/contrib/labstack/echo.v4/v2 v2.6.0
+	github.com/DataDog/dd-trace-go/contrib/net/http/v2 v2.6.0
+	github.com/DataDog/dd-trace-go/v2 v2.6.0
 	github.com/coopnorge/go-logger v0.15.0
 	github.com/coopnorge/mage v0.16.4
 	github.com/go-sql-driver/mysql v1.9.3
@@ -62,6 +62,7 @@ require (
 	github.com/klauspost/compress v1.18.1 // indirect
 	github.com/klauspost/cpuid/v2 v2.3.0 // indirect
 	github.com/labstack/gommon v0.4.2 // indirect
+	github.com/linkdata/deadlock v0.5.5 // indirect
 	github.com/lufia/plan9stats v0.0.0-20251013123823-9fd1530e3ec3 // indirect
 	github.com/magefile/mage v1.15.0 // indirect
 	github.com/mattn/go-colorable v0.1.14 // indirect
@@ -70,6 +71,7 @@ require (
 	github.com/modern-go/concurrent v0.0.0-20180306012644-bacd9c7ef1dd // indirect
 	github.com/modern-go/reflect2 v1.0.3-0.20250322232337-35a7c28c31ee // indirect
 	github.com/outcaste-io/ristretto v0.2.3 // indirect
+	github.com/petermattis/goid v0.0.0-20250813065127-a731cc31b4fe // indirect
 	github.com/philhofer/fwd v1.2.0 // indirect
 	github.com/pkg/errors v0.9.1 // indirect
 	github.com/planetscale/vtprotobuf v0.6.1-0.20240319094008-0393e58bdf10 // indirect
@@ -81,10 +83,10 @@ require (
 	github.com/shirou/gopsutil/v4 v4.25.10 // indirect
 	github.com/sirupsen/logrus v1.9.3 // indirect
 	github.com/spaolacci/murmur3 v1.1.0 // indirect
-	github.com/theckman/httpforwarded v0.4.0 // indirect
 	github.com/tinylib/msgp v1.5.0 // indirect
 	github.com/tklauser/go-sysconf v0.3.16 // indirect
 	github.com/tklauser/numcpus v0.11.0 // indirect
+	github.com/trailofbits/go-mutexasserts v0.0.0-20250514102930-c1f3d2e37561 // indirect
 	github.com/valyala/bytebufferpool v1.0.0 // indirect
 	github.com/valyala/fasttemplate v1.2.2 // indirect
 	github.com/yusufpapurcu/wmi v1.2.4 // indirect

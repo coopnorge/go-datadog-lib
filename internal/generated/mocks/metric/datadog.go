@@ -5,6 +5,7 @@
 //
 //	mockgen -source=metric/datadog.go -destination=internal/generated/mocks/metric/datadog.go
 //
+
 // Package mock_metric is a generated GoMock package.
 package mock_metric
 
@@ -19,6 +20,7 @@ import (
 type MockDatadogMetricsClient struct {
 	ctrl     *gomock.Controller
 	recorder *MockDatadogMetricsClientMockRecorder
+	isgomock struct{}
 }
 
 // MockDatadogMetricsClientMockRecorder is the mock recorder for MockDatadogMetricsClient.

@@ -2,25 +2,24 @@
 
 ![Build](https://github.com/coopnorge/go-datadog-lib/actions/workflows/cicd.yaml/badge.svg)
 
-Plug and play package that wraps base functionally and initialization of
-Datadog Service.
+Plug and play package that wraps base functionally and initialization of Datadog
+Service.
 
 - APM, StatsD Initialization
 - StatsD metrics unification
 
 Supported middleware to correlate/extend traceability and logs in Datadog.
 
-- [X] gRPC Server
-- [X] gRPC Client
-- [X] HTTP - Echo
-- [X] HTTP - Standard library Client
-- [X] Database - GORM
-- [X] Database - Standard library
+- [x] gRPC Server
+- [x] gRPC Client
+- [x] HTTP - Echo
+- [x] HTTP - Standard library Client
+- [x] Database - GORM
+- [x] Database - Standard library
 
 ## Documentation
 
 <https://pkg.go.dev/github.com/coopnorge/go-datadog-lib/v2>
-
 
 ## Development workflow
 
@@ -37,7 +36,6 @@ The source code is build using `mage`.
    go install tool
    ```
 
-
 ### Validate
 
 ```console
@@ -53,19 +51,21 @@ go tool mage -l
 ### Mocks
 
 To generate or update mocks use
-[`gomockhandler`](github.com/sanposhiho/gomockhandler). `gomockhandler` is
-provided by `golang-devtools`.
+[`gomockhandler`](github.com/sanposhiho/gomockhandler) together with
+[Uber's `mockgen`](go.uber.org/mock/mockge).
 
 #### Check mocks
 
 ```console
-docker compose run --rm golang-devtools gomockhandler -config ./gomockhandler.json check
+go install tool
+go tool github.com/sanposhiho/gomockhandler -config ./gomockhandler.json check
 ```
 
 #### Generate / Update mocks
 
 ```console
-docker compose run --rm golang-devtools gomockhandler -config ./gomockhandler.json mockgen
+go install tool
+go tool github.com/sanposhiho/gomockhandler -config ./gomockhandler.json mockgen
 ```
 
 ## User documentation
@@ -79,8 +79,8 @@ To list the commands available for the TechDocs image:
 docker compose run --rm help
 ```
 
-For more information see the [TechDocs Engineering
-Image](https://github.com/coopnorge/engineering-docker-images/tree/main/images/techdocs).
+For more information see the
+[TechDocs Engineering Image](https://github.com/coopnorge/engineering-docker-images/tree/main/images/techdocs).
 
 ### Documentation validation
 

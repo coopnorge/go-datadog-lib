@@ -2,6 +2,12 @@ module github.com/coopnorge/go-datadog-lib/v2
 
 go 1.25.0
 
+tool (
+	github.com/magefile/mage
+	github.com/sanposhiho/gomockhandler
+	go.uber.org/mock/mockgen
+)
+
 require (
 	github.com/DataDog/datadog-go/v5 v5.8.3
 	github.com/DataDog/dd-trace-go/contrib/database/sql/v2 v2.6.0
@@ -79,6 +85,7 @@ require (
 	github.com/power-devops/perfstat v0.0.0-20240221224432-82ca36839d55 // indirect
 	github.com/puzpuzpuz/xsync/v3 v3.5.1 // indirect
 	github.com/richardartoul/molecule v1.0.1-0.20240531184615-7ca0df43c0b3 // indirect
+	github.com/sanposhiho/gomockhandler v1.6.1 // indirect
 	github.com/secure-systems-lab/go-securesystemslib v0.9.1 // indirect
 	github.com/shirou/gopsutil/v4 v4.25.10 // indirect
 	github.com/sirupsen/logrus v1.9.3 // indirect
@@ -112,11 +119,10 @@ require (
 	golang.org/x/sys v0.39.0 // indirect
 	golang.org/x/text v0.32.0 // indirect
 	golang.org/x/time v0.14.0 // indirect
+	golang.org/x/tools v0.39.0 // indirect
 	golang.org/x/xerrors v0.0.0-20240903120638-7835f813f4da // indirect
 	google.golang.org/genproto/googleapis/rpc v0.0.0-20251202230838-ff82c1b0f217 // indirect
 	google.golang.org/protobuf v1.36.10 // indirect
 	gopkg.in/ini.v1 v1.67.0 // indirect
 	gopkg.in/yaml.v3 v3.0.1 // indirect
 )
-
-tool github.com/magefile/mage

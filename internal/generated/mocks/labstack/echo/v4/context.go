@@ -5,6 +5,7 @@
 //
 //	mockgen -destination=internal/generated/mocks/labstack/echo/v4/context.go -package=mock_echo github.com/labstack/echo/v4 Context
 //
+
 // Package mock_echo is a generated GoMock package.
 package mock_echo
 
@@ -23,6 +24,7 @@ import (
 type MockContext struct {
 	ctrl     *gomock.Controller
 	recorder *MockContextMockRecorder
+	isgomock struct{}
 }
 
 // MockContextMockRecorder is the mock recorder for MockContext.
@@ -43,60 +45,60 @@ func (m *MockContext) EXPECT() *MockContextMockRecorder {
 }
 
 // Attachment mocks base method.
-func (m *MockContext) Attachment(arg0, arg1 string) error {
+func (m *MockContext) Attachment(file, name string) error {
 	m.ctrl.T.Helper()
-	ret := m.ctrl.Call(m, "Attachment", arg0, arg1)
+	ret := m.ctrl.Call(m, "Attachment", file, name)
 	ret0, _ := ret[0].(error)
 	return ret0
 }
 
 // Attachment indicates an expected call of Attachment.
-func (mr *MockContextMockRecorder) Attachment(arg0, arg1 any) *gomock.Call {
+func (mr *MockContextMockRecorder) Attachment(file, name any) *gomock.Call {
 	mr.mock.ctrl.T.Helper()
-	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "Attachment", reflect.TypeOf((*MockContext)(nil).Attachment), arg0, arg1)
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "Attachment", reflect.TypeOf((*MockContext)(nil).Attachment), file, name)
 }
 
 // Bind mocks base method.
-func (m *MockContext) Bind(arg0 any) error {
+func (m *MockContext) Bind(i any) error {
 	m.ctrl.T.Helper()
-	ret := m.ctrl.Call(m, "Bind", arg0)
+	ret := m.ctrl.Call(m, "Bind", i)
 	ret0, _ := ret[0].(error)
 	return ret0
 }
 
 // Bind indicates an expected call of Bind.
-func (mr *MockContextMockRecorder) Bind(arg0 any) *gomock.Call {
+func (mr *MockContextMockRecorder) Bind(i any) *gomock.Call {
 	mr.mock.ctrl.T.Helper()
-	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "Bind", reflect.TypeOf((*MockContext)(nil).Bind), arg0)
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "Bind", reflect.TypeOf((*MockContext)(nil).Bind), i)
 }
 
 // Blob mocks base method.
-func (m *MockContext) Blob(arg0 int, arg1 string, arg2 []byte) error {
+func (m *MockContext) Blob(code int, contentType string, b []byte) error {
 	m.ctrl.T.Helper()
-	ret := m.ctrl.Call(m, "Blob", arg0, arg1, arg2)
+	ret := m.ctrl.Call(m, "Blob", code, contentType, b)
 	ret0, _ := ret[0].(error)
 	return ret0
 }
 
 // Blob indicates an expected call of Blob.
-func (mr *MockContextMockRecorder) Blob(arg0, arg1, arg2 any) *gomock.Call {
+func (mr *MockContextMockRecorder) Blob(code, contentType, b any) *gomock.Call {
 	mr.mock.ctrl.T.Helper()
-	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "Blob", reflect.TypeOf((*MockContext)(nil).Blob), arg0, arg1, arg2)
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "Blob", reflect.TypeOf((*MockContext)(nil).Blob), code, contentType, b)
 }
 
 // Cookie mocks base method.
-func (m *MockContext) Cookie(arg0 string) (*http.Cookie, error) {
+func (m *MockContext) Cookie(name string) (*http.Cookie, error) {
 	m.ctrl.T.Helper()
-	ret := m.ctrl.Call(m, "Cookie", arg0)
+	ret := m.ctrl.Call(m, "Cookie", name)
 	ret0, _ := ret[0].(*http.Cookie)
 	ret1, _ := ret[1].(error)
 	return ret0, ret1
 }
 
 // Cookie indicates an expected call of Cookie.
-func (mr *MockContextMockRecorder) Cookie(arg0 any) *gomock.Call {
+func (mr *MockContextMockRecorder) Cookie(name any) *gomock.Call {
 	mr.mock.ctrl.T.Helper()
-	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "Cookie", reflect.TypeOf((*MockContext)(nil).Cookie), arg0)
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "Cookie", reflect.TypeOf((*MockContext)(nil).Cookie), name)
 }
 
 // Cookies mocks base method.
@@ -128,44 +130,44 @@ func (mr *MockContextMockRecorder) Echo() *gomock.Call {
 }
 
 // Error mocks base method.
-func (m *MockContext) Error(arg0 error) {
+func (m *MockContext) Error(err error) {
 	m.ctrl.T.Helper()
-	m.ctrl.Call(m, "Error", arg0)
+	m.ctrl.Call(m, "Error", err)
 }
 
 // Error indicates an expected call of Error.
-func (mr *MockContextMockRecorder) Error(arg0 any) *gomock.Call {
+func (mr *MockContextMockRecorder) Error(err any) *gomock.Call {
 	mr.mock.ctrl.T.Helper()
-	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "Error", reflect.TypeOf((*MockContext)(nil).Error), arg0)
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "Error", reflect.TypeOf((*MockContext)(nil).Error), err)
 }
 
 // File mocks base method.
-func (m *MockContext) File(arg0 string) error {
+func (m *MockContext) File(file string) error {
 	m.ctrl.T.Helper()
-	ret := m.ctrl.Call(m, "File", arg0)
+	ret := m.ctrl.Call(m, "File", file)
 	ret0, _ := ret[0].(error)
 	return ret0
 }
 
 // File indicates an expected call of File.
-func (mr *MockContextMockRecorder) File(arg0 any) *gomock.Call {
+func (mr *MockContextMockRecorder) File(file any) *gomock.Call {
 	mr.mock.ctrl.T.Helper()
-	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "File", reflect.TypeOf((*MockContext)(nil).File), arg0)
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "File", reflect.TypeOf((*MockContext)(nil).File), file)
 }
 
 // FormFile mocks base method.
-func (m *MockContext) FormFile(arg0 string) (*multipart.FileHeader, error) {
+func (m *MockContext) FormFile(name string) (*multipart.FileHeader, error) {
 	m.ctrl.T.Helper()
-	ret := m.ctrl.Call(m, "FormFile", arg0)
+	ret := m.ctrl.Call(m, "FormFile", name)
 	ret0, _ := ret[0].(*multipart.FileHeader)
 	ret1, _ := ret[1].(error)
 	return ret0, ret1
 }
 
 // FormFile indicates an expected call of FormFile.
-func (mr *MockContextMockRecorder) FormFile(arg0 any) *gomock.Call {
+func (mr *MockContextMockRecorder) FormFile(name any) *gomock.Call {
 	mr.mock.ctrl.T.Helper()
-	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "FormFile", reflect.TypeOf((*MockContext)(nil).FormFile), arg0)
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "FormFile", reflect.TypeOf((*MockContext)(nil).FormFile), name)
 }
 
 // FormParams mocks base method.
@@ -184,59 +186,59 @@ func (mr *MockContextMockRecorder) FormParams() *gomock.Call {
 }
 
 // FormValue mocks base method.
-func (m *MockContext) FormValue(arg0 string) string {
+func (m *MockContext) FormValue(name string) string {
 	m.ctrl.T.Helper()
-	ret := m.ctrl.Call(m, "FormValue", arg0)
+	ret := m.ctrl.Call(m, "FormValue", name)
 	ret0, _ := ret[0].(string)
 	return ret0
 }
 
 // FormValue indicates an expected call of FormValue.
-func (mr *MockContextMockRecorder) FormValue(arg0 any) *gomock.Call {
+func (mr *MockContextMockRecorder) FormValue(name any) *gomock.Call {
 	mr.mock.ctrl.T.Helper()
-	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "FormValue", reflect.TypeOf((*MockContext)(nil).FormValue), arg0)
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "FormValue", reflect.TypeOf((*MockContext)(nil).FormValue), name)
 }
 
 // Get mocks base method.
-func (m *MockContext) Get(arg0 string) any {
+func (m *MockContext) Get(key string) any {
 	m.ctrl.T.Helper()
-	ret := m.ctrl.Call(m, "Get", arg0)
+	ret := m.ctrl.Call(m, "Get", key)
 	ret0, _ := ret[0].(any)
 	return ret0
 }
 
 // Get indicates an expected call of Get.
-func (mr *MockContextMockRecorder) Get(arg0 any) *gomock.Call {
+func (mr *MockContextMockRecorder) Get(key any) *gomock.Call {
 	mr.mock.ctrl.T.Helper()
-	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "Get", reflect.TypeOf((*MockContext)(nil).Get), arg0)
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "Get", reflect.TypeOf((*MockContext)(nil).Get), key)
 }
 
 // HTML mocks base method.
-func (m *MockContext) HTML(arg0 int, arg1 string) error {
+func (m *MockContext) HTML(code int, html string) error {
 	m.ctrl.T.Helper()
-	ret := m.ctrl.Call(m, "HTML", arg0, arg1)
+	ret := m.ctrl.Call(m, "HTML", code, html)
 	ret0, _ := ret[0].(error)
 	return ret0
 }
 
 // HTML indicates an expected call of HTML.
-func (mr *MockContextMockRecorder) HTML(arg0, arg1 any) *gomock.Call {
+func (mr *MockContextMockRecorder) HTML(code, html any) *gomock.Call {
 	mr.mock.ctrl.T.Helper()
-	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "HTML", reflect.TypeOf((*MockContext)(nil).HTML), arg0, arg1)
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "HTML", reflect.TypeOf((*MockContext)(nil).HTML), code, html)
 }
 
 // HTMLBlob mocks base method.
-func (m *MockContext) HTMLBlob(arg0 int, arg1 []byte) error {
+func (m *MockContext) HTMLBlob(code int, b []byte) error {
 	m.ctrl.T.Helper()
-	ret := m.ctrl.Call(m, "HTMLBlob", arg0, arg1)
+	ret := m.ctrl.Call(m, "HTMLBlob", code, b)
 	ret0, _ := ret[0].(error)
 	return ret0
 }
 
 // HTMLBlob indicates an expected call of HTMLBlob.
-func (mr *MockContextMockRecorder) HTMLBlob(arg0, arg1 any) *gomock.Call {
+func (mr *MockContextMockRecorder) HTMLBlob(code, b any) *gomock.Call {
 	mr.mock.ctrl.T.Helper()
-	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "HTMLBlob", reflect.TypeOf((*MockContext)(nil).HTMLBlob), arg0, arg1)
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "HTMLBlob", reflect.TypeOf((*MockContext)(nil).HTMLBlob), code, b)
 }
 
 // Handler mocks base method.
@@ -254,17 +256,17 @@ func (mr *MockContextMockRecorder) Handler() *gomock.Call {
 }
 
 // Inline mocks base method.
-func (m *MockContext) Inline(arg0, arg1 string) error {
+func (m *MockContext) Inline(file, name string) error {
 	m.ctrl.T.Helper()
-	ret := m.ctrl.Call(m, "Inline", arg0, arg1)
+	ret := m.ctrl.Call(m, "Inline", file, name)
 	ret0, _ := ret[0].(error)
 	return ret0
 }
 
 // Inline indicates an expected call of Inline.
-func (mr *MockContextMockRecorder) Inline(arg0, arg1 any) *gomock.Call {
+func (mr *MockContextMockRecorder) Inline(file, name any) *gomock.Call {
 	mr.mock.ctrl.T.Helper()
-	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "Inline", reflect.TypeOf((*MockContext)(nil).Inline), arg0, arg1)
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "Inline", reflect.TypeOf((*MockContext)(nil).Inline), file, name)
 }
 
 // IsTLS mocks base method.
@@ -296,73 +298,73 @@ func (mr *MockContextMockRecorder) IsWebSocket() *gomock.Call {
 }
 
 // JSON mocks base method.
-func (m *MockContext) JSON(arg0 int, arg1 any) error {
+func (m *MockContext) JSON(code int, i any) error {
 	m.ctrl.T.Helper()
-	ret := m.ctrl.Call(m, "JSON", arg0, arg1)
+	ret := m.ctrl.Call(m, "JSON", code, i)
 	ret0, _ := ret[0].(error)
 	return ret0
 }
 
 // JSON indicates an expected call of JSON.
-func (mr *MockContextMockRecorder) JSON(arg0, arg1 any) *gomock.Call {
+func (mr *MockContextMockRecorder) JSON(code, i any) *gomock.Call {
 	mr.mock.ctrl.T.Helper()
-	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "JSON", reflect.TypeOf((*MockContext)(nil).JSON), arg0, arg1)
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "JSON", reflect.TypeOf((*MockContext)(nil).JSON), code, i)
 }
 
 // JSONBlob mocks base method.
-func (m *MockContext) JSONBlob(arg0 int, arg1 []byte) error {
+func (m *MockContext) JSONBlob(code int, b []byte) error {
 	m.ctrl.T.Helper()
-	ret := m.ctrl.Call(m, "JSONBlob", arg0, arg1)
+	ret := m.ctrl.Call(m, "JSONBlob", code, b)
 	ret0, _ := ret[0].(error)
 	return ret0
 }
 
 // JSONBlob indicates an expected call of JSONBlob.
-func (mr *MockContextMockRecorder) JSONBlob(arg0, arg1 any) *gomock.Call {
+func (mr *MockContextMockRecorder) JSONBlob(code, b any) *gomock.Call {
 	mr.mock.ctrl.T.Helper()
-	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "JSONBlob", reflect.TypeOf((*MockContext)(nil).JSONBlob), arg0, arg1)
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "JSONBlob", reflect.TypeOf((*MockContext)(nil).JSONBlob), code, b)
 }
 
 // JSONP mocks base method.
-func (m *MockContext) JSONP(arg0 int, arg1 string, arg2 any) error {
+func (m *MockContext) JSONP(code int, callback string, i any) error {
 	m.ctrl.T.Helper()
-	ret := m.ctrl.Call(m, "JSONP", arg0, arg1, arg2)
+	ret := m.ctrl.Call(m, "JSONP", code, callback, i)
 	ret0, _ := ret[0].(error)
 	return ret0
 }
 
 // JSONP indicates an expected call of JSONP.
-func (mr *MockContextMockRecorder) JSONP(arg0, arg1, arg2 any) *gomock.Call {
+func (mr *MockContextMockRecorder) JSONP(code, callback, i any) *gomock.Call {
 	mr.mock.ctrl.T.Helper()
-	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "JSONP", reflect.TypeOf((*MockContext)(nil).JSONP), arg0, arg1, arg2)
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "JSONP", reflect.TypeOf((*MockContext)(nil).JSONP), code, callback, i)
 }
 
 // JSONPBlob mocks base method.
-func (m *MockContext) JSONPBlob(arg0 int, arg1 string, arg2 []byte) error {
+func (m *MockContext) JSONPBlob(code int, callback string, b []byte) error {
 	m.ctrl.T.Helper()
-	ret := m.ctrl.Call(m, "JSONPBlob", arg0, arg1, arg2)
+	ret := m.ctrl.Call(m, "JSONPBlob", code, callback, b)
 	ret0, _ := ret[0].(error)
 	return ret0
 }
 
 // JSONPBlob indicates an expected call of JSONPBlob.
-func (mr *MockContextMockRecorder) JSONPBlob(arg0, arg1, arg2 any) *gomock.Call {
+func (mr *MockContextMockRecorder) JSONPBlob(code, callback, b any) *gomock.Call {
 	mr.mock.ctrl.T.Helper()
-	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "JSONPBlob", reflect.TypeOf((*MockContext)(nil).JSONPBlob), arg0, arg1, arg2)
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "JSONPBlob", reflect.TypeOf((*MockContext)(nil).JSONPBlob), code, callback, b)
 }
 
 // JSONPretty mocks base method.
-func (m *MockContext) JSONPretty(arg0 int, arg1 any, arg2 string) error {
+func (m *MockContext) JSONPretty(code int, i any, indent string) error {
 	m.ctrl.T.Helper()
-	ret := m.ctrl.Call(m, "JSONPretty", arg0, arg1, arg2)
+	ret := m.ctrl.Call(m, "JSONPretty", code, i, indent)
 	ret0, _ := ret[0].(error)
 	return ret0
 }
 
 // JSONPretty indicates an expected call of JSONPretty.
-func (mr *MockContextMockRecorder) JSONPretty(arg0, arg1, arg2 any) *gomock.Call {
+func (mr *MockContextMockRecorder) JSONPretty(code, i, indent any) *gomock.Call {
 	mr.mock.ctrl.T.Helper()
-	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "JSONPretty", reflect.TypeOf((*MockContext)(nil).JSONPretty), arg0, arg1, arg2)
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "JSONPretty", reflect.TypeOf((*MockContext)(nil).JSONPretty), code, i, indent)
 }
 
 // Logger mocks base method.
@@ -395,31 +397,31 @@ func (mr *MockContextMockRecorder) MultipartForm() *gomock.Call {
 }
 
 // NoContent mocks base method.
-func (m *MockContext) NoContent(arg0 int) error {
+func (m *MockContext) NoContent(code int) error {
 	m.ctrl.T.Helper()
-	ret := m.ctrl.Call(m, "NoContent", arg0)
+	ret := m.ctrl.Call(m, "NoContent", code)
 	ret0, _ := ret[0].(error)
 	return ret0
 }
 
 // NoContent indicates an expected call of NoContent.
-func (mr *MockContextMockRecorder) NoContent(arg0 any) *gomock.Call {
+func (mr *MockContextMockRecorder) NoContent(code any) *gomock.Call {
 	mr.mock.ctrl.T.Helper()
-	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "NoContent", reflect.TypeOf((*MockContext)(nil).NoContent), arg0)
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "NoContent", reflect.TypeOf((*MockContext)(nil).NoContent), code)
 }
 
 // Param mocks base method.
-func (m *MockContext) Param(arg0 string) string {
+func (m *MockContext) Param(name string) string {
 	m.ctrl.T.Helper()
-	ret := m.ctrl.Call(m, "Param", arg0)
+	ret := m.ctrl.Call(m, "Param", name)
 	ret0, _ := ret[0].(string)
 	return ret0
 }
 
 // Param indicates an expected call of Param.
-func (mr *MockContextMockRecorder) Param(arg0 any) *gomock.Call {
+func (mr *MockContextMockRecorder) Param(name any) *gomock.Call {
 	mr.mock.ctrl.T.Helper()
-	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "Param", reflect.TypeOf((*MockContext)(nil).Param), arg0)
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "Param", reflect.TypeOf((*MockContext)(nil).Param), name)
 }
 
 // ParamNames mocks base method.
@@ -465,17 +467,17 @@ func (mr *MockContextMockRecorder) Path() *gomock.Call {
 }
 
 // QueryParam mocks base method.
-func (m *MockContext) QueryParam(arg0 string) string {
+func (m *MockContext) QueryParam(name string) string {
 	m.ctrl.T.Helper()
-	ret := m.ctrl.Call(m, "QueryParam", arg0)
+	ret := m.ctrl.Call(m, "QueryParam", name)
 	ret0, _ := ret[0].(string)
 	return ret0
 }
 
 // QueryParam indicates an expected call of QueryParam.
-func (mr *MockContextMockRecorder) QueryParam(arg0 any) *gomock.Call {
+func (mr *MockContextMockRecorder) QueryParam(name any) *gomock.Call {
 	mr.mock.ctrl.T.Helper()
-	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "QueryParam", reflect.TypeOf((*MockContext)(nil).QueryParam), arg0)
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "QueryParam", reflect.TypeOf((*MockContext)(nil).QueryParam), name)
 }
 
 // QueryParams mocks base method.
@@ -521,31 +523,31 @@ func (mr *MockContextMockRecorder) RealIP() *gomock.Call {
 }
 
 // Redirect mocks base method.
-func (m *MockContext) Redirect(arg0 int, arg1 string) error {
+func (m *MockContext) Redirect(code int, arg1 string) error {
 	m.ctrl.T.Helper()
-	ret := m.ctrl.Call(m, "Redirect", arg0, arg1)
+	ret := m.ctrl.Call(m, "Redirect", code, arg1)
 	ret0, _ := ret[0].(error)
 	return ret0
 }
 
 // Redirect indicates an expected call of Redirect.
-func (mr *MockContextMockRecorder) Redirect(arg0, arg1 any) *gomock.Call {
+func (mr *MockContextMockRecorder) Redirect(code, arg1 any) *gomock.Call {
 	mr.mock.ctrl.T.Helper()
-	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "Redirect", reflect.TypeOf((*MockContext)(nil).Redirect), arg0, arg1)
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "Redirect", reflect.TypeOf((*MockContext)(nil).Redirect), code, arg1)
 }
 
 // Render mocks base method.
-func (m *MockContext) Render(arg0 int, arg1 string, arg2 any) error {
+func (m *MockContext) Render(code int, name string, data any) error {
 	m.ctrl.T.Helper()
-	ret := m.ctrl.Call(m, "Render", arg0, arg1, arg2)
+	ret := m.ctrl.Call(m, "Render", code, name, data)
 	ret0, _ := ret[0].(error)
 	return ret0
 }
 
 // Render indicates an expected call of Render.
-func (mr *MockContextMockRecorder) Render(arg0, arg1, arg2 any) *gomock.Call {
+func (mr *MockContextMockRecorder) Render(code, name, data any) *gomock.Call {
 	mr.mock.ctrl.T.Helper()
-	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "Render", reflect.TypeOf((*MockContext)(nil).Render), arg0, arg1, arg2)
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "Render", reflect.TypeOf((*MockContext)(nil).Render), code, name, data)
 }
 
 // Request mocks base method.
@@ -563,15 +565,15 @@ func (mr *MockContextMockRecorder) Request() *gomock.Call {
 }
 
 // Reset mocks base method.
-func (m *MockContext) Reset(arg0 *http.Request, arg1 http.ResponseWriter) {
+func (m *MockContext) Reset(r *http.Request, w http.ResponseWriter) {
 	m.ctrl.T.Helper()
-	m.ctrl.Call(m, "Reset", arg0, arg1)
+	m.ctrl.Call(m, "Reset", r, w)
 }
 
 // Reset indicates an expected call of Reset.
-func (mr *MockContextMockRecorder) Reset(arg0, arg1 any) *gomock.Call {
+func (mr *MockContextMockRecorder) Reset(r, w any) *gomock.Call {
 	mr.mock.ctrl.T.Helper()
-	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "Reset", reflect.TypeOf((*MockContext)(nil).Reset), arg0, arg1)
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "Reset", reflect.TypeOf((*MockContext)(nil).Reset), r, w)
 }
 
 // Response mocks base method.
@@ -603,201 +605,201 @@ func (mr *MockContextMockRecorder) Scheme() *gomock.Call {
 }
 
 // Set mocks base method.
-func (m *MockContext) Set(arg0 string, arg1 any) {
+func (m *MockContext) Set(key string, val any) {
 	m.ctrl.T.Helper()
-	m.ctrl.Call(m, "Set", arg0, arg1)
+	m.ctrl.Call(m, "Set", key, val)
 }
 
 // Set indicates an expected call of Set.
-func (mr *MockContextMockRecorder) Set(arg0, arg1 any) *gomock.Call {
+func (mr *MockContextMockRecorder) Set(key, val any) *gomock.Call {
 	mr.mock.ctrl.T.Helper()
-	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "Set", reflect.TypeOf((*MockContext)(nil).Set), arg0, arg1)
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "Set", reflect.TypeOf((*MockContext)(nil).Set), key, val)
 }
 
 // SetCookie mocks base method.
-func (m *MockContext) SetCookie(arg0 *http.Cookie) {
+func (m *MockContext) SetCookie(cookie *http.Cookie) {
 	m.ctrl.T.Helper()
-	m.ctrl.Call(m, "SetCookie", arg0)
+	m.ctrl.Call(m, "SetCookie", cookie)
 }
 
 // SetCookie indicates an expected call of SetCookie.
-func (mr *MockContextMockRecorder) SetCookie(arg0 any) *gomock.Call {
+func (mr *MockContextMockRecorder) SetCookie(cookie any) *gomock.Call {
 	mr.mock.ctrl.T.Helper()
-	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "SetCookie", reflect.TypeOf((*MockContext)(nil).SetCookie), arg0)
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "SetCookie", reflect.TypeOf((*MockContext)(nil).SetCookie), cookie)
 }
 
 // SetHandler mocks base method.
-func (m *MockContext) SetHandler(arg0 echo.HandlerFunc) {
+func (m *MockContext) SetHandler(h echo.HandlerFunc) {
 	m.ctrl.T.Helper()
-	m.ctrl.Call(m, "SetHandler", arg0)
+	m.ctrl.Call(m, "SetHandler", h)
 }
 
 // SetHandler indicates an expected call of SetHandler.
-func (mr *MockContextMockRecorder) SetHandler(arg0 any) *gomock.Call {
+func (mr *MockContextMockRecorder) SetHandler(h any) *gomock.Call {
 	mr.mock.ctrl.T.Helper()
-	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "SetHandler", reflect.TypeOf((*MockContext)(nil).SetHandler), arg0)
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "SetHandler", reflect.TypeOf((*MockContext)(nil).SetHandler), h)
 }
 
 // SetLogger mocks base method.
-func (m *MockContext) SetLogger(arg0 echo.Logger) {
+func (m *MockContext) SetLogger(l echo.Logger) {
 	m.ctrl.T.Helper()
-	m.ctrl.Call(m, "SetLogger", arg0)
+	m.ctrl.Call(m, "SetLogger", l)
 }
 
 // SetLogger indicates an expected call of SetLogger.
-func (mr *MockContextMockRecorder) SetLogger(arg0 any) *gomock.Call {
+func (mr *MockContextMockRecorder) SetLogger(l any) *gomock.Call {
 	mr.mock.ctrl.T.Helper()
-	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "SetLogger", reflect.TypeOf((*MockContext)(nil).SetLogger), arg0)
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "SetLogger", reflect.TypeOf((*MockContext)(nil).SetLogger), l)
 }
 
 // SetParamNames mocks base method.
-func (m *MockContext) SetParamNames(arg0 ...string) {
+func (m *MockContext) SetParamNames(names ...string) {
 	m.ctrl.T.Helper()
 	varargs := []any{}
-	for _, a := range arg0 {
+	for _, a := range names {
 		varargs = append(varargs, a)
 	}
 	m.ctrl.Call(m, "SetParamNames", varargs...)
 }
 
 // SetParamNames indicates an expected call of SetParamNames.
-func (mr *MockContextMockRecorder) SetParamNames(arg0 ...any) *gomock.Call {
+func (mr *MockContextMockRecorder) SetParamNames(names ...any) *gomock.Call {
 	mr.mock.ctrl.T.Helper()
-	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "SetParamNames", reflect.TypeOf((*MockContext)(nil).SetParamNames), arg0...)
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "SetParamNames", reflect.TypeOf((*MockContext)(nil).SetParamNames), names...)
 }
 
 // SetParamValues mocks base method.
-func (m *MockContext) SetParamValues(arg0 ...string) {
+func (m *MockContext) SetParamValues(values ...string) {
 	m.ctrl.T.Helper()
 	varargs := []any{}
-	for _, a := range arg0 {
+	for _, a := range values {
 		varargs = append(varargs, a)
 	}
 	m.ctrl.Call(m, "SetParamValues", varargs...)
 }
 
 // SetParamValues indicates an expected call of SetParamValues.
-func (mr *MockContextMockRecorder) SetParamValues(arg0 ...any) *gomock.Call {
+func (mr *MockContextMockRecorder) SetParamValues(values ...any) *gomock.Call {
 	mr.mock.ctrl.T.Helper()
-	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "SetParamValues", reflect.TypeOf((*MockContext)(nil).SetParamValues), arg0...)
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "SetParamValues", reflect.TypeOf((*MockContext)(nil).SetParamValues), values...)
 }
 
 // SetPath mocks base method.
-func (m *MockContext) SetPath(arg0 string) {
+func (m *MockContext) SetPath(p string) {
 	m.ctrl.T.Helper()
-	m.ctrl.Call(m, "SetPath", arg0)
+	m.ctrl.Call(m, "SetPath", p)
 }
 
 // SetPath indicates an expected call of SetPath.
-func (mr *MockContextMockRecorder) SetPath(arg0 any) *gomock.Call {
+func (mr *MockContextMockRecorder) SetPath(p any) *gomock.Call {
 	mr.mock.ctrl.T.Helper()
-	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "SetPath", reflect.TypeOf((*MockContext)(nil).SetPath), arg0)
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "SetPath", reflect.TypeOf((*MockContext)(nil).SetPath), p)
 }
 
 // SetRequest mocks base method.
-func (m *MockContext) SetRequest(arg0 *http.Request) {
+func (m *MockContext) SetRequest(r *http.Request) {
 	m.ctrl.T.Helper()
-	m.ctrl.Call(m, "SetRequest", arg0)
+	m.ctrl.Call(m, "SetRequest", r)
 }
 
 // SetRequest indicates an expected call of SetRequest.
-func (mr *MockContextMockRecorder) SetRequest(arg0 any) *gomock.Call {
+func (mr *MockContextMockRecorder) SetRequest(r any) *gomock.Call {
 	mr.mock.ctrl.T.Helper()
-	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "SetRequest", reflect.TypeOf((*MockContext)(nil).SetRequest), arg0)
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "SetRequest", reflect.TypeOf((*MockContext)(nil).SetRequest), r)
 }
 
 // SetResponse mocks base method.
-func (m *MockContext) SetResponse(arg0 *echo.Response) {
+func (m *MockContext) SetResponse(r *echo.Response) {
 	m.ctrl.T.Helper()
-	m.ctrl.Call(m, "SetResponse", arg0)
+	m.ctrl.Call(m, "SetResponse", r)
 }
 
 // SetResponse indicates an expected call of SetResponse.
-func (mr *MockContextMockRecorder) SetResponse(arg0 any) *gomock.Call {
+func (mr *MockContextMockRecorder) SetResponse(r any) *gomock.Call {
 	mr.mock.ctrl.T.Helper()
-	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "SetResponse", reflect.TypeOf((*MockContext)(nil).SetResponse), arg0)
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "SetResponse", reflect.TypeOf((*MockContext)(nil).SetResponse), r)
 }
 
 // Stream mocks base method.
-func (m *MockContext) Stream(arg0 int, arg1 string, arg2 io.Reader) error {
+func (m *MockContext) Stream(code int, contentType string, r io.Reader) error {
 	m.ctrl.T.Helper()
-	ret := m.ctrl.Call(m, "Stream", arg0, arg1, arg2)
+	ret := m.ctrl.Call(m, "Stream", code, contentType, r)
 	ret0, _ := ret[0].(error)
 	return ret0
 }
 
 // Stream indicates an expected call of Stream.
-func (mr *MockContextMockRecorder) Stream(arg0, arg1, arg2 any) *gomock.Call {
+func (mr *MockContextMockRecorder) Stream(code, contentType, r any) *gomock.Call {
 	mr.mock.ctrl.T.Helper()
-	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "Stream", reflect.TypeOf((*MockContext)(nil).Stream), arg0, arg1, arg2)
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "Stream", reflect.TypeOf((*MockContext)(nil).Stream), code, contentType, r)
 }
 
 // String mocks base method.
-func (m *MockContext) String(arg0 int, arg1 string) error {
+func (m *MockContext) String(code int, s string) error {
 	m.ctrl.T.Helper()
-	ret := m.ctrl.Call(m, "String", arg0, arg1)
+	ret := m.ctrl.Call(m, "String", code, s)
 	ret0, _ := ret[0].(error)
 	return ret0
 }
 
 // String indicates an expected call of String.
-func (mr *MockContextMockRecorder) String(arg0, arg1 any) *gomock.Call {
+func (mr *MockContextMockRecorder) String(code, s any) *gomock.Call {
 	mr.mock.ctrl.T.Helper()
-	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "String", reflect.TypeOf((*MockContext)(nil).String), arg0, arg1)
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "String", reflect.TypeOf((*MockContext)(nil).String), code, s)
 }
 
 // Validate mocks base method.
-func (m *MockContext) Validate(arg0 any) error {
+func (m *MockContext) Validate(i any) error {
 	m.ctrl.T.Helper()
-	ret := m.ctrl.Call(m, "Validate", arg0)
+	ret := m.ctrl.Call(m, "Validate", i)
 	ret0, _ := ret[0].(error)
 	return ret0
 }
 
 // Validate indicates an expected call of Validate.
-func (mr *MockContextMockRecorder) Validate(arg0 any) *gomock.Call {
+func (mr *MockContextMockRecorder) Validate(i any) *gomock.Call {
 	mr.mock.ctrl.T.Helper()
-	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "Validate", reflect.TypeOf((*MockContext)(nil).Validate), arg0)
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "Validate", reflect.TypeOf((*MockContext)(nil).Validate), i)
 }
 
 // XML mocks base method.
-func (m *MockContext) XML(arg0 int, arg1 any) error {
+func (m *MockContext) XML(code int, i any) error {
 	m.ctrl.T.Helper()
-	ret := m.ctrl.Call(m, "XML", arg0, arg1)
+	ret := m.ctrl.Call(m, "XML", code, i)
 	ret0, _ := ret[0].(error)
 	return ret0
 }
 
 // XML indicates an expected call of XML.
-func (mr *MockContextMockRecorder) XML(arg0, arg1 any) *gomock.Call {
+func (mr *MockContextMockRecorder) XML(code, i any) *gomock.Call {
 	mr.mock.ctrl.T.Helper()
-	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "XML", reflect.TypeOf((*MockContext)(nil).XML), arg0, arg1)
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "XML", reflect.TypeOf((*MockContext)(nil).XML), code, i)
 }
 
 // XMLBlob mocks base method.
-func (m *MockContext) XMLBlob(arg0 int, arg1 []byte) error {
+func (m *MockContext) XMLBlob(code int, b []byte) error {
 	m.ctrl.T.Helper()
-	ret := m.ctrl.Call(m, "XMLBlob", arg0, arg1)
+	ret := m.ctrl.Call(m, "XMLBlob", code, b)
 	ret0, _ := ret[0].(error)
 	return ret0
 }
 
 // XMLBlob indicates an expected call of XMLBlob.
-func (mr *MockContextMockRecorder) XMLBlob(arg0, arg1 any) *gomock.Call {
+func (mr *MockContextMockRecorder) XMLBlob(code, b any) *gomock.Call {
 	mr.mock.ctrl.T.Helper()
-	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "XMLBlob", reflect.TypeOf((*MockContext)(nil).XMLBlob), arg0, arg1)
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "XMLBlob", reflect.TypeOf((*MockContext)(nil).XMLBlob), code, b)
 }
 
 // XMLPretty mocks base method.
-func (m *MockContext) XMLPretty(arg0 int, arg1 any, arg2 string) error {
+func (m *MockContext) XMLPretty(code int, i any, indent string) error {
 	m.ctrl.T.Helper()
-	ret := m.ctrl.Call(m, "XMLPretty", arg0, arg1, arg2)
+	ret := m.ctrl.Call(m, "XMLPretty", code, i, indent)
 	ret0, _ := ret[0].(error)
 	return ret0
 }
 
 // XMLPretty indicates an expected call of XMLPretty.
-func (mr *MockContextMockRecorder) XMLPretty(arg0, arg1, arg2 any) *gomock.Call {
+func (mr *MockContextMockRecorder) XMLPretty(code, i, indent any) *gomock.Call {
 	mr.mock.ctrl.T.Helper()
-	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "XMLPretty", reflect.TypeOf((*MockContext)(nil).XMLPretty), arg0, arg1, arg2)
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "XMLPretty", reflect.TypeOf((*MockContext)(nil).XMLPretty), code, i, indent)
 }

@@ -1,8 +1,8 @@
 {
 	"mocks": {
 		"DatadogMetricsClient": {
-			"checksum": "cRchveYKewaDrDOBtFPf4Q==",
-			"source_checksum": "a3NW83Cn6OGLBqKklPD3UQ==",
+			"checksum": "B5MlM5Uv3MNMA15MSH4q0w==",
+			"source_checksum": "Zvj9sx1XAHfjy1+a2Ovz7Q==",
 			"mode": "SOURCE_MODE",
 			"source_mode_runner": {
 				"source": "metric/datadog.go",
@@ -10,7 +10,7 @@
 			}
 		},
 		"internal/generated/mocks/DataDog/datadog-go/v5/statsd/statsd.go": {
-			"checksum": "6Ri6JzlCmHGMnGMB6L8x/g==",
+			"checksum": "nUISM3dcBarsssqNBRNLHg==",
 			"mode": "REFLECT_MODE",
 			"reflect_mode_runner": {
 				"package_name": "github.com/DataDog/datadog-go/v5/statsd",
@@ -19,7 +19,7 @@
 			}
 		},
 		"internal/generated/mocks/labstack/echo/v4/context.go": {
-			"checksum": "L74NccKqt3ohccT0EQteHA==",
+			"checksum": "C2bR6antiziE5kkFb/1EYQ==",
 			"mode": "REFLECT_MODE",
 			"reflect_mode_runner": {
 				"package_name": "github.com/labstack/echo/v4",

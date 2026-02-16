@@ -24,7 +24,6 @@ func NewORM(dialector gorm.Dialector, gormCfg *gorm.Config, options ...Option) (
 		opts = append(opts, gormtrace.WithService(cfg.serviceName))
 	}
 	for k, v := range cfg.tags {
-		v := v
 		staticTagger := func(_ *gorm.DB) any {
 			return v
 		}
@@ -41,7 +40,7 @@ func NewORM(dialector gorm.Dialector, gormCfg *gorm.Config, options ...Option) (
 
 type config struct {
 	serviceName string
-	tags        map[string]interface{}
+	tags        map[string]any
 }
 
 func defaults() *config {
@@ -63,10 +62,10 @@ func WithServiceName(serviceName string) Option {
 }
 
 // WithCustomTag will attach the value to the span tagged by the key.
-func WithCustomTag(key string, value interface{}) Option {
+func WithCustomTag(key string, value any) Option {
 	return func(cfg *config) {
 		if cfg.tags == nil {
-			cfg.tags = make(map[string]interface{})
+			cfg.tags = make(map[string]any)
 		}
 		cfg.tags[key] = value
 	}

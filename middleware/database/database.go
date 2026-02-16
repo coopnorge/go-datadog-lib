@@ -47,7 +47,7 @@ func RegisterDriverAndOpen(driverName string, driver driver.Driver, dsn string, 
 type config struct {
 	serviceName       string
 	childSpansOnly    bool
-	tags              map[string]interface{}
+	tags              map[string]any
 	ignoredQueryTypes []string
 }
 
@@ -77,10 +77,10 @@ func WithServiceName(serviceName string) Option {
 }
 
 // WithCustomTag will attach the value to the span tagged by the key.
-func WithCustomTag(key string, value interface{}) Option {
+func WithCustomTag(key string, value any) Option {
 	return func(cfg *config) {
 		if cfg.tags == nil {
-			cfg.tags = make(map[string]interface{})
+			cfg.tags = make(map[string]any)
 		}
 		cfg.tags[key] = value
 	}

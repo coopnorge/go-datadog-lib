@@ -1,5 +1,5 @@
 // Package metrics implements custom metrics with Dogstatsd
-package metrics
+package metrics //nolint:revive
 
 import (
 	"fmt"

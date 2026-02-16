@@ -1,6 +1,7 @@
 package coopdatadog_test
 
 import (
+	"fmt"
 	"os"
 	"testing"
 
@@ -108,9 +109,16 @@ func TestStartDatadog(t *testing.T) {
 }
 
 func resetEnvVars() {
-	os.Unsetenv(internal.DatadogEnvironment)
-	os.Unsetenv(internal.DatadogService)
-	os.Unsetenv(internal.DatadogVersion)
-	os.Unsetenv(internal.DatadogDSDEndpoint)
-	os.Unsetenv(internal.DatadogAPMEndpoint)
+	unsetenv(internal.DatadogEnvironment)
+	unsetenv(internal.DatadogService)
+	unsetenv(internal.DatadogVersion)
+	unsetenv(internal.DatadogDSDEndpoint)
+	unsetenv(internal.DatadogAPMEndpoint)
+}
+
+func unsetenv(key string) {
+	err := os.Unsetenv(key)
+	if err != nil {
+		panic(fmt.Sprintf("Failed to unset env var %s: %v", key, err))
+	}
 }

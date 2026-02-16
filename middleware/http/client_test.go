@@ -34,7 +34,8 @@ func TestWrapClient(t *testing.T) {
 		tracestate = r.Header.Get("Tracestate")
 		ddTraceID = r.Header.Get("X-Datadog-Trace-Id")
 		ddParentID = r.Header.Get("X-Datadog-Parent-Id")
-		_, _ = w.Write([]byte("OK"))
+		_, err := w.Write([]byte("OK"))
+		require.NoError(t, err)
 	}))
 
 	t.Cleanup(s.Close)
@@ -96,7 +97,8 @@ func TestURLIsNotInTags(t *testing.T) {
 	span, ctx := tracer.StartSpanFromContext(context.Background(), "http.request", tracer.ResourceName("/helloworld"))
 
 	s := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, _ *http.Request) {
-		_, _ = w.Write([]byte("OK"))
+		_, err := w.Write([]byte("OK"))
+		require.NoError(t, err)
 	}))
 
 	t.Cleanup(s.Close)

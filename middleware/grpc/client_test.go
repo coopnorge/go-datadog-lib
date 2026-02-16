@@ -2,6 +2,8 @@ package grpc_test
 
 import (
 	"context"
+	"fmt"
+	"io"
 	"net"
 	"strconv"
 	"strings"
@@ -42,9 +44,15 @@ func (s *testServer) hydrateTraceData(ctx context.Context) error {
 	}
 	s.traceparent = strings.Join(md.Get("traceparent"), "")
 	s.tracestate = strings.Join(md.Get("tracestate"), "")
-	ddParentID, _ := strconv.ParseUint(strings.Join(md.Get("x-datadog-parent-id"), ""), 10, 64)
+	ddParentID, err := strconv.ParseUint(strings.Join(md.Get("x-datadog-parent-id"), ""), 10, 64)
+	if err != nil {
+		panic(fmt.Errorf("error parsing x-datadog-parent-id: %w", err))
+	}
 	s.ddParentID = ddParentID
-	ddTraceID, _ := strconv.ParseUint(strings.Join(md.Get("x-datadog-trace-id"), ""), 10, 64)
+	ddTraceID, err := strconv.ParseUint(strings.Join(md.Get("x-datadog-trace-id"), ""), 10, 64)
+	if err != nil {
+		panic(fmt.Errorf("error parsing x-datadog-trace-id: %w", err))
+	}
 	s.ddTraceID = ddTraceID
 	return nil
 }
@@ -158,7 +166,8 @@ func TestStreamClientInterceptor(t *testing.T) {
 	c, err := client.StreamingOutputCall(spanCtx, &testgrpc.StreamingOutputCallRequest{})
 	require.NoError(t, err)
 
-	c.Recv()
+	_, err = c.Recv()
+	require.ErrorIs(t, err, io.EOF)
 	err = c.CloseSend()
 	require.NoError(t, err)
 	span.Finish()

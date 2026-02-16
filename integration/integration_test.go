@@ -37,7 +37,8 @@ func TestGRPCServerHttpClientTracing(t *testing.T) {
 
 	// Start Datadog tracer, so that we don't create NoopSpans.
 	// Start real tracer (not mocktracer), to propagate Traceparent.
-	tracer.Start(tracer.WithService("unittest"))
+	err := tracer.Start(tracer.WithService("unittest"))
+	require.NoError(t, err)
 	t.Cleanup(tracer.Flush)
 	t.Cleanup(tracer.Stop)
 
@@ -58,7 +59,8 @@ func TestGRPCServerHttpClientTracing(t *testing.T) {
 		traceparents[r.Header.Get("Traceparent")] = struct{}{}
 		ddTraceIDs[r.Header.Get("X-Datadog-Trace-Id")] = struct{}{}
 		ddParentIDs[r.Header.Get("X-Datadog-Parent-Id")] = struct{}{}
-		_, _ = w.Write([]byte("OK"))
+		_, err := w.Write([]byte("OK"))
+		require.NoError(t, err)
 	}))
 	t.Cleanup(s.Close)
 
@@ -81,7 +83,10 @@ func TestGRPCServerHttpClientTracing(t *testing.T) {
 		grpc.WithUnaryInterceptor(grpcMiddleware.UnaryClientInterceptor()),
 	)
 	require.NoError(t, err)
-	defer conn.Close()
+	defer func() {
+		err := conn.Close()
+		require.NoError(t, err)
+	}()
 
 	client := testgrpc.NewTestServiceClient(conn)
 	_, err = client.EmptyCall(ctx, &testgrpc.Empty{})

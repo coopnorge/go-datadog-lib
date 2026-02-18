@@ -60,8 +60,8 @@ github.com/cihub/seelog v0.0.0-20170130134532-f561c5e57575 h1:kHaBemcxl8o/pQ5VM1
 github.com/cihub/seelog v0.0.0-20170130134532-f561c5e57575/go.mod h1:9d6lWj8KzO/fd/NrVaLscBKmPigpZpn5YawRPw+e3Yo=
 github.com/coopnorge/go-logger v0.15.0 h1:fDP15H7ofaWiz8u3bhBS9ie2M6Z5e/5PNuvEitoAjXA=
 github.com/coopnorge/go-logger v0.15.0/go.mod h1:BO1FFjYoSD+d/LuahkHyoM55gl4E8Fy1SUpnBtSn00Y=
-github.com/coopnorge/mage v0.23.1 h1:15p8Etx4EQUrxvkZRP01uDPnMZjNM/9W6JG4s8a76gE=
-github.com/coopnorge/mage v0.23.1/go.mod h1:Vk13yfPsoz+W2QFR2N8Ehs7VUGbE/Pt4hcxFTQYr25w=
+github.com/coopnorge/mage v0.23.3 h1:19X4XMtns6AdBz+Uoqvxf3r/0cQ4LSdJf3Ln8QnhUT0=
+github.com/coopnorge/mage v0.23.3/go.mod h1:Vk13yfPsoz+W2QFR2N8Ehs7VUGbE/Pt4hcxFTQYr25w=
 github.com/davecgh/go-spew v1.1.0/go.mod h1:J7Y8YcW2NihsgmVo/mv3lAwl/skON4iLHjSsI+c5H38=
 github.com/davecgh/go-spew v1.1.1/go.mod h1:J7Y8YcW2NihsgmVo/mv3lAwl/skON4iLHjSsI+c5H38=
 github.com/davecgh/go-spew v1.1.2-0.20180830191138-d8f796af33cc h1:U9qPSI2PIWSS1VwoXQT9A3Wy9MM3WgvqSxFWenqJduM=

@@ -25,7 +25,7 @@ func TestTraceUnaryServerInterceptor(t *testing.T) {
 	testhelpers.ConfigureDatadog(t)
 
 	grpcUnaryMW := datadogMiddleware.TraceUnaryServerInterceptor()
-	grpcUnaryHandler := func(ctx context.Context, _ interface{}) (interface{}, error) {
+	grpcUnaryHandler := func(ctx context.Context, _ any) (any, error) {
 		span, exists := tracer.SpanFromContext(ctx)
 		assert.True(t, exists)
 		assert.NotNil(t, span)

@@ -130,8 +130,8 @@ func TestTraceUnaryClientInterceptor(t *testing.T) {
 	require.True(t, len(parts) >= 1)
 	found := false
 	for _, listMember := range parts {
-		if strings.HasPrefix(listMember, "dd=") {
-			assert.NotEmpty(t, strings.TrimPrefix(listMember, "dd="))
+		if after, ok := strings.CutPrefix(listMember, "dd="); ok {
+			assert.NotEmpty(t, after)
 			found = true
 		}
 	}

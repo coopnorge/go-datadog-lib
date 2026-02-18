@@ -10,6 +10,7 @@ import (
 	coopEchoDatadog "github.com/coopnorge/go-datadog-lib/v2/middleware/echo"
 	"github.com/labstack/echo/v4"
 	"github.com/stretchr/testify/assert"
+	"github.com/stretchr/testify/require"
 	gomock "go.uber.org/mock/gomock"
 )
 
@@ -23,7 +24,8 @@ func TestTraceServerMiddleware(t *testing.T) {
 		return nil
 	}
 
-	tReq, _ := http.NewRequest(http.MethodGet, "unit.test", nil)
+	tReq, err := http.NewRequest(http.MethodGet, "unit.test", nil)
+	require.NoError(t, err)
 
 	ctrl := gomock.NewController(t)
 	mockEchoContext := mock_echo.NewMockContext(ctrl)

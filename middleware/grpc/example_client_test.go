@@ -19,7 +19,12 @@ func ExampleUnaryClientInterceptor() {
 	if err != nil {
 		panic(err)
 	}
-	defer cc.Close()
+	defer func() {
+		err := cc.Close()
+		if err != nil {
+			panic(err)
+		}
+	}()
 
 	client := testpb.NewTestServiceClient(cc)
 
@@ -42,7 +47,12 @@ func ExampleStreamClientInterceptor() {
 	if err != nil {
 		panic(err)
 	}
-	defer cc.Close()
+	defer func() {
+		err := cc.Close()
+		if err != nil {
+			panic(err)
+		}
+	}()
 
 	client := testpb.NewTestServiceClient(cc)
 

@@ -6,13 +6,15 @@ import (
 	"testing"
 
 	"github.com/stretchr/testify/assert"
+	"github.com/stretchr/testify/require"
 
 	"github.com/coopnorge/go-datadog-lib/v2/internal"
 )
 
 func TestIsDatadogDisabledFlagNotSet(t *testing.T) {
 	t.Setenv(internal.DatadogDisable, "")
-	os.Unsetenv(internal.DatadogDisable)
+	err := os.Unsetenv(internal.DatadogDisable)
+	require.NoError(t, err)
 
 	assert.False(t, internal.IsDatadogDisabled())
 }

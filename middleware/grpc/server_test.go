@@ -12,6 +12,7 @@ import (
 	"github.com/DataDog/dd-trace-go/v2/ddtrace/tracer"
 	"github.com/grpc-ecosystem/go-grpc-middleware/v2/testing/testpb"
 	"github.com/stretchr/testify/assert"
+	"github.com/stretchr/testify/require"
 	"github.com/stretchr/testify/suite"
 	"google.golang.org/grpc"
 )
@@ -33,7 +34,8 @@ func TestTraceUnaryServerInterceptor(t *testing.T) {
 	}
 
 	tCtx := context.Background()
-	tReq, _ := http.NewRequest(http.MethodGet, "unit.test", nil)
+	tReq, err := http.NewRequest(http.MethodGet, "unit.test", nil)
+	require.NoError(t, err)
 	resp, err := grpcUnaryMW(
 		tCtx,
 		tReq,
@@ -41,7 +43,7 @@ func TestTraceUnaryServerInterceptor(t *testing.T) {
 		grpcUnaryHandler,
 	)
 
-	assert.Nil(t, err)
+	require.NoError(t, err)
 	assert.Nil(t, resp)
 }
 
@@ -51,7 +53,8 @@ type streamServerInterceptorTestSuite struct {
 
 func (s *streamServerInterceptorTestSuite) TestPingStream() {
 	ctx := context.Background()
-	s.Client.PingList(ctx, &testpb.PingListRequest{})
+	_, err := s.Client.PingList(ctx, &testpb.PingListRequest{})
+	require.NoError(s.T(), err)
 }
 
 type testPingService struct {

@@ -1,11 +1,11 @@
 policy:
   approval:
   - or:
-    - Dependabot update
+    - Dependency updates
     - Code change
 
 approval_rules:
-- name: Dependabot update
+- name: Dependency updates
   requires:
     count: 1
     teams:
@@ -22,6 +22,7 @@ approval_rules:
     only_has_contributors_in:
       users:
       - "dependabot[bot]"
+      - "renovate-coop-norge[bot]"
     only_changed_files:
       paths:
       - "^go.mod$"

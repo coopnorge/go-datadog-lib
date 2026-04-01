@@ -21,5 +21,3 @@ jobs:
     secrets: inherit
     with:
       log-level: ${{ inputs.log-level }}
-      gcp-workload-identity-provider: projects/27056482351/locations/global/workloadIdentityPools/github-actions/providers/github-actions-provider
-      gcp-service-account: gh-action-pipeline@store-informat-shared-5fc8.iam.gserviceaccount.com

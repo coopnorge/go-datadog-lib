@@ -60,8 +60,8 @@ github.com/cihub/seelog v0.0.0-20170130134532-f561c5e57575 h1:kHaBemcxl8o/pQ5VM1
 github.com/cihub/seelog v0.0.0-20170130134532-f561c5e57575/go.mod h1:9d6lWj8KzO/fd/NrVaLscBKmPigpZpn5YawRPw+e3Yo=
 github.com/coopnorge/go-logger v0.15.1 h1:oecW6ATgrPydkOuBI7dTNvi2x+pfnH+op81F25SsdTs=
 github.com/coopnorge/go-logger v0.15.1/go.mod h1:xORB8QYLn2F2kj+ud2o17RMWMna4V0EieTirOzjdTAo=
-github.com/coopnorge/mage v0.26.1 h1:XWUVL9sx71DkEfB4SBG6dZITaoj89dJTRi3p2y+27cU=
-github.com/coopnorge/mage v0.26.1/go.mod h1:2IeFwVRmSpTV+yg2TR2eKDXyCgD40zJhGhinVnhj9fc=
+github.com/coopnorge/mage v0.26.2 h1:6OeurBy/s0ORK0BooCydW25WPX9dJD5m/FNl4jaZJrQ=
+github.com/coopnorge/mage v0.26.2/go.mod h1:6pbguzt+rdPXO8USeVL8AOk5INOJUssUOLwKXKNU9H4=
 github.com/davecgh/go-spew v1.1.0/go.mod h1:J7Y8YcW2NihsgmVo/mv3lAwl/skON4iLHjSsI+c5H38=
 github.com/davecgh/go-spew v1.1.1/go.mod h1:J7Y8YcW2NihsgmVo/mv3lAwl/skON4iLHjSsI+c5H38=
 github.com/davecgh/go-spew v1.1.2-0.20180830191138-d8f796af33cc h1:U9qPSI2PIWSS1VwoXQT9A3Wy9MM3WgvqSxFWenqJduM=
@@ -145,8 +145,8 @@ github.com/linkdata/deadlock v0.5.5 h1:d6O+rzEqasSfamGDA8u7bjtaq7hOX8Ha4Zn36Wxrk
 github.com/linkdata/deadlock v0.5.5/go.mod h1:tXb28stzAD3trzEEK0UJWC+rZKuobCoPktPYzebb1u0=
 github.com/lufia/plan9stats v0.0.0-20251013123823-9fd1530e3ec3 h1:PwQumkgq4/acIiZhtifTV5OUqqiP82UAl0h87xj/l9k=
 github.com/lufia/plan9stats v0.0.0-20251013123823-9fd1530e3ec3/go.mod h1:autxFIvghDt3jPTLoqZ9OZ7s9qTGNAWmYCjVFWPX/zg=
-github.com/magefile/mage v1.16.1 h1:j5UwkdA48xTlGs0Hcm1Q3sSAcxBorntQjiewDNMsqlo=
-github.com/magefile/mage v1.16.1/go.mod h1:z5UZb/iS3GoOSn0JgWuiw7dxlurVYTu+/jHXqQg881A=
+github.com/magefile/mage v1.17.0 h1:dS4tkq997Ism03akafC8509iqDjeE7TNTexI25Y7sXM=
+github.com/magefile/mage v1.17.0/go.mod h1:Yj51kqllmsgFpvvSzgrZPK9WtluG3kUhFaBUVLo4feA=
 github.com/mattn/go-colorable v0.1.14 h1:9A9LHSqF/7dyVVX6g0U9cwm9pG3kP9gSzcuIPHPsaIE=
 github.com/mattn/go-colorable v0.1.14/go.mod h1:6LmQG8QLFO4G5z1gPvYEzlUgJ2wF+stgPZH1UqBm1s8=
 github.com/mattn/go-isatty v0.0.20 h1:xfD0iDuEKnDkl03q4limB+vH+GxLEtL/jb4xVJSWWEY=

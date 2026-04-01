@@ -1,18 +1,20 @@
 ---
 version: 2
-
 registries:
   coop-ghcr:
     type: docker-registry
     url: ghcr.io
     username: CoopGithubServiceaccount
     password: ${{ secrets.DEPENDABOT_GHCR_PULL }}
-
 updates:
   - package-ecosystem: "github-actions"
     directory: "/"
     schedule:
       interval: "daily"
+    cooldown:
+      default-days: 7
+      exclude:
+        - coopnorge/*
   - package-ecosystem: "gomod"
     directory: "/"
     schedule:
@@ -22,6 +24,10 @@ updates:
         patterns:
           - github.com/DataDog/dd-trace-go
           - github.com/DataDog/dd-trace-go/*
+    cooldown:
+      default-days: 7
+      exclude:
+        - github.com/coopnorge/*
   - package-ecosystem: "docker"
     directory: "/docker-compose"
     registries:
@@ -32,3 +38,7 @@ updates:
       devtools:
         patterns:
           - coopnorge/engineering-docker-images/e0/*
+    cooldown:
+      default-days: 7
+      exclude:
+        - coopnorge/*

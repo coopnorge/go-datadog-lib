@@ -5,7 +5,7 @@ import (
 
 	coopdatadog "github.com/coopnorge/go-datadog-lib/v2"
 	coopEchoDatadog "github.com/coopnorge/go-datadog-lib/v2/middleware/echo"
-	"github.com/labstack/echo/v4"
+	"github.com/labstack/echo/v5"
 )
 
 // `go-datadog-lib` provides middleware for the Echo framework for tracing

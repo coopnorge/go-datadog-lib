@@ -10,12 +10,12 @@ tool (
 
 require (
 	github.com/DataDog/datadog-go/v5 v5.8.3
-	github.com/DataDog/dd-trace-go/contrib/database/sql/v2 v2.6.0
-	github.com/DataDog/dd-trace-go/contrib/google.golang.org/grpc/v2 v2.6.0
-	github.com/DataDog/dd-trace-go/contrib/gorm.io/gorm.v1/v2 v2.6.0
-	github.com/DataDog/dd-trace-go/contrib/labstack/echo.v4/v2 v2.6.0
-	github.com/DataDog/dd-trace-go/contrib/net/http/v2 v2.6.0
-	github.com/DataDog/dd-trace-go/v2 v2.6.0
+	github.com/DataDog/dd-trace-go/contrib/database/sql/v2 v2.7.0
+	github.com/DataDog/dd-trace-go/contrib/google.golang.org/grpc/v2 v2.7.0
+	github.com/DataDog/dd-trace-go/contrib/gorm.io/gorm.v1/v2 v2.7.0
+	github.com/DataDog/dd-trace-go/contrib/labstack/echo.v4/v2 v2.7.0
+	github.com/DataDog/dd-trace-go/contrib/net/http/v2 v2.7.0
+	github.com/DataDog/dd-trace-go/v2 v2.7.0
 	github.com/coopnorge/go-logger v0.15.2
 	github.com/coopnorge/mage v0.26.2
 	github.com/go-sql-driver/mysql v1.9.3
@@ -32,17 +32,18 @@ require (
 
 require (
 	filippo.io/edwards25519 v1.1.1 // indirect
-	github.com/DataDog/datadog-agent/comp/core/tagger/origindetection v0.72.2 // indirect
-	github.com/DataDog/datadog-agent/pkg/obfuscate v0.72.2 // indirect
-	github.com/DataDog/datadog-agent/pkg/opentelemetry-mapping-go/otlp/attributes v0.72.2 // indirect
-	github.com/DataDog/datadog-agent/pkg/proto v0.72.2 // indirect
-	github.com/DataDog/datadog-agent/pkg/remoteconfig/state v0.74.0-devel // indirect
-	github.com/DataDog/datadog-agent/pkg/trace v0.72.2 // indirect
-	github.com/DataDog/datadog-agent/pkg/util/log v0.72.2 // indirect
-	github.com/DataDog/datadog-agent/pkg/util/scrubber v0.72.2 // indirect
-	github.com/DataDog/datadog-agent/pkg/version v0.72.2 // indirect
+	github.com/DataDog/datadog-agent/comp/core/tagger/origindetection v0.75.2 // indirect
+	github.com/DataDog/datadog-agent/pkg/obfuscate v0.75.2 // indirect
+	github.com/DataDog/datadog-agent/pkg/opentelemetry-mapping-go/otlp/attributes v0.75.2 // indirect
+	github.com/DataDog/datadog-agent/pkg/proto v0.75.2 // indirect
+	github.com/DataDog/datadog-agent/pkg/remoteconfig/state v0.75.2 // indirect
+	github.com/DataDog/datadog-agent/pkg/template v0.75.2 // indirect
+	github.com/DataDog/datadog-agent/pkg/trace v0.75.2 // indirect
+	github.com/DataDog/datadog-agent/pkg/util/log v0.75.2 // indirect
+	github.com/DataDog/datadog-agent/pkg/util/scrubber v0.75.2 // indirect
+	github.com/DataDog/datadog-agent/pkg/version v0.75.2 // indirect
 	github.com/DataDog/go-libddwaf/v4 v4.8.0 // indirect
-	github.com/DataDog/go-runtime-metrics-internal v0.0.4-0.20250721125240-fdf1ef85b633 // indirect
+	github.com/DataDog/go-runtime-metrics-internal v0.0.4-0.20260217080614-b0f4edc38a6d // indirect
 	github.com/DataDog/go-sqllexer v0.1.10 // indirect
 	github.com/DataDog/go-tuf v1.1.1-0.5.2 // indirect
 	github.com/DataDog/gostackparse v0.7.0 // indirect
@@ -55,8 +56,6 @@ require (
 	github.com/davecgh/go-spew v1.1.2-0.20180830191138-d8f796af33cc // indirect
 	github.com/dustin/go-humanize v1.0.1 // indirect
 	github.com/ebitengine/purego v0.9.1 // indirect
-	github.com/go-logr/logr v1.4.3 // indirect
-	github.com/go-logr/stdr v1.2.2 // indirect
 	github.com/go-ole/go-ole v1.3.0 // indirect
 	github.com/golang/protobuf v1.5.4 // indirect
 	github.com/google/pprof v0.0.0-20250403155104-27863c87afa6 // indirect
@@ -65,7 +64,7 @@ require (
 	github.com/jinzhu/inflection v1.0.0 // indirect
 	github.com/jinzhu/now v1.1.5 // indirect
 	github.com/json-iterator/go v1.1.12 // indirect
-	github.com/klauspost/compress v1.18.1 // indirect
+	github.com/klauspost/compress v1.18.2 // indirect
 	github.com/klauspost/cpuid/v2 v2.3.0 // indirect
 	github.com/labstack/gommon v0.4.2 // indirect
 	github.com/linkdata/deadlock v0.5.5 // indirect
@@ -87,27 +86,23 @@ require (
 	github.com/richardartoul/molecule v1.0.1-0.20240531184615-7ca0df43c0b3 // indirect
 	github.com/sanposhiho/gomockhandler v1.6.1 // indirect
 	github.com/secure-systems-lab/go-securesystemslib v0.9.1 // indirect
-	github.com/shirou/gopsutil/v4 v4.25.10 // indirect
+	github.com/shirou/gopsutil/v4 v4.25.11 // indirect
 	github.com/sirupsen/logrus v1.9.4 // indirect
 	github.com/spaolacci/murmur3 v1.1.0 // indirect
-	github.com/tinylib/msgp v1.5.0 // indirect
+	github.com/tinylib/msgp v1.6.1 // indirect
 	github.com/tklauser/go-sysconf v0.3.16 // indirect
 	github.com/tklauser/numcpus v0.11.0 // indirect
 	github.com/trailofbits/go-mutexasserts v0.0.0-20250514102930-c1f3d2e37561 // indirect
 	github.com/valyala/bytebufferpool v1.0.0 // indirect
 	github.com/valyala/fasttemplate v1.2.2 // indirect
 	github.com/yusufpapurcu/wmi v1.2.4 // indirect
-	go.opentelemetry.io/auto/sdk v1.2.1 // indirect
-	go.opentelemetry.io/collector/component v1.44.0 // indirect
-	go.opentelemetry.io/collector/featuregate v1.46.0 // indirect
-	go.opentelemetry.io/collector/internal/telemetry v0.138.0 // indirect
-	go.opentelemetry.io/collector/pdata v1.46.0 // indirect
-	go.opentelemetry.io/collector/pdata/pprofile v0.140.0 // indirect
-	go.opentelemetry.io/contrib/bridges/otelzap v0.13.0 // indirect
-	go.opentelemetry.io/otel v1.39.0 // indirect
-	go.opentelemetry.io/otel/log v0.14.0 // indirect
-	go.opentelemetry.io/otel/metric v1.39.0 // indirect
-	go.opentelemetry.io/otel/trace v1.39.0 // indirect
+	go.opentelemetry.io/collector/component v1.48.0 // indirect
+	go.opentelemetry.io/collector/featuregate v1.48.0 // indirect
+	go.opentelemetry.io/collector/pdata v1.48.0 // indirect
+	go.opentelemetry.io/collector/pdata/pprofile v0.142.0 // indirect
+	go.opentelemetry.io/otel v1.40.0 // indirect
+	go.opentelemetry.io/otel/metric v1.40.0 // indirect
+	go.opentelemetry.io/otel/trace v1.40.0 // indirect
 	go.uber.org/atomic v1.11.0 // indirect
 	go.uber.org/multierr v1.11.0 // indirect
 	go.uber.org/zap v1.27.1 // indirect
@@ -115,7 +110,7 @@ require (
 	golang.org/x/crypto v0.48.0 // indirect
 	golang.org/x/exp v0.0.0-20260218203240-3dfff04db8fa // indirect
 	golang.org/x/mod v0.33.0 // indirect
-	golang.org/x/net v0.50.0 // indirect
+	golang.org/x/net v0.51.0 // indirect
 	golang.org/x/sys v0.41.0 // indirect
 	golang.org/x/text v0.34.0 // indirect
 	golang.org/x/time v0.14.0 // indirect

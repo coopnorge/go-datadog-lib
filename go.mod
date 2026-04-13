@@ -17,7 +17,7 @@ require (
 	github.com/DataDog/dd-trace-go/contrib/net/http/v2 v2.7.0
 	github.com/DataDog/dd-trace-go/v2 v2.7.0
 	github.com/coopnorge/go-logger v0.15.2
-	github.com/coopnorge/mage v0.26.2
+	github.com/coopnorge/mage v0.26.3
 	github.com/go-sql-driver/mysql v1.9.3
 	github.com/grpc-ecosystem/go-grpc-middleware/v2 v2.3.3
 	github.com/iancoleman/strcase v0.3.0
@@ -60,7 +60,7 @@ require (
 	github.com/golang/protobuf v1.5.4 // indirect
 	github.com/google/pprof v0.0.0-20250403155104-27863c87afa6 // indirect
 	github.com/google/uuid v1.6.0 // indirect
-	github.com/hashicorp/go-version v1.8.0 // indirect
+	github.com/hashicorp/go-version v1.9.0 // indirect
 	github.com/jinzhu/inflection v1.0.0 // indirect
 	github.com/jinzhu/now v1.1.5 // indirect
 	github.com/json-iterator/go v1.1.12 // indirect
@@ -69,7 +69,7 @@ require (
 	github.com/labstack/gommon v0.4.2 // indirect
 	github.com/linkdata/deadlock v0.5.5 // indirect
 	github.com/lufia/plan9stats v0.0.0-20251013123823-9fd1530e3ec3 // indirect
-	github.com/magefile/mage v1.17.0 // indirect
+	github.com/magefile/mage v1.17.1 // indirect
 	github.com/mattn/go-colorable v0.1.14 // indirect
 	github.com/mattn/go-isatty v0.0.20 // indirect
 	github.com/minio/simdjson-go v0.4.5 // indirect

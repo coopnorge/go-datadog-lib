@@ -68,8 +68,8 @@ github.com/cespare/xxhash/v2 v2.3.0 h1:UL815xU9SqsFlibzuggzjXhog7bL6oX9BbNZnL2UF
 github.com/cespare/xxhash/v2 v2.3.0/go.mod h1:VGX0DQ3Q6kWi7AoAeZDth3/j3BFtOZR5XLFGgcrjCOs=
 github.com/cihub/seelog v0.0.0-20170130134532-f561c5e57575 h1:kHaBemcxl8o/pQ5VM1c8PVE1PubbNx3mjUr09OqWGCs=
 github.com/cihub/seelog v0.0.0-20170130134532-f561c5e57575/go.mod h1:9d6lWj8KzO/fd/NrVaLscBKmPigpZpn5YawRPw+e3Yo=
-github.com/coopnorge/go-logger v0.15.2 h1:CGH5o33onznfmyDZvqRuak+Qg2A7cL9jAYIwCFYAQqg=
-github.com/coopnorge/go-logger v0.15.2/go.mod h1:ZbJIpR+5xbw3nILzTcsXcl643uFTGYg+0+ytWZYo5Og=
+github.com/coopnorge/go-logger v0.15.3 h1:nNSA/V2Wc49pigNwDuWe2qx5OoFmcePwrnxr9PIQiDw=
+github.com/coopnorge/go-logger v0.15.3/go.mod h1:uU/xQaMrD/sk7JYxefpaIiwvm/pIiwx1vJSu9Qe/Ypw=
 github.com/coopnorge/mage v0.26.3 h1:HQGFycU3bi6veioSjW4jjn81RK2EgpKcJMEgUAma0EU=
 github.com/coopnorge/mage v0.26.3/go.mod h1:DGfj4p1VKQRuXl5KZmBgDip7y1VT4p6srENcRICXV2w=
 github.com/davecgh/go-spew v1.1.0/go.mod h1:J7Y8YcW2NihsgmVo/mv3lAwl/skON4iLHjSsI+c5H38=

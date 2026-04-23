@@ -3,9 +3,17 @@ kind: Component
 metadata:
   name: go-datadog-lib
   title: Go Datadog Library
+  description: >-
+    Datadog APM and metrics integration for Go services. One-call
+    initialisation with distributed tracing middleware for gRPC, HTTP, SQL
+    and GORM. Provides a go-logger hook for trace-correlated log entries.
   tags:
-    - "go"
-    - "pkg"
+    - go
+    - datadog
+    - tracing
+    - metrics
+    - observability
+    - apm
   annotations:
     github.com/project-slug: coopnorge/go-datadog-lib
     backstage.io/techdocs-ref: dir:.
@@ -18,7 +26,7 @@ metadata:
       icon: web
 spec:
   type: library
-  lifecycle: experimental
+  lifecycle: production
   owner: engineering
   dependsOn:
     - component:devtools-golang-v1beta1

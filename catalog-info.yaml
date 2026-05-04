@@ -28,10 +28,3 @@ spec:
   type: library
   lifecycle: production
   owner: engineering
-  dependsOn:
-    - component:devtools-golang-v1beta1
-    - component:github-workflow-supply-chain-security-validation
-    - component:github-workflow-techdocs
-    - component:go-logger
-    - component:techdocs
-    - component:vale-coop

@@ -16,7 +16,7 @@ require (
 	github.com/DataDog/dd-trace-go/contrib/labstack/echo.v4/v2 v2.7.3
 	github.com/DataDog/dd-trace-go/contrib/net/http/v2 v2.7.3
 	github.com/DataDog/dd-trace-go/v2 v2.7.3
-	github.com/coopnorge/go-logger v0.15.3
+	github.com/coopnorge/go-logger v0.15.4
 	github.com/coopnorge/mage v0.27.2
 	github.com/go-sql-driver/mysql v1.9.3
 	github.com/grpc-ecosystem/go-grpc-middleware/v2 v2.3.3
@@ -69,12 +69,12 @@ require (
 	github.com/json-iterator/go v1.1.12 // indirect
 	github.com/klauspost/compress v1.18.4 // indirect
 	github.com/klauspost/cpuid/v2 v2.3.0 // indirect
-	github.com/labstack/gommon v0.4.2 // indirect
+	github.com/labstack/gommon v0.5.0 // indirect
 	github.com/linkdata/deadlock v0.5.5 // indirect
 	github.com/lufia/plan9stats v0.0.0-20260216142805-b3301c5f2a88 // indirect
 	github.com/magefile/mage v1.17.2 // indirect
 	github.com/mattn/go-colorable v0.1.14 // indirect
-	github.com/mattn/go-isatty v0.0.20 // indirect
+	github.com/mattn/go-isatty v0.0.21 // indirect
 	github.com/minio/simdjson-go v0.4.5 // indirect
 	github.com/modern-go/concurrent v0.0.0-20180306012644-bacd9c7ef1dd // indirect
 	github.com/modern-go/reflect2 v1.0.3-0.20250322232337-35a7c28c31ee // indirect

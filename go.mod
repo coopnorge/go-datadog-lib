@@ -18,7 +18,7 @@ require (
 	github.com/DataDog/dd-trace-go/v2 v2.7.3
 	github.com/coopnorge/go-logger v0.15.4
 	github.com/coopnorge/mage v0.27.2
-	github.com/go-sql-driver/mysql v1.9.3
+	github.com/go-sql-driver/mysql v1.10.0
 	github.com/grpc-ecosystem/go-grpc-middleware/v2 v2.3.3
 	github.com/iancoleman/strcase v0.3.0
 	github.com/labstack/echo/v4 v4.15.1
@@ -31,7 +31,7 @@ require (
 )
 
 require (
-	filippo.io/edwards25519 v1.1.1 // indirect
+	filippo.io/edwards25519 v1.2.0 // indirect
 	github.com/DataDog/datadog-agent/comp/core/tagger/origindetection v0.77.0 // indirect
 	github.com/DataDog/datadog-agent/pkg/obfuscate v0.77.0 // indirect
 	github.com/DataDog/datadog-agent/pkg/opentelemetry-mapping-go/otlp/attributes v0.77.0 // indirect

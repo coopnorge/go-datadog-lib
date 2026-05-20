@@ -10,12 +10,12 @@ tool (
 
 require (
 	github.com/DataDog/datadog-go/v5 v5.8.3
-	github.com/DataDog/dd-trace-go/contrib/database/sql/v2 v2.7.3
-	github.com/DataDog/dd-trace-go/contrib/google.golang.org/grpc/v2 v2.7.3
-	github.com/DataDog/dd-trace-go/contrib/gorm.io/gorm.v1/v2 v2.7.3
-	github.com/DataDog/dd-trace-go/contrib/labstack/echo.v4/v2 v2.7.3
-	github.com/DataDog/dd-trace-go/contrib/net/http/v2 v2.7.3
-	github.com/DataDog/dd-trace-go/v2 v2.7.3
+	github.com/DataDog/dd-trace-go/contrib/database/sql/v2 v2.8.1
+	github.com/DataDog/dd-trace-go/contrib/google.golang.org/grpc/v2 v2.8.1
+	github.com/DataDog/dd-trace-go/contrib/gorm.io/gorm.v1/v2 v2.8.1
+	github.com/DataDog/dd-trace-go/contrib/labstack/echo.v4/v2 v2.8.1
+	github.com/DataDog/dd-trace-go/contrib/net/http/v2 v2.8.1
+	github.com/DataDog/dd-trace-go/v2 v2.8.1
 	github.com/coopnorge/go-logger v0.15.4
 	github.com/coopnorge/mage v0.27.2
 	github.com/go-sql-driver/mysql v1.10.0
@@ -50,7 +50,6 @@ require (
 	github.com/DataDog/go-runtime-metrics-internal v0.0.4-0.20260217080614-b0f4edc38a6d // indirect
 	github.com/DataDog/go-sqllexer v0.1.13 // indirect
 	github.com/DataDog/go-tuf v1.1.1-0.5.2 // indirect
-	github.com/DataDog/gostackparse v0.7.0 // indirect
 	github.com/DataDog/sketches-go v1.4.8 // indirect
 	github.com/Microsoft/go-winio v0.6.2 // indirect
 	github.com/bmatcuk/doublestar/v4 v4.10.0 // indirect
@@ -106,6 +105,7 @@ require (
 	go.opentelemetry.io/otel v1.41.0 // indirect
 	go.opentelemetry.io/otel/metric v1.41.0 // indirect
 	go.opentelemetry.io/otel/trace v1.41.0 // indirect
+	go.opentelemetry.io/proto/otlp v1.9.0 // indirect
 	go.uber.org/atomic v1.11.0 // indirect
 	go.uber.org/multierr v1.11.0 // indirect
 	go.uber.org/zap v1.27.1 // indirect

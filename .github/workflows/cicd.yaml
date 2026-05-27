@@ -27,12 +27,9 @@ jobs:
     needs:
       - mage
       - techdocs
-    if: always()
-    runs-on: ubuntu-latest
+    if: failure() || cancelled()
+    runs-on: ubuntu-slim
     steps:
       - run: exit 1
         name: "Catch errors"
-        if: |
-          needs.mage.result == 'failure' ||
-          needs.techdocs.result == 'failure'
     permissions: {}

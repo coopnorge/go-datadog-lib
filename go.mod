@@ -17,7 +17,7 @@ require (
 	github.com/DataDog/dd-trace-go/contrib/net/http/v2 v2.8.2
 	github.com/DataDog/dd-trace-go/v2 v2.8.2
 	github.com/coopnorge/go-logger v0.15.6
-	github.com/coopnorge/mage v0.27.6
+	github.com/coopnorge/mage v0.27.7
 	github.com/go-sql-driver/mysql v1.10.0
 	github.com/grpc-ecosystem/go-grpc-middleware/v2 v2.3.3
 	github.com/iancoleman/strcase v0.3.0

@@ -66,7 +66,7 @@ require (
 	github.com/jinzhu/inflection v1.0.0 // indirect
 	github.com/jinzhu/now v1.1.5 // indirect
 	github.com/json-iterator/go v1.1.12 // indirect
-	github.com/klauspost/compress v1.18.4 // indirect
+	github.com/klauspost/compress v1.18.7 // indirect
 	github.com/klauspost/cpuid/v2 v2.3.0 // indirect
 	github.com/labstack/gommon v0.5.0 // indirect
 	github.com/linkdata/deadlock v0.5.5 // indirect

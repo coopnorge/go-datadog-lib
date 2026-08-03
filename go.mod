@@ -27,7 +27,7 @@ require (
 	golang.org/x/sync v0.22.0
 	google.golang.org/grpc v1.82.1
 	gorm.io/driver/mysql v1.6.0
-	gorm.io/gorm v1.31.1
+	gorm.io/gorm v1.31.2
 )
 
 require (

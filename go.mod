@@ -25,7 +25,7 @@ require (
 	github.com/stretchr/testify v1.12.0
 	go.uber.org/mock v0.6.0
 	golang.org/x/sync v0.22.0
-	google.golang.org/grpc v1.83.0
+	google.golang.org/grpc v1.83.1
 	gorm.io/driver/mysql v1.6.0
 	gorm.io/gorm v1.31.2
 )

@@ -38,7 +38,7 @@ func NewDatadogMetrics(cfg config.DatadogParameters, orgPrefix string) (*Datadog
 
 	ddClient, ddClientErr = statsd.New(cfg.GetDsdEndpoint())
 	if ddClientErr != nil {
-		return nil, fmt.Errorf("datadog statsd client initialize with socket(%s) - error %v", cfg.GetDsdEndpoint(), ddClientErr)
+		return nil, fmt.Errorf("datadog statsd client initialize with socket(%s) - error %w", cfg.GetDsdEndpoint(), ddClientErr)
 	}
 
 	dm := &DatadogMetrics{

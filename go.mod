@@ -19,7 +19,7 @@ require (
 	github.com/coopnorge/go-logger v0.15.8
 	github.com/coopnorge/mage v0.37.0
 	github.com/go-sql-driver/mysql v1.10.0
-	github.com/grpc-ecosystem/go-grpc-middleware/v2 v2.3.3
+	github.com/grpc-ecosystem/go-grpc-middleware/v2 v2.3.4
 	github.com/iancoleman/strcase v0.3.0
 	github.com/labstack/echo/v4 v4.15.4
 	github.com/stretchr/testify v1.12.1

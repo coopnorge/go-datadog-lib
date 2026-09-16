@@ -8,7 +8,7 @@ import (
 	"github.com/coopnorge/go-datadog-lib/v2/internal/testhelpers"
 
 	coopEchoDatadog "github.com/coopnorge/go-datadog-lib/v2/middleware/echo"
-	"github.com/labstack/echo/v4"
+	"github.com/labstack/echo/v5"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
 	gomock "go.uber.org/mock/gomock"

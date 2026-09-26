@@ -21,7 +21,7 @@ require (
 	github.com/go-sql-driver/mysql v1.10.1
 	github.com/grpc-ecosystem/go-grpc-middleware/v2 v2.3.4
 	github.com/iancoleman/strcase v0.3.0
-	github.com/labstack/echo/v4 v4.15.4
+	github.com/labstack/echo/v5 v5.3.1
 	github.com/stretchr/testify v1.12.1
 	go.uber.org/mock v0.6.0
 	golang.org/x/sync v0.23.0
@@ -63,6 +63,7 @@ require (
 	github.com/json-iterator/go v1.1.12 // indirect
 	github.com/klauspost/compress v1.18.7 // indirect
 	github.com/klauspost/cpuid/v2 v2.3.0 // indirect
+	github.com/labstack/echo/v4 v4.13.3 // indirect
 	github.com/labstack/gommon v0.5.0 // indirect
 	github.com/linkdata/deadlock v0.5.5 // indirect
 	github.com/lufia/plan9stats v0.0.0-20260330125221-c963978e514e // indirect

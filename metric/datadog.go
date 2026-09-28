@@ -12,19 +12,30 @@ import (
 
 type (
 	// DatadogMetricsClient ...
+	//
+	// Deprecated: Use metrics package instead
 	DatadogMetricsClient interface {
 		// GetClient statsd client
+		//
+		// Deprecated: Use metrics package instead
 		GetClient() statsd.ClientInterface
 		// GetDefaultTags that will be used in Datadog metrics
+		//
+		// Deprecated: Use metrics package instead
 		GetDefaultTags() []string
 		// GetServiceNamePrefix for metric name
+		//
+		// Deprecated: Use metrics package instead
 		GetServiceNamePrefix() string
 	}
 
 	// DatadogMetrics ready to use client to send statsd metrics
+	//
+	// Deprecated: Use metrics package instead
 	DatadogMetrics struct {
-		client             *statsd.Client
-		ServicePrefix      string
+		client        *statsd.Client
+		ServicePrefix string
+		// Deprecated: Use metrics package instead
 		DefaultMetricsTags []string
 	}
 )
@@ -59,16 +70,22 @@ func NewDatadogMetrics(cfg config.DatadogParameters, orgPrefix string) (*Datadog
 }
 
 // GetClient statsd client
+//
+// Deprecated: Use metrics package instead
 func (d DatadogMetrics) GetClient() statsd.ClientInterface {
 	return d.client
 }
 
 // GetDefaultTags that will be used in Datadog metrics
+//
+// Deprecated: Use metrics package instead
 func (d DatadogMetrics) GetDefaultTags() []string {
 	return d.DefaultMetricsTags
 }
 
 // GetServiceNamePrefix for metric name
+//
+// Deprecated: Use metrics package instead
 func (d DatadogMetrics) GetServiceNamePrefix() string {
 	return d.ServicePrefix
 }

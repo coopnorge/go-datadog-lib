@@ -16,7 +16,7 @@ require (
 	github.com/DataDog/dd-trace-go/contrib/labstack/echo.v4/v2 v2.10.1
 	github.com/DataDog/dd-trace-go/contrib/net/http/v2 v2.10.1
 	github.com/DataDog/dd-trace-go/v2 v2.10.1
-	github.com/coopnorge/go-logger v0.15.8
+	github.com/coopnorge/go-logger v0.15.9
 	github.com/coopnorge/mage v0.38.2
 	github.com/go-sql-driver/mysql v1.10.1
 	github.com/grpc-ecosystem/go-grpc-middleware/v2 v2.3.4
@@ -68,7 +68,7 @@ require (
 	github.com/lufia/plan9stats v0.0.0-20260330125221-c963978e514e // indirect
 	github.com/magefile/mage v1.17.2 // indirect
 	github.com/mattn/go-colorable v0.1.15 // indirect
-	github.com/mattn/go-isatty v0.0.22 // indirect
+	github.com/mattn/go-isatty v0.0.24 // indirect
 	github.com/minio/simdjson-go v0.4.5 // indirect
 	github.com/modern-go/concurrent v0.0.0-20180306012644-bacd9c7ef1dd // indirect
 	github.com/modern-go/reflect2 v1.0.3-0.20250322232337-35a7c28c31ee // indirect
@@ -83,7 +83,7 @@ require (
 	github.com/sanposhiho/gomockhandler v1.7.0 // indirect
 	github.com/secure-systems-lab/go-securesystemslib v0.11.0 // indirect
 	github.com/shirou/gopsutil/v4 v4.26.6 // indirect
-	github.com/sirupsen/logrus v1.9.4 // indirect
+	github.com/sirupsen/logrus v1.10.2 // indirect
 	github.com/spaolacci/murmur3 v1.1.0 // indirect
 	github.com/tinylib/msgp v1.6.4 // indirect
 	github.com/tklauser/go-sysconf v0.3.16 // indirect

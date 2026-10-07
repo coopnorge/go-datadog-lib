@@ -47,8 +47,8 @@ github.com/DataDog/sketches-go v1.4.8/go.mod h1:a/wjRUqzqtGS8qRHRPDCs4EAQfmvPDZG
 github.com/Microsoft/go-winio v0.5.0/go.mod h1:JPGBdM1cNvN/6ISo+n8V5iA4v8pBzdOpzfwIujj1a84=
 github.com/Microsoft/go-winio v0.6.2 h1:F2VQgta7ecxGYO8k3ZZz3RS8fVIXVxONVUPlNERoyfY=
 github.com/Microsoft/go-winio v0.6.2/go.mod h1:yd8OoFMLzJbo9gZq8j5qaps8bJ9aShtEA8Ipt1oGCvU=
-github.com/bmatcuk/doublestar/v4 v4.10.0 h1:zU9WiOla1YA122oLM6i4EXvGW62DvKZVxIe6TYWexEs=
-github.com/bmatcuk/doublestar/v4 v4.10.0/go.mod h1:xBQ8jztBU6kakFMg+8WGxn0c6z1fTSPVIjEY1Wr7jzc=
+github.com/bmatcuk/doublestar/v4 v4.10.2 h1:eF7W7HWKg3z9NrWV9pTLnNeoXaqq3Tq9DNKXVMfoCnw=
+github.com/bmatcuk/doublestar/v4 v4.10.2/go.mod h1:xBQ8jztBU6kakFMg+8WGxn0c6z1fTSPVIjEY1Wr7jzc=
 github.com/cenkalti/backoff/v5 v5.0.3 h1:ZN+IMa753KfX5hd8vVaMixjnqRZ3y8CuJKRKj1xcsSM=
 github.com/cenkalti/backoff/v5 v5.0.3/go.mod h1:rkhZdG3JZukswDf7f0cwqPNk4K0sa+F97BxZthm/crw=
 github.com/cespare/xxhash/v2 v2.1.1/go.mod h1:VGX0DQ3Q6kWi7AoAeZDth3/j3BFtOZR5XLFGgcrjCOs=
@@ -58,8 +58,8 @@ github.com/cihub/seelog v0.0.0-20170130134532-f561c5e57575 h1:kHaBemcxl8o/pQ5VM1
 github.com/cihub/seelog v0.0.0-20170130134532-f561c5e57575/go.mod h1:9d6lWj8KzO/fd/NrVaLscBKmPigpZpn5YawRPw+e3Yo=
 github.com/coopnorge/go-logger v0.15.9 h1:5mM0r+sSHmt4Sen4HmZUW5+xy+ewQwwz7/0d2CfO8L8=
 github.com/coopnorge/go-logger v0.15.9/go.mod h1:qnIY4mDWYi+W1L5Qzpsel2gD1TSt0is4jMS5BiGwIA0=
-github.com/coopnorge/mage v0.39.2 h1:uyucJ0eSoiAZ3F4z2eHXY8ynBjhR8xIUdHRYvJkZbJ0=
-github.com/coopnorge/mage v0.39.2/go.mod h1:6R9CYFXkhTWVeGOWMpVxlZN/bbRscf1YfLey6cvRwBs=
+github.com/coopnorge/mage v0.42.0 h1:4+9w8m5TYnwn/Q/igNeJzE39UH83/XmgSNvJc7f7/Rw=
+github.com/coopnorge/mage v0.42.0/go.mod h1:Cuub4BeiRC1QsYBf59ra3/UOrg7MtNb8i6WOf/z0T/c=
 github.com/datolabs-io/go-backstage/v3 v3.2.0 h1:t451wJ44SBaXggkErMM8qvLjEQTvx46oFIeKykldlaU=
 github.com/datolabs-io/go-backstage/v3 v3.2.0/go.mod h1:8ttnYlIi7EA7hSso71PceQyC6N8WS/vL+SrTSXL68R4=
 github.com/davecgh/go-spew v1.1.0/go.mod h1:J7Y8YcW2NihsgmVo/mv3lAwl/skON4iLHjSsI+c5H38=

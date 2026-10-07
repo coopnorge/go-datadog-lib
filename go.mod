@@ -17,7 +17,7 @@ require (
 	github.com/DataDog/dd-trace-go/contrib/net/http/v2 v2.10.1
 	github.com/DataDog/dd-trace-go/v2 v2.10.1
 	github.com/coopnorge/go-logger v0.15.9
-	github.com/coopnorge/mage v0.39.2
+	github.com/coopnorge/mage v0.42.0
 	github.com/go-sql-driver/mysql v1.10.1
 	github.com/grpc-ecosystem/go-grpc-middleware/v2 v2.3.4
 	github.com/iancoleman/strcase v0.3.0
@@ -47,7 +47,7 @@ require (
 	github.com/DataDog/go-tuf v1.1.1-0.5.2 // indirect
 	github.com/DataDog/sketches-go v1.4.8 // indirect
 	github.com/Microsoft/go-winio v0.6.2 // indirect
-	github.com/bmatcuk/doublestar/v4 v4.10.0 // indirect
+	github.com/bmatcuk/doublestar/v4 v4.10.2 // indirect
 	github.com/cenkalti/backoff/v5 v5.0.3 // indirect
 	github.com/cespare/xxhash/v2 v2.3.0 // indirect
 	github.com/cihub/seelog v0.0.0-20170130134532-f561c5e57575 // indirect

@@ -31,7 +31,7 @@ approval_rules:
   requires:
     count: 1
     teams:
-    - "coopnorge/engineering"
+    - "coopnorge/backend-and-platform-engineering"
   options:
     invalidate_on_push: true
     request_review:
@@ -64,7 +64,7 @@ approval_rules:
   requires:
     count: 2
     teams:
-    - "coopnorge/engineering"
+    - "coopnorge/backend-and-platform-engineering"
   options:
     invalidate_on_push: true
     request_review:

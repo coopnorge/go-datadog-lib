@@ -18,10 +18,12 @@ approval_rules:
       pattern: "^renovate/(github\\.com-coopnorge-|coopnorge-|engineering-docker-images).*$"
     only_changed_files:
       paths:
-      - "^go.mod$"
-      - "^go.sum$"
-      - "^.github/workflows/.*$"
-      - "^docker-compose/Dockerfile$"
+      - "(^|.*/)go\\.mod$"
+      - "(^|.*/)go\\.sum$"
+      - "(^|.*/)[^/]*Dockerfile[^/]*$"
+      - "(^|.*/)docker-compose\\.ya?ml$"
+      - "^\\.github/workflows/.*$"
+      - "^\\.github/actions/.*$"
     has_valid_signatures_by_keys:
       key_ids: ["B5690EEEBB952194"]
 
@@ -45,10 +47,12 @@ approval_rules:
       - "renovate-coop-norge[bot]"
     only_changed_files:
       paths:
-      - "^go.mod$"
-      - "^go.sum$"
-      - "^.github/workflows/.*$"
-      - "^docker-compose/Dockerfile$"
+      - "(^|.*/)go\\.mod$"
+      - "(^|.*/)go\\.sum$"
+      - "(^|.*/)[^/]*Dockerfile[^/]*$"
+      - "(^|.*/)docker-compose\\.ya?ml$"
+      - "^\\.github/workflows/.*$"
+      - "^\\.github/actions/.*$"
     has_valid_signatures_by_keys:
       key_ids: ["B5690EEEBB952194"]
 
@@ -56,7 +60,7 @@ approval_rules:
   if:
     changed_files:
       paths:
-        - ".*"
+      - ".*"
   requires:
     count: 2
     teams:

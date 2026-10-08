@@ -7,7 +7,7 @@ on:
 
 jobs:
   mage:
-    uses: coopnorge/mage/.github/workflows/mage.yaml@v0
+    uses: coopnorge/mage/.github/workflows/mage.yaml@v0.42.0
     permissions:
       contents: read
       id-token: write

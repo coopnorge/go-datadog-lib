@@ -27,4 +27,4 @@ metadata:
 spec:
   type: library
   lifecycle: production
-  owner: engineering
+  owner: backend-and-platform-engineering

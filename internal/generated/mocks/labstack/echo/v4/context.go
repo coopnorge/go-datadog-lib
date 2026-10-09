@@ -16,7 +16,7 @@ import (
 	url "net/url"
 	reflect "reflect"
 
-	echo "github.com/labstack/echo/v4"
+	echo "github.com/labstack/echo/v5"
 	gomock "go.uber.org/mock/gomock"
 )
 

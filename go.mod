@@ -10,12 +10,12 @@ tool (
 
 require (
 	github.com/DataDog/datadog-go/v5 v5.9.1
-	github.com/DataDog/dd-trace-go/contrib/database/sql/v2 v2.10.1
-	github.com/DataDog/dd-trace-go/contrib/google.golang.org/grpc/v2 v2.10.1
-	github.com/DataDog/dd-trace-go/contrib/gorm.io/gorm.v1/v2 v2.10.1
-	github.com/DataDog/dd-trace-go/contrib/labstack/echo.v4/v2 v2.10.1
-	github.com/DataDog/dd-trace-go/contrib/net/http/v2 v2.10.1
-	github.com/DataDog/dd-trace-go/v2 v2.10.1
+	github.com/DataDog/dd-trace-go/contrib/database/sql/v2 v2.11.1
+	github.com/DataDog/dd-trace-go/contrib/google.golang.org/grpc/v2 v2.11.1
+	github.com/DataDog/dd-trace-go/contrib/gorm.io/gorm.v1/v2 v2.11.1
+	github.com/DataDog/dd-trace-go/contrib/labstack/echo.v4/v2 v2.11.1
+	github.com/DataDog/dd-trace-go/contrib/net/http/v2 v2.11.1
+	github.com/DataDog/dd-trace-go/v2 v2.11.1
 	github.com/coopnorge/go-logger v0.15.9
 	github.com/coopnorge/mage v0.44.0
 	github.com/go-sql-driver/mysql v1.10.1
@@ -78,7 +78,7 @@ require (
 	github.com/pkg/errors v0.9.1 // indirect
 	github.com/planetscale/vtprotobuf v0.6.1-0.20240319094008-0393e58bdf10 // indirect
 	github.com/power-devops/perfstat v0.0.0-20240221224432-82ca36839d55 // indirect
-	github.com/puzpuzpuz/xsync/v3 v3.5.1 // indirect
+	github.com/puzpuzpuz/xsync/v4 v4.5.0 // indirect
 	github.com/richardartoul/molecule v1.0.1-0.20240531184615-7ca0df43c0b3 // indirect
 	github.com/sanposhiho/gomockhandler v1.7.0 // indirect
 	github.com/secure-systems-lab/go-securesystemslib v0.11.0 // indirect
@@ -96,10 +96,10 @@ require (
 	go.opentelemetry.io/collector/featuregate v1.61.0 // indirect
 	go.opentelemetry.io/collector/pdata v1.61.0 // indirect
 	go.opentelemetry.io/collector/pdata/pprofile v0.155.0 // indirect
-	go.opentelemetry.io/otel v1.44.0 // indirect
-	go.opentelemetry.io/otel/metric v1.44.0 // indirect
-	go.opentelemetry.io/otel/trace v1.44.0 // indirect
-	go.opentelemetry.io/proto/otlp v1.10.0 // indirect
+	go.opentelemetry.io/otel v1.45.0 // indirect
+	go.opentelemetry.io/otel/metric v1.45.0 // indirect
+	go.opentelemetry.io/otel/trace v1.45.0 // indirect
+	go.opentelemetry.io/proto/otlp v1.11.0 // indirect
 	go.uber.org/atomic v1.11.0 // indirect
 	go.uber.org/multierr v1.11.0 // indirect
 	go.uber.org/zap v1.28.0 // indirect
@@ -113,7 +113,7 @@ require (
 	golang.org/x/time v0.15.0 // indirect
 	golang.org/x/tools v0.52.0 // indirect
 	golang.org/x/xerrors v0.0.0-20240903120638-7835f813f4da // indirect
-	google.golang.org/genproto/googleapis/rpc v0.0.0-20260706201446-f0a921348800 // indirect
+	google.golang.org/genproto/googleapis/rpc v0.0.0-20260803160001-6ac0973c030d // indirect
 	google.golang.org/protobuf v1.36.12-0.20260116114154-8c4c4ae446ca // indirect
 	gopkg.in/yaml.v3 v3.0.1 // indirect
 )

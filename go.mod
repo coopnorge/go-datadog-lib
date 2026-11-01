@@ -16,7 +16,7 @@ require (
 	github.com/DataDog/dd-trace-go/contrib/labstack/echo.v4/v2 v2.11.2
 	github.com/DataDog/dd-trace-go/contrib/net/http/v2 v2.11.2
 	github.com/DataDog/dd-trace-go/v2 v2.11.2
-	github.com/coopnorge/go-logger v0.15.9
+	github.com/coopnorge/go-logger v0.15.10
 	github.com/coopnorge/mage v0.44.2
 	github.com/go-sql-driver/mysql v1.10.1
 	github.com/grpc-ecosystem/go-grpc-middleware/v2 v2.3.4
@@ -52,7 +52,7 @@ require (
 	github.com/cespare/xxhash/v2 v2.3.0 // indirect
 	github.com/cihub/seelog v0.0.0-20170130134532-f561c5e57575 // indirect
 	github.com/datolabs-io/go-backstage/v3 v3.2.0 // indirect
-	github.com/dustin/go-humanize v1.0.1 // indirect
+	github.com/dustin/go-humanize v1.1.0 // indirect
 	github.com/ebitengine/purego v0.10.0 // indirect
 	github.com/go-ole/go-ole v1.3.0 // indirect
 	github.com/google/pprof v0.0.0-20250403155104-27863c87afa6 // indirect

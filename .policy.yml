@@ -3,6 +3,7 @@ policy:
   - or:
     - Security fix
     - Internal dependency update
+    - Approved dependency update
     - Dependency updates
     - Code change
 
@@ -43,6 +44,42 @@ approval_rules:
       - "renovate-coop-norge[bot]"
     from_branch:
       pattern: "^renovate/(github\\.com-coopnorge-|coopnorge-|engineering-docker-images).*$"
+    only_changed_files:
+      paths:
+      - "(^|.*/)go\\.mod$"
+      - "(^|.*/)go\\.sum$"
+      - "(^|.*/)[^/]*Dockerfile[^/]*$"
+      - "(^|.*/)docker-compose\\.ya?ml$"
+      - "^\\.github/workflows/.*$"
+      - "^\\.github/actions/.*$"
+    has_valid_signatures_by_keys:
+      key_ids: ["B5690EEEBB952194"]
+
+# Approved dependencies: merge without human review once checks pass.
+# Everything else falls back to "Dependency updates" (1 review).
+# Branch names (renovate/<name>) taken from Renovate PR history:
+#   github.com/stretchr/testify            renovate/github.com-stretchr-testify-1.x
+#   golang.org/x/* (group)                 renovate/golang-x-packages, renovate/golang.org-x-<pkg>-0.x
+#   dd-trace-go (group)                    renovate/dd-trace-go
+#   github.com/DataDog/datadog-go/v5       renovate/github.com-datadog-datadog-go-v5-5.x
+#   go-grpc-middleware/v2                  renovate/github.com-grpc-ecosystem-go-grpc-middleware-v2-2.x
+#   echo (group + echo/v4)                 renovate/echo-go, renovate/github.com-labstack-echo-v4-4.x
+#   google.golang.org/grpc                 renovate/google.golang.org-grpc-1.x
+#   gorm.io/gorm                           renovate/gorm.io-gorm-1.x
+#   go-sql-driver/mysql                    renovate/github.com-go-sql-driver-mysql-1.x
+# Not approved: go directive (renovate/go-1.x), -vulnerability branches (Security fix rule).
+- name: Approved dependency update
+  requires:
+    count: 0
+  if:
+    has_successful_status:
+      - "build"
+      - "Supply Chain / Validate"
+    only_has_contributors_in:
+      users:
+      - "renovate-coop-norge[bot]"
+    from_branch:
+      pattern: "^renovate/(golang-x-packages|golang\\.org-x-[a-z0-9]+-[0-9]+\\.x|dd-trace-go|echo-go|github\\.com-stretchr-testify-1\\.x|github\\.com-datadog-datadog-go-v5-5\\.x|github\\.com-grpc-ecosystem-go-grpc-middleware-v2-2\\.x|github\\.com-labstack-echo-v4-4\\.x|google\\.golang\\.org-grpc-1\\.x|gorm\\.io-gorm-1\\.x|github\\.com-go-sql-driver-mysql-1\\.x)$"
     only_changed_files:
       paths:
       - "(^|.*/)go\\.mod$"

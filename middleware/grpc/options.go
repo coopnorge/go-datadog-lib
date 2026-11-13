@@ -48,9 +48,17 @@ func convertOptions(options ...Option) []ddGrpc.Option {
 }
 
 // Option allows for overriding our default-config.
+//
+// Deprecated: The whole module is deprecated. Use the otelgrpc package from
+// go.opentelemetry.io/contrib/instrumentation/google.golang.org/grpc/otelgrpc, where the
+// options live.
 type Option func(cfg *config)
 
 // WithServiceName overrides the service-name set in environment-variable "DD_SERVICE".
+//
+// Deprecated: The whole module is deprecated. Use the otelgrpc package from
+// go.opentelemetry.io/contrib/instrumentation/google.golang.org/grpc/otelgrpc, where the
+// options live.
 func WithServiceName(serviceName string) Option {
 	return func(cfg *config) {
 		cfg.serviceName = serviceName
@@ -59,6 +67,8 @@ func WithServiceName(serviceName string) Option {
 
 // WithNonErrorCodes determines the list of codes which will not be considered errors in instrumentation.
 // This call overrides the default handling of codes.Canceled as a non-error.
+//
+// Deprecated: The whole module is deprecated. There is no direct replacement.
 func WithNonErrorCodes(cs ...codes.Code) Option {
 	return func(cfg *config) {
 		cfg.nonErrorCodes = cs
@@ -67,6 +77,10 @@ func WithNonErrorCodes(cs ...codes.Code) Option {
 
 // WithUntracedMethods specifies full methods to be ignored by the server side and client
 // side interceptors. When a request's full method is in 'methods', no spans will be created.
+//
+// Deprecated: The whole module is deprecated. Use the otelgrpc package from
+// go.opentelemetry.io/contrib/instrumentation/google.golang.org/grpc/otelgrpc, where the
+// options live.
 func WithUntracedMethods(methods ...string) Option {
 	return func(cfg *config) {
 		cfg.untracedMethods = methods
@@ -74,6 +88,10 @@ func WithUntracedMethods(methods ...string) Option {
 }
 
 // WithCustomTag will attach the value to the span tagged by the key.
+//
+// Deprecated: The whole module is deprecated. Use the otelgrpc package from
+// go.opentelemetry.io/contrib/instrumentation/google.golang.org/grpc/otelgrpc, where the
+// options live.
 func WithCustomTag(key string, value any) Option {
 	return func(cfg *config) {
 		if cfg.tags == nil {

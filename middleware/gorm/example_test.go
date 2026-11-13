@@ -1,3 +1,4 @@
+//nolint:staticcheck // the module is deprecated as a whole
 package gorm_test
 
 import (

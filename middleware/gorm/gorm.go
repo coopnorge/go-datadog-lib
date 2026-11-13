@@ -1,3 +1,8 @@
+// Package gorm adds Datadog tracing to GORM database connections.
+//
+// Deprecated: The whole module is deprecated. Use db.Use(tracing.NewPlugin())
+// with gorm.io/plugin/opentelemetry/tracing. See the root package documentation
+// for the migration guide and ADR.
 package gorm
 
 import (
@@ -10,6 +15,9 @@ import (
 
 // NewORM returns a new gorm DB instance.
 // Create a dialector by calling e.g. https://pkg.go.dev/gorm.io/driver/mysql#New
+//
+// Deprecated: The whole module is deprecated. Use db.Use(tracing.NewPlugin()) with
+// gorm.io/plugin/opentelemetry/tracing.
 func NewORM(dialector gorm.Dialector, gormCfg *gorm.Config, options ...Option) (*gorm.DB, error) {
 	if internal.IsDatadogDisabled() {
 		return gorm.Open(dialector, gormCfg)
@@ -52,9 +60,15 @@ func defaults() *config {
 }
 
 // Option allows for overriding our default-config.
+//
+// Deprecated: The whole module is deprecated. Use db.Use(tracing.NewPlugin()) with
+// gorm.io/plugin/opentelemetry/tracing.
 type Option func(cfg *config)
 
 // WithServiceName overrides the service-name set in environment-variable "DD_SERVICE".
+//
+// Deprecated: The whole module is deprecated. Use db.Use(tracing.NewPlugin()) with
+// gorm.io/plugin/opentelemetry/tracing.
 func WithServiceName(serviceName string) Option {
 	return func(cfg *config) {
 		cfg.serviceName = serviceName
@@ -62,6 +76,9 @@ func WithServiceName(serviceName string) Option {
 }
 
 // WithCustomTag will attach the value to the span tagged by the key.
+//
+// Deprecated: The whole module is deprecated. Use db.Use(tracing.NewPlugin()) with
+// gorm.io/plugin/opentelemetry/tracing.
 func WithCustomTag(key string, value any) Option {
 	return func(cfg *config) {
 		if cfg.tags == nil {

@@ -4,7 +4,7 @@ import (
 	"fmt"
 	"strings"
 
-	"github.com/coopnorge/go-datadog-lib/v2/config"
+	"github.com/coopnorge/go-datadog-lib/v2/config" //nolint:staticcheck // internal use of the deprecated module
 
 	"github.com/DataDog/datadog-go/v5/statsd"
 	"github.com/iancoleman/strcase"
@@ -12,16 +12,31 @@ import (
 
 type (
 	// DatadogMetricsClient ...
+	//
+	// Deprecated: The whole module is deprecated. Use instruments created once from
+	// otel.Meter in go.opentelemetry.io/otel (package go.opentelemetry.io/otel/metric).
 	DatadogMetricsClient interface {
 		// GetClient statsd client
+		//
+		// Deprecated: The whole module is deprecated. Use instruments created once from
+		// otel.Meter in go.opentelemetry.io/otel (package go.opentelemetry.io/otel/metric).
 		GetClient() statsd.ClientInterface
 		// GetDefaultTags that will be used in Datadog metrics
+		//
+		// Deprecated: The whole module is deprecated. Use instruments created once from
+		// otel.Meter in go.opentelemetry.io/otel (package go.opentelemetry.io/otel/metric).
 		GetDefaultTags() []string
 		// GetServiceNamePrefix for metric name
+		//
+		// Deprecated: The whole module is deprecated. Use instruments created once from
+		// otel.Meter in go.opentelemetry.io/otel (package go.opentelemetry.io/otel/metric).
 		GetServiceNamePrefix() string
 	}
 
 	// DatadogMetrics ready to use client to send statsd metrics
+	//
+	// Deprecated: The whole module is deprecated. Use instruments created once from
+	// otel.Meter in go.opentelemetry.io/otel (package go.opentelemetry.io/otel/metric).
 	DatadogMetrics struct {
 		client             *statsd.Client
 		ServicePrefix      string
@@ -32,6 +47,8 @@ type (
 // NewDatadogMetrics instance required to have cfg config.DatadogParameters to get information about service and optional orgPrefix to append into for metric name
 //
 // Deprecated: Use coopdatadog.Start() instead.
+// The whole module is deprecated; use instruments created once from otel.Meter in
+// go.opentelemetry.io/otel (package go.opentelemetry.io/otel/metric).
 func NewDatadogMetrics(cfg config.DatadogParameters, orgPrefix string) (*DatadogMetrics, error) {
 	var ddClient *statsd.Client
 	var ddClientErr error
@@ -59,16 +76,25 @@ func NewDatadogMetrics(cfg config.DatadogParameters, orgPrefix string) (*Datadog
 }
 
 // GetClient statsd client
+//
+// Deprecated: The whole module is deprecated. Use instruments created once from
+// otel.Meter in go.opentelemetry.io/otel (package go.opentelemetry.io/otel/metric).
 func (d DatadogMetrics) GetClient() statsd.ClientInterface {
 	return d.client
 }
 
 // GetDefaultTags that will be used in Datadog metrics
+//
+// Deprecated: The whole module is deprecated. Use instruments created once from
+// otel.Meter in go.opentelemetry.io/otel (package go.opentelemetry.io/otel/metric).
 func (d DatadogMetrics) GetDefaultTags() []string {
 	return d.DefaultMetricsTags
 }
 
 // GetServiceNamePrefix for metric name
+//
+// Deprecated: The whole module is deprecated. Use instruments created once from
+// otel.Meter in go.opentelemetry.io/otel (package go.opentelemetry.io/otel/metric).
 func (d DatadogMetrics) GetServiceNamePrefix() string {
 	return d.ServicePrefix
 }

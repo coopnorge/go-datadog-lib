@@ -1,3 +1,4 @@
+//nolint:staticcheck // the module is deprecated as a whole
 package coopdatadog_test
 
 import (

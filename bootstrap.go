@@ -11,7 +11,7 @@ import (
 	"github.com/DataDog/dd-trace-go/v2/profiler"
 	"github.com/coopnorge/go-datadog-lib/v2/internal"
 	"github.com/coopnorge/go-datadog-lib/v2/internal/log"
-	"github.com/coopnorge/go-datadog-lib/v2/metrics"
+	"github.com/coopnorge/go-datadog-lib/v2/metrics" //nolint:staticcheck // internal use of the deprecated module
 )
 
 // Start the Datadog integration. It is the caller's responsibility to call the
@@ -20,6 +20,9 @@ import (
 //
 // Canceling the supplied context.Context will not trigger the returned
 // StopFunc, since that could lead to loss of important traces or metrics.
+//
+// Deprecated: The whole module is deprecated. Use Start from
+// github.com/coopnorge/go-telemetry-lib.
 func Start(ctx context.Context, opts ...Option) (StopFunc, error) {
 	if ctx == nil {
 		return noop, errors.New("ctx cannot be nil")
@@ -84,6 +87,9 @@ func normalizeAPMEndpoint(apmEndpoint string) (string, bool) {
 
 // StopFunc is a function signature for functions that stops the Datadog
 // integration.
+//
+// Deprecated: The whole module is deprecated. Use Start from
+// github.com/coopnorge/go-telemetry-lib.
 type StopFunc func() error
 
 func noop() error {
@@ -101,8 +107,8 @@ func start(options *options) error {
 	if err != nil {
 		return err
 	}
-	metricOptions := append([]metrics.Option{metrics.WithErrorHandler(options.errorHandler)}, options.metricOptions...)
-	err = metrics.GlobalSetup(metricOptions...)
+	metricOptions := append([]metrics.Option{metrics.WithErrorHandler(options.errorHandler)}, options.metricOptions...) //nolint:staticcheck // internal use of the deprecated module
+	err = metrics.GlobalSetup(metricOptions...)                                                                         //nolint:staticcheck // internal use of the deprecated module
 	if err != nil {
 		return err
 	}
@@ -146,7 +152,7 @@ func stop(options *options) error {
 	go func() {
 		tracer.Stop()
 		profiler.Stop()
-		err := metrics.Flush()
+		err := metrics.Flush() //nolint:staticcheck // internal use of the deprecated module
 		errCh <- err
 	}()
 

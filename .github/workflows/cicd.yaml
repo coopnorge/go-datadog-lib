@@ -27,9 +27,10 @@ jobs:
     needs:
       - mage
       - techdocs
-    if: failure() || cancelled()
+    if: always()
     runs-on: ubuntu-slim
-    steps:
-      - run: exit 1
-        name: "Catch errors"
     permissions: {}
+    steps:
+      - name: "Catch errors"
+        if: contains(needs.*.result, 'failure') || contains(needs.*.result, 'cancelled')
+        run: exit 1

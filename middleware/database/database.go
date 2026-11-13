@@ -1,3 +1,9 @@
+// Package database adds Datadog tracing to database/sql connections.
+//
+// Deprecated: The whole module is deprecated. For gorm, use
+// gorm.io/plugin/opentelemetry/tracing. For plain database/sql there is no
+// direct replacement. See the root package documentation for the migration
+// guide and ADR.
 package database
 
 import (
@@ -13,6 +19,10 @@ import (
 // sqltrace, and opens a connection to the database using the dsn. The
 // implementation assumes that the consumer call sql.Register before
 // calling this function.
+//
+// Deprecated: The whole module is deprecated. For gorm, use
+// gorm.io/plugin/opentelemetry/tracing. For plain database/sql there is no direct
+// replacement.
 func RegisterDriverAndOpen(driverName string, driver driver.Driver, dsn string, options ...Option) (*sql.DB, error) {
 	if internal.IsDatadogDisabled() {
 		return sql.Open(driverName, dsn)
@@ -67,9 +77,17 @@ func defaults() *config {
 }
 
 // Option allows for overriding our default-config.
+//
+// Deprecated: The whole module is deprecated. For gorm, use
+// gorm.io/plugin/opentelemetry/tracing. For plain database/sql there is no direct
+// replacement.
 type Option func(cfg *config)
 
 // WithServiceName overrides the service-name set in environment-variable "DD_SERVICE".
+//
+// Deprecated: The whole module is deprecated. For gorm, use
+// gorm.io/plugin/opentelemetry/tracing. For plain database/sql there is no direct
+// replacement.
 func WithServiceName(serviceName string) Option {
 	return func(cfg *config) {
 		cfg.serviceName = serviceName
@@ -77,6 +95,10 @@ func WithServiceName(serviceName string) Option {
 }
 
 // WithCustomTag will attach the value to the span tagged by the key.
+//
+// Deprecated: The whole module is deprecated. For gorm, use
+// gorm.io/plugin/opentelemetry/tracing. For plain database/sql there is no direct
+// replacement.
 func WithCustomTag(key string, value any) Option {
 	return func(cfg *config) {
 		if cfg.tags == nil {
@@ -87,6 +109,10 @@ func WithCustomTag(key string, value any) Option {
 }
 
 // WithChildSpansOnly causes spans to be created only when there is an existing parent span in the Context.
+//
+// Deprecated: The whole module is deprecated. For gorm, use
+// gorm.io/plugin/opentelemetry/tracing. For plain database/sql there is no direct
+// replacement.
 func WithChildSpansOnly(childSpansOnly bool) Option {
 	return func(cfg *config) {
 		cfg.childSpansOnly = childSpansOnly
@@ -96,6 +122,10 @@ func WithChildSpansOnly(childSpansOnly bool) Option {
 // WithIgnoreQueryTypes specifies the query types for which spans should not be created.
 // Will replace any existing ignored query-types, so it must be an exhaustive list.
 // See available QueryTypes here: https://pkg.go.dev/github.com/DataDog/dd-trace-go/contrib/database/sql/v2#pkg-constants
+//
+// Deprecated: The whole module is deprecated. For gorm, use
+// gorm.io/plugin/opentelemetry/tracing. For plain database/sql there is no direct
+// replacement.
 func WithIgnoreQueryTypes(ignoredQueryTypes ...string) Option {
 	return func(cfg *config) {
 		cfg.ignoredQueryTypes = ignoredQueryTypes

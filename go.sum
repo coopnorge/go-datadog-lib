@@ -58,8 +58,8 @@ github.com/cihub/seelog v0.0.0-20170130134532-f561c5e57575 h1:kHaBemcxl8o/pQ5VM1
 github.com/cihub/seelog v0.0.0-20170130134532-f561c5e57575/go.mod h1:9d6lWj8KzO/fd/NrVaLscBKmPigpZpn5YawRPw+e3Yo=
 github.com/coopnorge/go-logger v0.15.10 h1:K+KBoqBnMdYEzOlIE33DmT2AuEDT3yCYwaz+GUoGY5w=
 github.com/coopnorge/go-logger v0.15.10/go.mod h1:UDQN9qY0JFRX0k2iGgLzrqaVJt/K7NEWRIPJAOiesqk=
-github.com/coopnorge/mage v0.45.0 h1:a85EpPhwRFFE6dnbqqNcqXoh9OyJ1kvwImD7rAMq7Vc=
-github.com/coopnorge/mage v0.45.0/go.mod h1:kwGJFZdCqSUvNaXHcWI1JuB6qCZiH79ls6PQdopQn8o=
+github.com/coopnorge/mage v0.45.1 h1:KEfiMDmDmxigmb12xkBTtsJH5qYdHnqOxaBe/j3xrWk=
+github.com/coopnorge/mage v0.45.1/go.mod h1:kwGJFZdCqSUvNaXHcWI1JuB6qCZiH79ls6PQdopQn8o=
 github.com/datolabs-io/go-backstage/v3 v3.2.0 h1:t451wJ44SBaXggkErMM8qvLjEQTvx46oFIeKykldlaU=
 github.com/datolabs-io/go-backstage/v3 v3.2.0/go.mod h1:8ttnYlIi7EA7hSso71PceQyC6N8WS/vL+SrTSXL68R4=
 github.com/davecgh/go-spew v1.1.0/go.mod h1:J7Y8YcW2NihsgmVo/mv3lAwl/skON4iLHjSsI+c5H38=

@@ -1,5 +1,21 @@
 # Go Datadog Library
 
+> [!WARNING]
+>
+> This library is deprecated. See the [go-telemetry-lib ADR 0001][adr-0001] for
+> the reasoning and the [migration guide](migration-to-opentelemetry.md) for
+> replacements.
+>
+> The repository will be archived on 2027-03-01. Until then it only receives
+> non-breaking dependency updates.
+
+## Support timeline
+
+Until 2027-03-01 this library gets no new features and no bug fixes. It only
+receives non-breaking dependency updates. After that date the repository is
+archived. Services that need continuous profiling stay on this library until
+then.
+
 Reduces the complexity of initializing and using Datadog functionality. See
 [Datadog - Getting Started](https://docs.datadoghq.com/getting_started/?site=eu)
 for more information about how Datadog works.
@@ -649,3 +665,6 @@ func b(ctx context.Context) error {
 // Output:
 // {"dd.span_id":8047616890857967865,"dd.trace_id":8160264448608745330,"file":"/srv/workspace/app/main.go:25","function":"github.com/coopnorge/app/main.b","level":"info","msg":"Hello","time":"2024-09-12T19:01:34+02:00"}
 ```
+
+[adr-0001]:
+  https://inventory.internal.coop/catalog/default/component/go-telemetry-lib/adrs?record=0001-deprecate-go-datadog-lib.md

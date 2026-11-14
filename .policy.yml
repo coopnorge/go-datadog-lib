@@ -1,18 +1,45 @@
 policy:
   approval:
   - or:
+    - Security fix
     - Internal dependency update
     - Dependency updates
     - Code change
 
 approval_rules:
+- name: Security fix
+  requires:
+    count: 0
+  if:
+    has_successful_status:
+      - "build"
+      - "Supply Chain / Validate"
+    only_has_contributors_in:
+      users:
+      - "renovate-coop-norge[bot]"
+    from_branch:
+      pattern: "^renovate/.*-vulnerability$"
+    only_changed_files:
+      paths:
+      - "(^|.*/)go\\.mod$"
+      - "(^|.*/)go\\.sum$"
+      - "(^|.*/)go\\.work\\.sum$"
+      - "(^|.*/)[^/]*Dockerfile[^/]*$"
+      - "(^|.*/)docker-compose\\.ya?ml$"
+      - "^\\.github/workflows/.*$"
+      - "^\\.github/actions/.*$"
+    has_valid_signatures_by_keys:
+      key_ids: ["B5690EEEBB952194"]
+
 - name: Internal dependency update
   requires:
     count: 0
   if:
+    has_successful_status:
+      - "build"
+      - "Supply Chain / Validate"
     only_has_contributors_in:
       users:
-      - "dependabot[bot]"
       - "renovate-coop-norge[bot]"
     from_branch:
       pattern: "^renovate/(github\\.com-coopnorge-|coopnorge-|engineering-docker-images).*$"
@@ -43,7 +70,6 @@ approval_rules:
   if:
     only_has_contributors_in:
       users:
-      - "dependabot[bot]"
       - "renovate-coop-norge[bot]"
     only_changed_files:
       paths:

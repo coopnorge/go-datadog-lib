@@ -1,3 +1,8 @@
+// Package echo provides Datadog tracing for Echo v4.
+//
+// Deprecated: The whole module is deprecated; use NewMiddleware from
+// github.com/labstack/echo-otel/v4 (e.Use(echootel.NewMiddleware(serverName))).
+// See the root package documentation for the migration guide and ADR.
 package echo
 
 import (
@@ -11,6 +16,8 @@ import (
 // It is recommended to use this if you want to benefit from future tracer
 // features that require additional properties to be configured without having
 // to update your code.
+//
+// Deprecated: The whole module is deprecated; use NewMiddleware from github.com/labstack/echo-otel/v4 (e.Use(echootel.NewMiddleware(serverName))).
 func Wrap(e *echo.Echo) *echo.Echo {
 	if internal.IsDatadogDisabled() {
 		return e
@@ -24,6 +31,7 @@ func Wrap(e *echo.Echo) *echo.Echo {
 //
 // Deprecated: Use of the [Wrap] function is recommended instead of directly calling
 // [echo.TraceServerMiddleware], as [Wrap] activates all available features automatically.
+// The whole module is deprecated; use NewMiddleware from github.com/labstack/echo-otel/v4 (e.Use(echootel.NewMiddleware(serverName))).
 func TraceServerMiddleware() echo.MiddlewareFunc {
 	if internal.IsDatadogDisabled() {
 		return noOpMiddlewareFunc()

@@ -1,3 +1,9 @@
 {
-  "extends": ["github>coopnorge/github-workflow-renovate"]
+  "extends": ["github>coopnorge/github-workflow-renovate"],
+  "packageRules": [
+    {
+      "matchUpdateTypes": ["major"],
+      "enabled": false
+    }
+  ]
 }

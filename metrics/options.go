@@ -7,7 +7,7 @@ import (
 	"slices"
 	"strings"
 
-	ddErrors "github.com/coopnorge/go-datadog-lib/v2/errors"
+	ddErrors "github.com/coopnorge/go-datadog-lib/v2/errors" //nolint:staticcheck // internal use of the deprecated module
 	"github.com/coopnorge/go-datadog-lib/v2/internal"
 	"github.com/coopnorge/go-logger"
 )
@@ -17,11 +17,14 @@ const (
 )
 
 // Option is used to configure the behaviour of the metrics integration.
+//
+// Deprecated: The whole module is deprecated. Use instruments created once from
+// otel.Meter in go.opentelemetry.io/otel (package go.opentelemetry.io/otel/metric).
 type Option func(*options) error
 
 type options struct {
 	dsdEndpoint  string
-	errorHandler ddErrors.ErrorHandler
+	errorHandler ddErrors.ErrorHandler //nolint:staticcheck // internal use of the deprecated module
 	sampleRate   float64
 	tags         []string
 }
@@ -76,6 +79,9 @@ func (opts *options) applyOptions(options []Option) error {
 
 // WithErrorHandler allows for setting a custom ErrorHandler to be called on
 // function that may error but does not return an error
+//
+// Deprecated: The whole module is deprecated. Use instruments created once from
+// otel.Meter in go.opentelemetry.io/otel (package go.opentelemetry.io/otel/metric).
 func WithErrorHandler(handler ddErrors.ErrorHandler) Option {
 	return func(options *options) error {
 		options.errorHandler = handler
@@ -87,6 +93,9 @@ func WithErrorHandler(handler ddErrors.ErrorHandler) Option {
 // Parameters:
 //   - k: The tag key
 //   - v: The tag value
+//
+// Deprecated: The whole module is deprecated. Use instruments created once from
+// otel.Meter in go.opentelemetry.io/otel (package go.opentelemetry.io/otel/metric).
 func WithTag(k, v string) Option {
 	return func(options *options) error {
 		if k == "" {
@@ -119,6 +128,9 @@ func WithTag(k, v string) Option {
 //   - between 0 and 1 means that % of metrics will be sent (0.25 = 25%)
 //
 // Returns an error if the rate is invalid (negative)
+//
+// Deprecated: The whole module is deprecated. Use instruments created once from
+// otel.Meter in go.opentelemetry.io/otel (package go.opentelemetry.io/otel/metric).
 func WithSampleRate(rate float64) Option {
 	return func(o *options) error {
 		if rate < 0 {

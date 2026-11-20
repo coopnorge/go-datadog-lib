@@ -1,4 +1,9 @@
 // Package metrics implements custom metrics with Dogstatsd
+//
+// Deprecated: The whole module is deprecated. Use instruments created once from
+// otel.Meter in go.opentelemetry.io/otel (package
+// go.opentelemetry.io/otel/metric). See the root package documentation for the
+// migration guide and ADR.
 package metrics //nolint:revive
 
 import (
@@ -23,6 +28,9 @@ var (
 
 // GlobalSetup configures the Dogstatsd Client. GlobalSetup is intended to be
 // called from coopdatadog.Start(), but can be called directly.
+//
+// Deprecated: The whole module is deprecated. Use instruments created once from
+// otel.Meter in go.opentelemetry.io/otel (package go.opentelemetry.io/otel/metric).
 func GlobalSetup(options ...Option) error {
 	setupOnce.Do(func() {
 		if internal.IsDatadogDisabled() {
@@ -44,6 +52,9 @@ func GlobalSetup(options ...Option) error {
 }
 
 // Flush forces a flush of all the queued dogstatsd payloads.
+//
+// Deprecated: The whole module is deprecated. Use instruments created once from
+// otel.Meter in go.opentelemetry.io/otel (package go.opentelemetry.io/otel/metric).
 func Flush() error {
 	err := statsdClient.Flush()
 	if err != nil {
@@ -53,6 +64,9 @@ func Flush() error {
 }
 
 // Gauge measures the value of a metric at a particular time.
+//
+// Deprecated: The whole module is deprecated. Use instruments created once from
+// otel.Meter in go.opentelemetry.io/otel (package go.opentelemetry.io/otel/metric).
 func Gauge(name string, value float64, options ...Option) {
 	localOpts := getLocalOpts()
 	err := localOpts.applyOptions(options)
@@ -67,6 +81,9 @@ func Gauge(name string, value float64, options ...Option) {
 }
 
 // Count tracks how many times something happened per second.
+//
+// Deprecated: The whole module is deprecated. Use instruments created once from
+// otel.Meter in go.opentelemetry.io/otel (package go.opentelemetry.io/otel/metric).
 func Count(name string, value int64, options ...Option) {
 	localOpts := getLocalOpts()
 	err := localOpts.applyOptions(options)
@@ -81,6 +98,9 @@ func Count(name string, value int64, options ...Option) {
 }
 
 // Histogram tracks the statistical distribution of a set of values on each host.
+//
+// Deprecated: The whole module is deprecated. Use instruments created once from
+// otel.Meter in go.opentelemetry.io/otel (package go.opentelemetry.io/otel/metric).
 func Histogram(name string, value float64, options ...Option) {
 	localOpts := getLocalOpts()
 	err := localOpts.applyOptions(options)
@@ -95,6 +115,9 @@ func Histogram(name string, value float64, options ...Option) {
 }
 
 // Distribution tracks the statistical distribution of a set of values across your infrastructure.
+//
+// Deprecated: The whole module is deprecated. Use instruments created once from
+// otel.Meter in go.opentelemetry.io/otel (package go.opentelemetry.io/otel/metric).
 func Distribution(name string, value float64, options ...Option) {
 	localOpts := getLocalOpts()
 	err := localOpts.applyOptions(options)
@@ -109,16 +132,25 @@ func Distribution(name string, value float64, options ...Option) {
 }
 
 // Decr is just Count of -1
+//
+// Deprecated: The whole module is deprecated. Use instruments created once from
+// otel.Meter in go.opentelemetry.io/otel (package go.opentelemetry.io/otel/metric).
 func Decr(name string, options ...Option) {
 	Count(name, -1, options...)
 }
 
 // Incr is just Count of 1
+//
+// Deprecated: The whole module is deprecated. Use instruments created once from
+// otel.Meter in go.opentelemetry.io/otel (package go.opentelemetry.io/otel/metric).
 func Incr(name string, options ...Option) {
 	Count(name, 1, options...)
 }
 
 // Set counts the number of unique elements in a group.
+//
+// Deprecated: The whole module is deprecated. Use instruments created once from
+// otel.Meter in go.opentelemetry.io/otel (package go.opentelemetry.io/otel/metric).
 func Set(name string, value string, options ...Option) {
 	localOpts := getLocalOpts()
 	err := localOpts.applyOptions(options)
@@ -133,11 +165,17 @@ func Set(name string, value string, options ...Option) {
 }
 
 // Timing sends timing information, it is an alias for TimeInMilliseconds
+//
+// Deprecated: The whole module is deprecated. Use instruments created once from
+// otel.Meter in go.opentelemetry.io/otel (package go.opentelemetry.io/otel/metric).
 func Timing(name string, value time.Duration, options ...Option) {
 	TimeInMilliseconds(name, value.Seconds()*1000, options...)
 }
 
 // TimeInMilliseconds sends timing information in milliseconds.
+//
+// Deprecated: The whole module is deprecated. Use instruments created once from
+// otel.Meter in go.opentelemetry.io/otel (package go.opentelemetry.io/otel/metric).
 func TimeInMilliseconds(name string, value float64, options ...Option) {
 	localOpts := getLocalOpts()
 	err := localOpts.applyOptions(options)
@@ -152,6 +190,8 @@ func TimeInMilliseconds(name string, value float64, options ...Option) {
 }
 
 // SimpleEvent sends an event with the provided title and text.
+//
+// Deprecated: The whole module is deprecated. There is no direct replacement.
 func SimpleEvent(title, text string) {
 	err := statsdClient.SimpleEvent(title, text)
 	if err != nil {
@@ -171,6 +211,9 @@ func getLocalOpts() *options {
 // GlobalClient is allows to grab the client so that the legacy codebases
 // using a statsd.Client can proceed to migrate and for those edge cases
 // where the package requires hand metric sending.
+//
+// Deprecated: The whole module is deprecated. Use instruments created once from
+// otel.Meter in go.opentelemetry.io/otel (package go.opentelemetry.io/otel/metric).
 func GlobalClient() statsd.ClientInterface {
 	return statsdClient
 }

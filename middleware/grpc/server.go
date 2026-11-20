@@ -11,6 +11,9 @@ import (
 // TraceUnaryServerInterceptor for Datadog Log Integration, middleware will create span that can be used from context
 //
 // Deprecated: Use UnaryServerInterceptor instead. This function will be removed in a later version.
+// The whole module is deprecated; use otelgrpc.NewServerHandler() from
+// go.opentelemetry.io/contrib/instrumentation/google.golang.org/grpc/otelgrpc, passed to
+// grpc.StatsHandler.
 func TraceUnaryServerInterceptor() grpc.UnaryServerInterceptor {
 	if internal.IsDatadogDisabled() {
 		return noOpUnaryServerInterceptor()
@@ -22,6 +25,9 @@ func TraceUnaryServerInterceptor() grpc.UnaryServerInterceptor {
 // TraceStreamServerInterceptor for Datadog Log Integration, middleware will create span that can be used from context
 //
 // Deprecated: Use StreamServerInterceptor instead. This function will be removed in a later version.
+// The whole module is deprecated; use otelgrpc.NewServerHandler() from
+// go.opentelemetry.io/contrib/instrumentation/google.golang.org/grpc/otelgrpc, passed to
+// grpc.StatsHandler.
 func TraceStreamServerInterceptor() grpc.StreamServerInterceptor {
 	if internal.IsDatadogDisabled() {
 		return noOpStreamServerInterceptor()
@@ -31,6 +37,10 @@ func TraceStreamServerInterceptor() grpc.StreamServerInterceptor {
 }
 
 // UnaryServerInterceptor returns a middleware that creates datadog-spans on incoming requests, and stores them in the requests' context.
+//
+// Deprecated: The whole module is deprecated. Use otelgrpc.NewServerHandler() from
+// go.opentelemetry.io/contrib/instrumentation/google.golang.org/grpc/otelgrpc, passed to
+// grpc.StatsHandler.
 func UnaryServerInterceptor(options ...Option) grpc.UnaryServerInterceptor {
 	if internal.IsDatadogDisabled() {
 		return noOpUnaryServerInterceptor()
@@ -40,6 +50,10 @@ func UnaryServerInterceptor(options ...Option) grpc.UnaryServerInterceptor {
 }
 
 // StreamServerInterceptor returns a middleware that creates datadog-spans on incoming requests, and stores them in the requests' context.
+//
+// Deprecated: The whole module is deprecated. Use otelgrpc.NewServerHandler() from
+// go.opentelemetry.io/contrib/instrumentation/google.golang.org/grpc/otelgrpc, passed to
+// grpc.StatsHandler.
 func StreamServerInterceptor(options ...Option) grpc.StreamServerInterceptor {
 	if internal.IsDatadogDisabled() {
 		return noOpStreamServerInterceptor()

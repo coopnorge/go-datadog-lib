@@ -1,3 +1,4 @@
+//nolint:staticcheck // the module is deprecated as a whole
 package coopdatadog
 
 import (
@@ -17,20 +18,24 @@ import (
 // ConnectionType enum type
 //
 // Deprecated: Use coopdatadog.Start() instead.
+// The whole module is deprecated; use Start from github.com/coopnorge/go-telemetry-lib.
 type ConnectionType byte
 
 const (
 	// ConnectionTypeSocket sets the connection to Datadog to go through a UNIX socket
 	//
 	// Deprecated: ConnectionTypeSocket. ConnectionTypeAuto should be used.
+	// The whole module is deprecated; use Start from github.com/coopnorge/go-telemetry-lib.
 	ConnectionTypeSocket ConnectionType = iota
 	// ConnectionTypeHTTP sets the connection to Datadog to go over HTTP
 	//
 	// Deprecated: ConnectionTypeHTTP. ConnectionTypeAuto should be used.
+	// The whole module is deprecated; use Start from github.com/coopnorge/go-telemetry-lib.
 	ConnectionTypeHTTP
 	// ConnectionTypeAuto sets connection to HTTP or UNIX depending on supplied configuration of DD_TRACE_AGENT_URL
 	//
 	// Deprecated: Use coopdatadog.Start() instead.
+	// The whole module is deprecated; use Start from github.com/coopnorge/go-telemetry-lib.
 	ConnectionTypeAuto
 )
 
@@ -38,6 +43,7 @@ const (
 // connectionType flag related to Datadog connection type, it supports HTTP or socket - values will be used from config.DatadogParameters
 //
 // Deprecated: Use coopdatadog.Start() instead.
+// The whole module is deprecated; use Start from github.com/coopnorge/go-telemetry-lib.
 func StartDatadog(cfg config.DatadogParameters, connectionType ConnectionType) error {
 	if internal.IsDatadogDisabled() {
 		return nil
@@ -112,6 +118,7 @@ func compareConfigWithEnv(cfg config.DatadogParameters) {
 // GracefulDatadogShutdown of executed parallel processes
 //
 // Deprecated: Use the StopFunc returned coopdatadog.Start() instead.
+// The whole module is deprecated; use Start from github.com/coopnorge/go-telemetry-lib.
 func GracefulDatadogShutdown() {
 	defer tracer.Stop()
 	defer profiler.Stop()

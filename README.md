@@ -1,5 +1,20 @@
 # Coop Datadog Go package
 
+> [!WARNING]
+> This library is deprecated. See the [go-telemetry-lib ADR 0001][adr-0001] for
+> the reasoning and the [migration guide](docs/migration-to-opentelemetry.md)
+> for replacements.
+>
+> The repository will be archived on 2027-03-01. Until then it only receives
+> non-breaking dependency updates.
+
+## Support timeline
+
+Until 2027-03-01 this library gets no new features and no bug fixes. It only
+receives non-breaking dependency updates. After that date the repository is
+archived. Services that need continuous profiling stay on this library until
+then.
+
 ![Build](https://github.com/coopnorge/go-datadog-lib/actions/workflows/cicd.yaml/badge.svg)
 
 Plug and play package that wraps base functionally and initialization of Datadog
@@ -103,3 +118,5 @@ To preview the documentation:
 ```sh
 docker compose up techdocs
 ```
+
+[adr-0001]: https://inventory.internal.coop/catalog/default/component/go-telemetry-lib/adrs?record=0001-deprecate-go-datadog-lib.md

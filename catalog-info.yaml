@@ -4,9 +4,11 @@ metadata:
   name: go-datadog-lib
   title: Go Datadog Library
   description: >-
-    Datadog APM and metrics integration for Go services. One-call
-    initialisation with distributed tracing middleware for gRPC, HTTP, SQL
-    and GORM. Provides a go-logger hook for trace-correlated log entries.
+    Deprecated, will be archived on 2027-03-01. Use
+    github.com/coopnorge/go-telemetry-lib and OpenTelemetry. Datadog APM and
+    metrics integration for Go services. One-call initialisation with
+    distributed tracing middleware for gRPC, HTTP, SQL and GORM. Provides a
+    go-logger hook for trace-correlated log entries.
   tags:
     - go
     - datadog
@@ -18,6 +20,9 @@ metadata:
     github.com/project-slug: coopnorge/go-datadog-lib
     backstage.io/techdocs-ref: dir:.
   links:
+    - url: https://github.com/coopnorge/go-telemetry-lib
+      title: github.com/coopnorge/go-telemetry-lib
+      icon: web
     - url: https://docs.datadoghq.com/tracing/trace_collection/dd_libraries/go/?tab=containers
       title: Official Datadog golang docs
       icon: web
@@ -26,5 +31,5 @@ metadata:
       icon: web
 spec:
   type: library
-  lifecycle: production
+  lifecycle: deprecated
   owner: backend-and-platform-engineering

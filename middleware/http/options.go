@@ -12,9 +12,15 @@ import (
 // These options, unless otherwise specified, will be valid for both client and server interceptors.
 
 // ResourceNamer is a function that  will be called to determine what the ResourceName of the span should be.
+//
+// Deprecated: The whole module is deprecated. Use the otelhttp package from
+// go.opentelemetry.io/contrib/instrumentation/net/http/otelhttp.
 type ResourceNamer func(req *http.Request) string
 
 // RequestIgnorer is a function that  will be called to determine if the request should be traced or not.
+//
+// Deprecated: The whole module is deprecated. Use the otelhttp package from
+// go.opentelemetry.io/contrib/instrumentation/net/http/otelhttp.
 type RequestIgnorer func(req *http.Request) bool
 
 type config struct {
@@ -67,9 +73,15 @@ func convertClientOptions(options ...Option) []httptrace.RoundTripperOption {
 }
 
 // Option allows for overriding our default-config.
+//
+// Deprecated: The whole module is deprecated. Use the otelhttp package from
+// go.opentelemetry.io/contrib/instrumentation/net/http/otelhttp.
 type Option func(cfg *config)
 
 // WithServiceName overrides the service-name set in environment-variable "DD_SERVICE".
+//
+// Deprecated: The whole module is deprecated. Use the otelhttp package from
+// go.opentelemetry.io/contrib/instrumentation/net/http/otelhttp.
 func WithServiceName(serviceName string) Option {
 	return func(cfg *config) {
 		cfg.serviceName = serviceName
@@ -79,6 +91,9 @@ func WithServiceName(serviceName string) Option {
 // WithResourceNamer specifies a function that will be called to determine what
 // the ResourceName of the span should be.
 // For example, in the span "http.client https://coop.no/", the ResourceName is "https://coop.no/"
+//
+// Deprecated: The whole module is deprecated. Use the otelhttp package from
+// go.opentelemetry.io/contrib/instrumentation/net/http/otelhttp.
 func WithResourceNamer(resourceNamer ResourceNamer) Option {
 	return func(cfg *config) {
 		cfg.resourceNamer = resourceNamer
@@ -87,6 +102,9 @@ func WithResourceNamer(resourceNamer ResourceNamer) Option {
 
 // WithRequestIgnorer specifies a function that will be called to determined if
 // the request should be traced or not.
+//
+// Deprecated: The whole module is deprecated. Use the otelhttp package from
+// go.opentelemetry.io/contrib/instrumentation/net/http/otelhttp.
 func WithRequestIgnorer(requestIgnorer RequestIgnorer) Option {
 	return func(cfg *config) {
 		cfg.requestIgnorer = requestIgnorer
@@ -94,6 +112,9 @@ func WithRequestIgnorer(requestIgnorer RequestIgnorer) Option {
 }
 
 // WithCustomTag will attach the value to the span tagged by the key.
+//
+// Deprecated: The whole module is deprecated. Use the otelhttp package from
+// go.opentelemetry.io/contrib/instrumentation/net/http/otelhttp.
 func WithCustomTag(key string, value any) Option {
 	return func(cfg *config) {
 		if cfg.tags == nil {
@@ -104,6 +125,9 @@ func WithCustomTag(key string, value any) Option {
 }
 
 // StaticResourceNamer will set every span's ResourceName to str.
+//
+// Deprecated: The whole module is deprecated. Use the otelhttp package from
+// go.opentelemetry.io/contrib/instrumentation/net/http/otelhttp.
 func StaticResourceNamer(str string) ResourceNamer {
 	return func(_ *http.Request) string {
 		return str
@@ -112,6 +136,9 @@ func StaticResourceNamer(str string) ResourceNamer {
 
 // FullURLWithParamsResourceNamer will name the ResourceName to "GET https://www.coop.no/api/some-service/some-endpoint?foo=bar"
 // NOTE! This might leak unintended user-ids, credentials, or other things that are part of a URL.
+//
+// Deprecated: The whole module is deprecated. Use the otelhttp package from
+// go.opentelemetry.io/contrib/instrumentation/net/http/otelhttp.
 func FullURLWithParamsResourceNamer() ResourceNamer {
 	return func(req *http.Request) string {
 		return req.Method + " " + req.URL.Redacted()
@@ -120,6 +147,9 @@ func FullURLWithParamsResourceNamer() ResourceNamer {
 
 // FullURLResourceNamer will name the ResourceName to "GET https://www.coop.no/api/some-service/some-endpoint"
 // NOTE! This might leak unintended user-ids, if they are part of the URL-path.
+//
+// Deprecated: The whole module is deprecated. Use the otelhttp package from
+// go.opentelemetry.io/contrib/instrumentation/net/http/otelhttp.
 func FullURLResourceNamer() ResourceNamer {
 	return func(req *http.Request) string {
 		u := req.URL
@@ -128,6 +158,9 @@ func FullURLResourceNamer() ResourceNamer {
 }
 
 // HostResourceNamer will name the ResourceName to "www.coop.no"
+//
+// Deprecated: The whole module is deprecated. Use the otelhttp package from
+// go.opentelemetry.io/contrib/instrumentation/net/http/otelhttp.
 func HostResourceNamer() ResourceNamer {
 	return func(req *http.Request) string {
 		return req.URL.Host

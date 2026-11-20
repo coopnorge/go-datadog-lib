@@ -1,3 +1,4 @@
+//nolint:staticcheck // the module is deprecated as a whole
 package grpc_test
 
 import (

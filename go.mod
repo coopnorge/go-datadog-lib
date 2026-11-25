@@ -18,7 +18,7 @@ require (
 	github.com/DataDog/dd-trace-go/contrib/net/http/v2 v2.12.0
 	github.com/DataDog/dd-trace-go/v2 v2.12.0
 	github.com/coopnorge/go-logger v0.15.10
-	github.com/coopnorge/mage v0.47.0
+	github.com/coopnorge/mage v0.48.0
 	github.com/go-sql-driver/mysql v1.10.1
 	github.com/grpc-ecosystem/go-grpc-middleware/v2 v2.3.4
 	github.com/iancoleman/strcase v0.3.0
@@ -107,7 +107,7 @@ require (
 	go.yaml.in/yaml/v3 v3.0.5 // indirect
 	golang.org/x/crypto v0.59.0 // indirect
 	golang.org/x/exp v0.0.0-20260529124908-c761662dc8c9 // indirect
-	golang.org/x/mod v0.42.0 // indirect
+	golang.org/x/mod v0.43.0 // indirect
 	golang.org/x/net v0.62.0 // indirect
 	golang.org/x/sys v0.50.0 // indirect
 	golang.org/x/text v0.44.0 // indirect

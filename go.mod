@@ -1,7 +1,7 @@
 // Deprecated: use github.com/coopnorge/go-telemetry-lib and OpenTelemetry instead. The module will be archived on 2027-03-01.
 module github.com/coopnorge/go-datadog-lib/v2
 
-go 1.27.3
+go 1.27.4
 
 tool (
 	github.com/magefile/mage
